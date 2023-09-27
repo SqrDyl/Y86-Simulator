@@ -26,6 +26,15 @@ $(OBJD)/%.o: %.C
 # 4) need a clean target to delete the .o files corresponding to
 #    the .C files in this directory from the ../obj directory
 
+$(obj)/ConditionCodes.o: $(inc)/Tools.h $(inc)/ConditionCodes.h
+
+$(obj)/Memory.o: $(inc)Memory.h
+
+$(obj)/RegisterFile.o: $(inc)/RegisterFile.h
+
+$(obj)/Tools.o: $(inc)Tools.h
+
+
 
 clean:
 	rm -f *.o
