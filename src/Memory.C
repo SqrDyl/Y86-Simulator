@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include "Tools.h"
 #include "Memory.h"
 
 //memInstance will be initialized to the single instance
@@ -12,6 +13,10 @@ Memory * Memory::memInstance = NULL;
  */
 Memory::Memory()
 {
+	for (int i = 0; i < Memory::size; i++)
+	{
+		mem[i] = 0;
+	}
 }
 
 /**
@@ -23,7 +28,12 @@ Memory::Memory()
  */
 Memory * Memory::getInstance()
 {
-   return NULL;
+   if (memInstance == NULL)
+   {
+	memInstance = new Memory();
+    return memInstance;
+   }
+   return memInstance;
 }
 
 /**
@@ -40,6 +50,12 @@ Memory * Memory::getInstance()
 uint64_t Memory::getLong(int32_t address, bool & imem_error)
 {
    //Use Memory::size to check if an address is valid
+   if (address < Memory::size && address >= 0 && address % 8 == 0)
+   {
+	imem_error = false;
+    return mem[address];
+   }
+   imem_error = true; 
    return 0;
 }
 
@@ -56,6 +72,12 @@ uint64_t Memory::getLong(int32_t address, bool & imem_error)
 uint8_t Memory::getByte(int32_t address, bool & imem_error)
 {
    //Use Memory::size to check if an address is valid
+   if (address < Memory::size && address >= 0)
+   {
+      imem_error = false;
+	  return mem[address];
+   }
+   imem_error = true;
    return 0;
 }
 
@@ -72,7 +94,21 @@ uint8_t Memory::getByte(int32_t address, bool & imem_error)
 void Memory::putLong(uint64_t value, int32_t address, bool & imem_error)
 {
    //Use Memory::size to check if an address is valid
-   return;
+    if (address < Memory::size && address >= 0 && address % 8 == 0)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			mem[address + i] = value >> i * 8 && 0xFF;
+			
+		}
+       imem_error = false;
+	   
+	}
+	else
+	{
+		imem_error = true;
+	}
+
 }
 
 /**
@@ -89,7 +125,16 @@ void Memory::putLong(uint64_t value, int32_t address, bool & imem_error)
 void Memory::putByte(uint8_t value, int32_t address, bool & imem_error)
 {
    //Use Memory::size to check if an address is valid
-   return;
+    if (address < Memory::size && address >= 0)
+	{
+		imem_error = false;
+		mem[address] = value;
+	}
+	else
+	{
+		imem_error = true;
+	}
+   
 }
 
 /**
