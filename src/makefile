@@ -6,6 +6,7 @@ BIN = ../bin
 OBJD = ../obj
 CFLAGS = -g -c -Wall -std=c++11 -I $(INC)
 
+LAB4SRCOBJS = $(OBJD)/Memory.o $(OBJD)/Tools.o $(OBJD)/RegisterFile.o $(OBJD)/ConditionCodes.o
 #rule to match .C with object in another directory
 $(OBJD)/%.o: %.C 
 	@mkdir -p $(OBJD)
@@ -26,13 +27,16 @@ $(OBJD)/%.o: %.C
 # 4) need a clean target to delete the .o files corresponding to
 #    the .C files in this directory from the ../obj directory
 
-$(obj)/ConditionCodes.o: $(inc)/Tools.h $(inc)/ConditionCodes.h
 
-$(obj)/Memory.o: $(inc)Memory.h
+compile: $(LAB4SRCOBJS)
 
-$(obj)/RegisterFile.o: $(inc)/RegisterFile.h
+$(OBJD)/ConditionCodes.o: $(INC)/Tools.h $(INC)/ConditionCodes.h
 
-$(obj)/Tools.o: $(inc)Tools.h
+$(OBJD)/Memory.o: $(INC)Memory.h
+
+$(OBJD)/RegisterFile.o: $(INC)/RegisterFile.h
+
+$(OBJD)/Tools.o: $(INC)Tools.h
 
 
 
