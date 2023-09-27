@@ -26,4 +26,6 @@ $(OBJD)/%.o: %.C
 # 4) need a clean target to delete the .o files corresponding to
 #    the .C files in this directory from the ../obj directory
 
- 
+
+clean:
+	rm -f *.o
