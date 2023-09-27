@@ -32,11 +32,11 @@ compile: $(LAB4SRCOBJS)
 
 $(OBJD)/ConditionCodes.o: $(INC)/Tools.h $(INC)/ConditionCodes.h
 
-$(OBJD)/Memory.o: $(INC)Memory.h
+$(OBJD)/Memory.o: $(INC)/Memory.h
 
 $(OBJD)/RegisterFile.o: $(INC)/RegisterFile.h
 
-$(OBJD)/Tools.o: $(INC)Tools.h
+$(OBJD)/Tools.o: $(INC)/Tools.h
 
 
 
