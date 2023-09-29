@@ -53,10 +53,33 @@ uint64_t Memory::getLong(int32_t address, bool & imem_error)
    if (address < Memory::size && address >= 0 && address % 8 == 0)
    {
 	imem_error = false;
-    return mem[address];
+	uint8_t bytes[LONGSIZE];
+	int count = 0;
+	for (int i = 7; i >= 0; i--)
+	{
+        bytes[count] = mem[address + i];
+		count++;
+	}
+	
+	uint64_t answer = Tools::buildLong(bytes);
+    
+	for (int i = 0; i < LONGSIZE; i++)
+    {
+		   bytes[i] = mem[address + i];
+	}
+	uint64_t answer2 = Tools::buildLong(bytes);
+	// if answer1 is bigger, then a byte was passed through putLong() rather than a long
+	// since answer 2 is smaller (ex: 0x88) and we need to return a byte. 
+	// then return answer2.
+	if (answer > answer2)
+	{	
+			return answer2;
+	}
+	return answer;
    }
    imem_error = true; 
    return 0;
+   
 }
 
 /**
@@ -96,13 +119,13 @@ void Memory::putLong(uint64_t value, int32_t address, bool & imem_error)
    //Use Memory::size to check if an address is valid
     if (address < Memory::size && address >= 0 && address % 8 == 0)
 	{
-		for (int i = 0; i < 8; i++)
+		int count = 0;
+		for (int i = 7; i >= 0; i--)
 		{
-			mem[address + i] = value >> i * 8 && 0xFF;
-			
+			mem[address + count] = value >> (i * 8);
+			count++;
 		}
        imem_error = false;
-	   
 	}
 	else
 	{
@@ -127,8 +150,9 @@ void Memory::putByte(uint8_t value, int32_t address, bool & imem_error)
    //Use Memory::size to check if an address is valid
     if (address < Memory::size && address >= 0)
 	{
-		imem_error = false;
-		mem[address] = value;
+	   mem[address] = value;
+       imem_error = false;
+	   
 	}
 	else
 	{
