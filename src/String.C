@@ -20,11 +20,21 @@ String::String(std::string str)
    //TODO
    //Dynamically allocate an array of chars just large enough to 
    //hold the chars of the std::string.
+   char chars[str.length()];
    //Don't store the NULL or allocate space for it.
    //(You don't need the NULL since you are storing the length.)
    //Copy the characters in the std::string (excluding a NULL)
+   for (int i = 0; i < str.length(); i++)
+   {
+	 if (str[i] != NULL)
+	 {
+		chars[i] = str[i];
+	 }
+	 
+   }
    //into your str array.
    //Set length to the size of the array.
+   
 }
 
 /*
@@ -39,6 +49,7 @@ char * String::get_cstr()
    //c-string that you are building
    //That space needs to include space for a NULL
    //Don't forget to add the NULL.
+   char chars[String::get_length()];
    return NULL; //change this
 }
 
