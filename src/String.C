@@ -203,19 +203,23 @@ uint32_t String::convert2Hex(int32_t startIdx, int32_t len, bool & error)
    {
 	error = false;
    for (int i = startIdx; i < startIdx + len; i++)
-   {
-     if ((this->str[i] >= 49 && this->str[i] <= 57))
-	 {
-		answer += (this->str[i] - 48) << (len - i) * 4;
-	 }
-	 else if (this->str[i] >= 65 && this->str[i] <= 70)
-	 {
-		answer += (this->str[i] - 64) << (len - i) * 4;
-	 }
-	 else if (this->str[i] >= 97 && this->str[i] <= 102)
-	 {
-		answer += (this->str[i] - 96) << (len - i) * 4;
-	 }
+    {
+        if ((this->str[i] >= 48 && this->str[i] <= 57))
+	    {
+        answer += (this->str[i] - 48);
+	    }
+        else if (this->str[i] >= 65 && this->str[i] <= 70)
+        {
+        answer += (this->str[i] - 55);
+        }
+        else if (this->str[i] >= 97 && this->str[i] <= 102)
+        {
+            answer += (this->str[i] - 87);
+        }
+        if (i != (startIdx + len) - 1)
+        {
+            answer = answer << 4;
+        }
    }
    return answer;
 }
@@ -232,7 +236,23 @@ uint32_t String::convert2Hex(int32_t startIdx, int32_t len, bool & error)
 bool String::isChar(char what, int32_t idx, bool & error)
 {
    //TODO
-   return false;
+   if (idx < 0 || idx >= length)
+   {
+        error = true;
+        return false;
+   }
+   else
+   {
+        error = false;
+        if (this->str[idx] == what)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+   }
 } 
 
 /* 
@@ -266,7 +286,7 @@ bool String::isHex(int32_t startIdx, int len, bool & error)
 	error = false;
    for (int i = startIdx; i < startIdx + len; i++)
    {
-     if ((this->str[i] >= 49 && this->str[i] <= 57) || 
+     if ((this->str[i] >= 48 && this->str[i] <= 57) || 
 	 (this->str[i] >= 65 && this->str[i] <= 70) ||  
 	 (this->str[i] >= 97 && this->str[i] <= 102))
 	 {
