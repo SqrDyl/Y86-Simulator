@@ -216,6 +216,12 @@ uint32_t String::convert2Hex(int32_t startIdx, int32_t len, bool & error)
         {
             answer += (this->str[i] - 87);
         }
+		else 
+		{
+			answer = 0;
+			error = true;
+			break;
+		}
         if (i != (startIdx + len) - 1)
         {
             answer = answer << 4;
@@ -295,6 +301,7 @@ bool String::isHex(int32_t startIdx, int len, bool & error)
 	 else
 	 {
 		ret = false;
+		break;
 	 }
    }
    }
