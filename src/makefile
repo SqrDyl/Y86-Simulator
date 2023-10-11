@@ -6,7 +6,8 @@ BIN = ../bin
 OBJD = ../obj
 CFLAGS = -g -c -Wall -std=c++11 -I $(INC)
 
-LAB4SRCOBJS = $(OBJD)/Memory.o $(OBJD)/Tools.o $(OBJD)/RegisterFile.o $(OBJD)/ConditionCodes.o
+LAB4SRCOBJS = $(OBJD)/Memory.o $(OBJD)/Tools.o $(OBJD)/RegisterFile.o $(OBJD)/ConditionCodes.o $(OBJD)/yess.o \
+	$(OBJD)/String.o $(OBJD)/Loader.o
 #rule to match .C with object in another directory
 $(OBJD)/%.o: %.C 
 	@mkdir -p $(OBJD)
@@ -38,7 +39,14 @@ $(OBJD)/RegisterFile.o: $(INC)/RegisterFile.h
 
 $(OBJD)/Tools.o: $(INC)/Tools.h
 
+$(OBJD)/yess.o: $(INC)/Memory.h $(INC)/Loader.h
 
+$(OBJD)/Loader.o: $(INC)/Memory.h $(INC)/String.h $(INC)/Loader.h
+
+$(OBJD)/String.o: $(INC)/String.h
+
+yess: $(LAB4SRCOBJS)
+	$(CC) $(LAB4SRCOBJS) -o $(BIN)/yess
 
 clean:
 	rm -f *.o
