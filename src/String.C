@@ -326,7 +326,30 @@ bool String::isHex(int32_t startIdx, int len, bool & error)
 bool String::isSubString(const char * subStr, int32_t startIdx, bool & error)
 {
    //TODO
-   return false;
+   bool ret;
+   if (badIndex(startIdx) || startIdx > 7)
+   {
+    error = true;
+	return false;
+   }
+   error = false;
+   int i = 0;
+   while (subStr[i] != NULL)
+   {
+	 if (this->str[startIdx] == subStr[i])
+	 {
+		ret = true;
+	 }
+	 else
+	 {
+		ret = false;
+		
+		break;
+	 }
+	 startIdx++;
+	 i++;
+   }
+   return ret;
 }
 
 
@@ -348,7 +371,30 @@ bool String::isSubString(std::string subStr, int32_t startIdx,
                          bool & error)
 {  
    //TODO
-   return false;
+   bool ret;
+   if (badIndex(startIdx) || startIdx > 7)
+   {
+    error = true;
+	return false;
+   }
+   error = false;
+   int i = 0;
+   while (subStr[i] != NULL)
+   {
+	 if (this->str[startIdx] == subStr[i])
+	 {
+		ret = true;
+	 }
+	 else
+	 {
+		ret = false;
+		
+		break;
+	 }
+	 startIdx++;
+	 i++;
+   }
+   return ret;
 }
 
  
