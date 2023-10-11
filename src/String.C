@@ -20,7 +20,7 @@ String::String(std::string str)
    //TODO
    //Dynamically allocate an array of chars just large enough to 
    //hold the chars of the std::string.
-   char chars[str.length()];
+   this->str = new char[str.length()];
    //Don't store the NULL or allocate space for it.
    //(You don't need the NULL since you are storing the length.)
    //Copy the characters in the std::string (excluding a NULL)
@@ -28,12 +28,13 @@ String::String(std::string str)
    {
 	 if (str[i] != NULL)
 	 {
-		chars[i] = str[i];
+		this->str[i] = str[i];
 	 }
 	 
    }
    //into your str array.
    //Set length to the size of the array.
+   length = str.length();
    
 }
 
@@ -49,8 +50,16 @@ char * String::get_cstr()
    //c-string that you are building
    //That space needs to include space for a NULL
    //Don't forget to add the NULL.
-   char chars[String::get_length()];
-   return NULL; //change this
+   
+   for (int i = 0; i <= length; i++)
+   {
+	if (i == length)
+	{
+		this->str[i] = NULL;
+	}
+   }
+
+   return str; //change this
 }
 
 /*
@@ -63,7 +72,8 @@ std::string String::get_stdstr()
    //TODO
    //You need to declare std::string and append the characters
    //from your str array to it
-   return 0;  //change this
+   
+   return std::string(this->str); //change this
 }
 
 /*
@@ -74,7 +84,8 @@ std::string String::get_stdstr()
 int32_t String::get_length()
 {
    //TODO
-   return 0;  
+  // return strlen(String::);
+  return (int32_t) strlen(this->str);  
 }
 
 /*
@@ -86,6 +97,10 @@ int32_t String::get_length()
 bool String::badIndex(int32_t idx)
 {
    //TODO
+   if (idx < 0 || idx > length)
+   {
+	return true;
+   }
    return false; 
 }
 
@@ -114,8 +129,33 @@ bool String::isRepeatingChar(char what, int32_t startIdx,
 {
    //TODO
    //use your badIndex method to check if the
-   //starting and ending indices are valid
-   return false;
+   //starting and ending indices are 
+   bool ret = false;
+   if (badIndex(startIdx) || badIndex(startIdx + len) || len < 0)
+   {
+    error = true;
+	ret = false;
+   }
+   else
+   {
+	error = false;
+   for (int i = startIdx; i < startIdx + len; i++)
+   {
+      if (this->str[i] == what)
+	  {
+		
+	    ret = true;
+	  }
+	  else
+	  {
+		
+		ret = false;
+		
+		break;
+	  }
+   }
+   }
+   return ret;
 }
 
 /*
@@ -152,9 +192,34 @@ uint32_t String::convert2Hex(int32_t startIdx, int32_t len, bool & error)
    //First time through loop: result = 0x2
    //Second time through loop: result = 0x2a
    //Third time through loop: result = 0x2af
-   return 0;
+   
+   uint32_t answer = 0;
+   if (badIndex(startIdx) || badIndex(startIdx + len) || len < 0)
+   {
+    error = true;
+	return 0;
+   }
+   else
+   {
+	error = false;
+   for (int i = startIdx; i < startIdx + len; i++)
+   {
+     if ((this->str[i] >= 49 && this->str[i] <= 57))
+	 {
+		answer += (this->str[i] - 48) << (len - i) * 4;
+	 }
+	 else if (this->str[i] >= 65 && this->str[i] <= 70)
+	 {
+		answer += (this->str[i] - 64) << (len - i) * 4;
+	 }
+	 else if (this->str[i] >= 97 && this->str[i] <= 102)
+	 {
+		answer += (this->str[i] - 96) << (len - i) * 4;
+	 }
+   }
+   return answer;
 }
-
+}
 /* 
  * isChar
  * Returns true if str[idx] is equal to what 
@@ -190,7 +255,31 @@ bool String::isChar(char what, int32_t idx, bool & error)
 bool String::isHex(int32_t startIdx, int len, bool & error)
 {
    //TODO
-   return false;
+   bool ret;
+   if (badIndex(startIdx) || badIndex(startIdx + len) || len < 0)
+   {
+    error = true;
+	ret = false;
+   }
+   else
+   {
+	error = false;
+   for (int i = startIdx; i < startIdx + len; i++)
+   {
+     if ((this->str[i] >= 49 && this->str[i] <= 57) || 
+	 (this->str[i] >= 65 && this->str[i] <= 70) ||  
+	 (this->str[i] >= 97 && this->str[i] <= 102))
+	 {
+		ret = true;
+	 }
+	 else
+	 {
+		ret = false;
+	 }
+   }
+   }
+   
+   return ret;
 } 
 
 /*
