@@ -67,7 +67,28 @@ bool Loader::printErrMsg(int32_t which, int32_t lineNumber, String * line)
 bool Loader::openFile()
 {
    //TODO
+    bool error = false;
+    if (inputFile == NULL)
+    {
+        printErrMsg(usage, -1, NULL);
+        return false;
+    }
+    else if (inputFile->get_length() < 4 || !inputFile->isSubString(".yo", 0, error))
+    {
+        printErrMsg(badfile, -1, NULL);
+        return false;
+    }
+    else
+    {
+        inf.open(inputFile->get_stdstr(), std::ifstream::in);
 
+        if (!inf.is_open())
+        {
+            printErrMsg(openerr, -1, NULL);
+            return false;
+        }
+
+    }
    //If the user didn't supply a command line argument (inputFile is NULL)
    //then print the Loader::usage error message and return false
    //(Note: Loader::usage is a static const defined in Loader.h)
@@ -102,29 +123,55 @@ bool Loader::load()
    int lineNumber = 1;  //needed if an error is found
    while (getline(inf, line))
    {
-      //create a String to contain the std::string
-      //Now, all accesses to the input line MUST be via your
-      //String class methods
-      String inputLine(line);
-      //TODO
+        //create a String to contain the std::string
+        //Now, all accesses to the input line MUST be via your
+        //String class methods
+        String inputLine(line);
+        String * pointer = &inputLine;
+        bool error = false;
+        //TODO
+        if (inputLine.isSubString("0x", 0, error)) //if line is a data record
+        {
+            //if error in data record
+            uint32_t data = inputLine.convert2Hex(databegin, maxbytes, error);
+            int32_t address = inputLine.convert2Hex(addrbegin, addrend - addrbegin, error);
 
-      //Note: there are two kinds of records: data and comment
-      //      A data record begins with a "0x"
-      //
-      //If the line is a data record with errors
-      //then print the Loader::baddata error message and return false
-      //
-      //If the line is a comment record with errors
-      //then print the Loader::badcomment error message and return false
-      //
-      //Otherwise, load any data on the line into
-      //memory
-      //
-      //Don't do all of this work in this method!
-      //Break the work up into multiple single purpose methods
+            if (!inputLine.isSubString(":", 5, error) || !inputLine.isSubString("|", comment, error))
+            {
+                printErrMsg(baddata, lineNumber, pointer);
+                return false;
+            }
+            else
+            {
+                mem->putByte(data, address, error);
+            }
+        }
+        else //if line is a comment record
+        {
+            //if comment record is bad
+            if (!inputLine.isSubString("|", comment, error) || !inputLine.isSubString("#", comment + 2, error))
+            {
+                printErrMsg(badcomment, lineNumber, pointer);
+                return false;
+            }
+        }
+        //Note: there are two kinds of records: data and comment
+        //      A data record begins with a "0x"
+        //
+        //If the line is a data record with errors
+        //then print the Loader::baddata error message and return false
+        //
+        //If the line is a comment record with errors
+        //then print the Loader::badcomment error message and return false
+        //
+        //Otherwise, load any data on the line into
+        //memory
+        //
+        //Don't do all of this work in this method!
+        //Break the work up into multiple single purpose methods
 
-      //increment the line number for next iteration
-      lineNumber++;
+        //increment the line number for next iteration
+        lineNumber++;
    }
    return true;  //load succeeded
 
@@ -133,4 +180,8 @@ bool Loader::load()
 //Add helper methods definitions here and the declarations to Loader.h
 //In your code, be sure to use the static const variables defined in 
 //Loader.h to grab specific fields from the input line.
-
+/*bool Loader::colon(String inputLine)
+{
+    bool error = false;
+    return (inputLine.isSubString(":", 5, error))
+}*/

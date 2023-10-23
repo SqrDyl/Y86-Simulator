@@ -24,9 +24,9 @@ String::String(std::string str)
    //Don't store the NULL or allocate space for it.
    //(You don't need the NULL since you are storing the length.)
    //Copy the characters in the std::string (excluding a NULL)
-   for (int i = 0; i < str.length(); i++)
+   for (uint64_t i = 0; i < str.length(); i++)
    {
-	 if (str[i] != NULL)
+	 if (str[i] > 0)
 	 {
 		this->str[i] = str[i];
 	 }
@@ -55,7 +55,7 @@ char * String::get_cstr()
    {
 	if (i == length)
 	{
-		this->str[i] = NULL;
+		this->str[i] = 0;
 	}
    }
 
@@ -334,7 +334,7 @@ bool String::isSubString(const char * subStr, int32_t startIdx, bool & error)
    }
    error = false;
    int i = 0;
-   while (subStr[i] != NULL)
+   while (subStr[i] > 0)
    {
 	 if (this->str[startIdx] == subStr[i])
 	 {
@@ -379,7 +379,7 @@ bool String::isSubString(std::string subStr, int32_t startIdx,
    }
    error = false;
    int i = 0;
-   while (subStr[i] != NULL)
+   while (subStr[i] > 0)
    {
 	 if (this->str[startIdx] == subStr[i])
 	 {
