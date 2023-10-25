@@ -16,6 +16,7 @@ Loader::Loader(int argc, char * argv[], Memory * mem)
    this->mem = mem;          //memory instance
    this->inputFile = NULL;   
    if (argc > 1) inputFile = new String(argv[1]);  //input file name
+   //printf("%s\n", inputFile->get_cstr());
 }
 
 /*
@@ -73,7 +74,7 @@ bool Loader::openFile()
         printErrMsg(usage, -1, NULL);
         return false;
     }
-    else if (inputFile->get_length() < 4 || !inputFile->isSubString(".yo", 0, error))
+    else if (inputFile->get_length() < 7 || !inputFile->isSubString(".yo", inputFile->get_length() - 3, error))
     {
         printErrMsg(badfile, -1, NULL);
         return false;
@@ -82,7 +83,7 @@ bool Loader::openFile()
     {
         inf.open(inputFile->get_stdstr(), std::ifstream::in);
 
-        if (!inf.is_open())
+        if (!inf)
         {
             printErrMsg(openerr, -1, NULL);
             return false;
@@ -132,24 +133,37 @@ bool Loader::load()
         //TODO
         if (inputLine.isSubString("0x", 0, error)) //if line is a data record
         {
-            //if error in data record
-            uint32_t data = inputLine.convert2Hex(databegin, maxbytes, error);
-            int32_t address = inputLine.convert2Hex(addrbegin, addrend - addrbegin, error);
-
-            if (!inputLine.isSubString(":", 5, error) || !inputLine.isSubString("|", comment, error))
+            //if error in data record 
+            int addressLength = 3;
+            if (!inputLine.isSubString(":", 5, error) || !inputLine.isHex(addrbegin, addressLength, error))
+            //|| !inputLine.isSubString("|", comment, error))
             {
                 printErrMsg(baddata, lineNumber, pointer);
                 return false;
             }
             else
             {
+                int dataend;
+                for (int i = databegin; i <= maxbytes; dataend++)
+                {
+                    if (inputLine.isHex(i, 1, error))
+                    {
+                        dataend = i;
+                        break;
+                    }
+                }
+                uint32_t data = inputLine.convert2Hex(databegin, dataend, error);
+                int32_t address = inputLine.convert2Hex(addrbegin, addrend - addrbegin, error);
+            
                 mem->putByte(data, address, error);
             }
         }
         else //if line is a comment record
         {
             //if comment record is bad
-            if (!inputLine.isSubString("|", comment, error) || !inputLine.isSubString("#", comment + 2, error))
+            
+            
+            if ( inputLine.isHex(0, comment, error) || !inputLine.isSubString("|", comment, error) )
             {
                 printErrMsg(badcomment, lineNumber, pointer);
                 return false;

@@ -329,25 +329,25 @@ bool String::isSubString(const char * subStr, int32_t startIdx, bool & error)
    bool ret;
    if (badIndex(startIdx) || startIdx > 7)
    {
-    error = true;
-	return false;
+      error = true;
+	   return false;
    }
    error = false;
    int i = 0;
    while (subStr[i] > 0)
    {
-	 if (this->str[startIdx] == subStr[i])
-	 {
-		ret = true;
-	 }
-	 else
-	 {
-		ret = false;
+	   if (this->str[startIdx] == subStr[i])
+	   {
+		   ret = true;
+	   }
+	   else
+	   {
+		   ret = false;
 		
-		break;
-	 }
-	 startIdx++;
-	 i++;
+		   break;
+	   }
+	   startIdx++;
+	   i++;
    }
    return ret;
 }
