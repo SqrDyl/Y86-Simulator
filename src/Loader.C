@@ -69,12 +69,12 @@ bool Loader::openFile()
 {
    //TODO
     bool error = false;
-    if (inputFile == NULL)
+    if (inputFile == NULL) 
     {
         printErrMsg(usage, -1, NULL);
         return false;
     }
-    else if (inputFile->get_length() < 7 || !inputFile->isSubString(".yo", inputFile->get_length() - 3, error))
+    else if (inputFile->get_length() < 4 || !inputFile->isSubString(".yo", inputFile->get_length() - 3, error))
     {
         printErrMsg(badfile, -1, NULL);
         return false;
@@ -83,7 +83,7 @@ bool Loader::openFile()
     {
         inf.open(inputFile->get_stdstr(), std::ifstream::in);
 
-        if (!inf.is_open())
+        if (!inf.is_open()) // used to be !inf
         {
             printErrMsg(openerr, -1, NULL);
             return false;
@@ -151,9 +151,10 @@ bool Loader::load()
                         dataend = i;
                         break;
                     }
+					
                 }
                 uint32_t data = inputLine.convert2Hex(databegin, dataend, error);
-                int32_t address = inputLine.convert2Hex(addrbegin, addrend - addrbegin, error);
+                int32_t address = inputLine.convert2Hex(addrbegin, addrend - addrbegin + 1, error);
             
                 mem->putByte(data, address, error);
             }
@@ -199,3 +200,45 @@ bool Loader::load()
     bool error = false;
     return (inputLine.isSubString(":", 5, error))
 }*/
+
+bool Loader::isDataRec(String input)
+{
+   bool error = false;
+   if (input.isSubString("0x", 0, error))
+   {
+	 return true;
+   }
+   else
+   {
+	return false;
+   }
+}
+
+bool Loader::isBadDataRec(String input)
+{
+	bool error = false;
+	if (!input.isSubString(":", 5, error) || !input.isHex(addrbegin, addressLength, error))
+    {
+        printErrMsg(baddata, lineNumber, pointer);
+        return false;
+    }
+	else
+	{
+		return true;
+	}
+}
+
+bool Loader::isBadComRec(String input)
+{
+	bool error = false; 
+    if (input.isHex(0, comment, error) || !input.isSubString("|", comment, error) )
+    {
+        printErrMsg(badcomment, lineNumber, pointer);
+        return false;
+    }
+}
+
+bool Loader::loadLine(String input)
+{
+	bool error = false;
+}
