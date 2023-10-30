@@ -26,10 +26,10 @@ String::String(std::string str)
    //Copy the characters in the std::string (excluding a NULL)
    for (uint64_t i = 0; i < str.length(); i++)
    {
-	 if (str[i] > 0)
-	 {
-		this->str[i] = str[i];
-	 }
+	    if (str[i] > 0)
+	    {
+		    this->str[i] = str[i];
+	    }
 	 
    }
    //into your str array.
@@ -53,10 +53,10 @@ char * String::get_cstr()
    
    for (int i = 0; i <= length; i++)
    {
-	if (i == length)
-	{
-		this->str[i] = 0;
-	}
+	    if (i == length)
+	    {
+		    this->str[i] = 0;
+	    }
    }
 
    return str; //change this
@@ -85,7 +85,7 @@ int32_t String::get_length()
 {
    //TODO
   // return strlen(String::);
-  return (int32_t) strlen(this->str);  
+  return length;  
 }
 
 /*
@@ -97,7 +97,7 @@ int32_t String::get_length()
 bool String::badIndex(int32_t idx)
 {
    //TODO
-   if (idx < 0 || idx > length)
+   if (idx < 0 || idx >= length)
    {
 	return true;
    }
@@ -130,32 +130,32 @@ bool String::isRepeatingChar(char what, int32_t startIdx,
    //TODO
    //use your badIndex method to check if the
    //starting and ending indices are 
-   bool ret = false;
-   if (badIndex(startIdx) || badIndex(startIdx + len) || len < 0)
-   {
-    error = true;
-	ret = false;
-   }
-   else
-   {
-	error = false;
-   for (int i = startIdx; i < startIdx + len; i++)
-   {
-      if (this->str[i] == what)
-	  {
-		
-	    ret = true;
-	  }
-	  else
-	  {
-		
-		ret = false;
-		
-		break;
-	  }
-   }
-   }
-   return ret;
+    bool ret = false;
+    if (badIndex(startIdx) || badIndex(startIdx + len - 1) || len < 0)
+    {
+        error = true;
+	    ret = false;
+    }
+    else
+    {
+	    error = false;
+        for (int i = startIdx; i < startIdx + len; i++)
+        {
+            if (this->str[i] == what)
+            {
+                
+                ret = true;
+            }
+            else
+            {
+                
+                ret = false;
+                
+                break;
+            }
+        }
+    }
+    return ret;
 }
 
 /*
@@ -194,7 +194,7 @@ uint32_t String::convert2Hex(int32_t startIdx, int32_t len, bool & error)
    //Third time through loop: result = 0x2af
    
    uint32_t answer = 0;
-   if (badIndex(startIdx) || badIndex(startIdx + len) || len < 0)
+   if (badIndex(startIdx) || badIndex(startIdx + len - 1) || len < 0)
    {
     error = true;
 	return 0;
@@ -281,30 +281,30 @@ bool String::isChar(char what, int32_t idx, bool & error)
 bool String::isHex(int32_t startIdx, int len, bool & error)
 {
    //TODO
-   bool ret;
-   if (badIndex(startIdx) || badIndex(startIdx + len) || len < 0)
-   {
-    error = true;
-	ret = false;
-   }
-   else
-   {
-	error = false;
-   for (int i = startIdx; i < startIdx + len; i++)
-   {
-     if ((this->str[i] >= 48 && this->str[i] <= 57) || 
-	 (this->str[i] >= 65 && this->str[i] <= 70) ||  
-	 (this->str[i] >= 97 && this->str[i] <= 102))
-	 {
-		ret = true;
-	 }
-	 else
-	 {
-		ret = false;
-		break;
-	 }
-   }
-   }
+    bool ret;
+    if (badIndex(startIdx) || badIndex(startIdx + len - 1) || len < 0)
+    {
+        error = true;
+        ret = false;
+    }
+    else
+    {
+        error = false;
+        for (int i = startIdx; i < startIdx + len; i++)
+        {
+            if ((this->str[i] >= '0' && this->str[i] <= '9') || 
+            (this->str[i] >= 'a' && this->str[i] <= 'f') ||  
+            (this->str[i] >= 'A' && this->str[i] <= 'F'))
+            {
+                ret = true;
+            }
+            else
+            {
+                ret = false;
+                break;
+            }
+        }
+    }
    
    return ret;
 } 
@@ -326,30 +326,32 @@ bool String::isHex(int32_t startIdx, int len, bool & error)
 bool String::isSubString(const char * subStr, int32_t startIdx, bool & error)
 {
    //TODO
-   bool ret;
-   if (badIndex(startIdx) || startIdx > 7)
-   {
-      error = true;
-	   return false;
-   }
-   error = false;
-   int i = 0;
-   while (subStr[i] > 0)
-   {
-	   if (this->str[startIdx] == subStr[i])
-	   {
-		   ret = true;
-	   }
-	   else
-	   {
-		   ret = false;
-		
-		   break;
-	   }
-	   startIdx++;
-	   i++;
-   }
-   return ret;
+    bool ret;
+    String newStr(subStr);
+    int endIdx = startIdx + newStr.get_length() - 1;
+    if (badIndex(startIdx) || badIndex(endIdx))
+    {
+        error = true;
+        return false;
+    }
+    error = false;
+    int i = 0;
+    while (subStr[i] > 0)
+    {
+        if (this->str[startIdx] == subStr[i])
+        {
+            ret = true;
+        }
+        else
+        {
+            ret = false;
+            
+            break;
+        }
+        startIdx++;
+        i++;
+    }
+    return ret;
 }
 
 
@@ -371,30 +373,32 @@ bool String::isSubString(std::string subStr, int32_t startIdx,
                          bool & error)
 {  
    //TODO
-   bool ret;
-   if (badIndex(startIdx) || startIdx > 7)
-   {
-    error = true;
-	return false;
-   }
-   error = false;
-   int i = 0;
-   while (subStr[i] > 0)
-   {
-	 if (this->str[startIdx] == subStr[i])
-	 {
-		ret = true;
-	 }
-	 else
-	 {
-		ret = false;
-		
-		break;
-	 }
-	 startIdx++;
-	 i++;
-   }
-   return ret;
+    bool ret;
+    String newStr(subStr);
+    int endIdx = startIdx + newStr.get_length() - 1;
+    if (badIndex(startIdx) || badIndex(endIdx))
+    {
+        error = true;
+        return false;  
+    }
+    error = false;
+    int i = 0;
+    while (subStr[i] > 0)
+    {
+        if (this->str[startIdx] == subStr[i])
+        {
+            ret = true;
+        }
+        else
+        {
+            ret = false;
+            
+            break;
+        }
+        startIdx++;
+        i++;
+    }
+    return ret;
 }
 
  

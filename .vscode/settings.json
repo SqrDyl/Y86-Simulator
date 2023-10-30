@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "Loader.C": "cpp"
+        "Loader.C": "cpp",
+        "String.C": "cpp",
+        "lab5.C": "cpp"
     }
 }
