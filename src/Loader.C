@@ -83,7 +83,7 @@ bool Loader::openFile()
     {
         inf.open(inputFile->get_stdstr(), std::ifstream::in);
 
-        if (!openFile())
+        if (!inf.is_open())
         {
             printErrMsg(openerr, -1, NULL);
             return false;
