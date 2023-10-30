@@ -33,9 +33,9 @@ class Loader
       bool openFile();      //check file name for correctness and open it
       bool printErrMsg(int32_t, int32_t, String *);  //print error message
 	  bool isDataRec(String);
-	  bool isBadDataRec(String);
-	  bool isBadComRec(String);
-	  bool loadLine(String);
+	  bool isBadDataRec(String, int32_t, String *, int32_t);
+	  bool isBadComRec(String, int32_t, String *);
+	  void loadLine(String, int32_t);
 	
 
       //TODO

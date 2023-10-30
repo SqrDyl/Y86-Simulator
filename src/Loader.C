@@ -214,31 +214,41 @@ bool Loader::isDataRec(String input)
    }
 }
 
-bool Loader::isBadDataRec(String input)
+bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, int32_t addressLen)
 {
 	bool error = false;
-	if (!input.isSubString(":", 5, error) || !input.isHex(addrbegin, addressLength, error))
+	if (!input.isSubString(":", 5, error) || !input.isHex(addrbegin, addressLen, error))
     {
         printErrMsg(baddata, lineNumber, pointer);
-        return false;
+        return true;
     }
 	else
 	{
-		return true;
+		return false;
 	}
 }
 
-bool Loader::isBadComRec(String input)
+bool Loader::isBadComRec(String input, int32_t lineNumber, String * pointer)
 {
 	bool error = false; 
     if (input.isHex(0, comment, error) || !input.isSubString("|", comment, error) )
     {
         printErrMsg(badcomment, lineNumber, pointer);
-        return false;
+        return true;
     }
+	return false;
 }
 
-bool Loader::loadLine(String input)
+void Loader::loadLine(String input, int32_t address)
 {
 	bool error = false;
+	int32_t i = databegin; 
+	while (input.isHex(i, 1, error))
+	{
+		int32_t byte = input.convert2Hex(i, 2, error);
+		mem->putByte(byte, address, error);
+		this->lastAddress = address;
+		i += 2;
+		address++;
+	}
 }
