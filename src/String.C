@@ -50,14 +50,12 @@ char * String::get_cstr()
    //c-string that you are building
    //That space needs to include space for a NULL
    //Don't forget to add the NULL.
-   
+   char * newStr = new char[length + 1];
    for (int i = 0; i <= length; i++)
    {
-	    if (i == length)
-	    {
-		    this->str[i] = 0;
-	    }
+        newStr[i] = str[i];
    }
+   newStr[length] = 0;
 
    return str; //change this
 }
@@ -73,7 +71,7 @@ std::string String::get_stdstr()
    //You need to declare std::string and append the characters
    //from your str array to it
    
-   return std::string(this->str); //change this
+   return std::string(this->str, length); //change this
 }
 
 /*

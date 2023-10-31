@@ -148,6 +148,7 @@ bool Loader::load()
 		{
 			loadLine(inputLine, address);
 		}
+        
         //Note: there are two kinds of records: data and comment
         //      A data record begins with a "0x"
         //
@@ -195,33 +196,82 @@ bool Loader::isDataRec(String input)
 bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, int32_t addressLen)
 {
 	bool error = false;
-	if (!input.isSubString(":", 5, error) || !input.isHex(addrbegin, addressLen, error))
+    int32_t colon = 5;
+    int32_t spaceAfterColon = 6;
+	if (!input.isSubString(":", colon, error) || !input.isHex(addrbegin, addressLen, error) || !input.isChar('|', comment, error)
+    || !input.isChar(' ', spaceAfterColon, error))
     {
-        int i = databegin;
-        bool error;
-        while (!input.isChar(' ', i, error))
-        {
-            if (!input.isHex(i, 1, error))
-            {
-                return false;
-            }
-            i++;
-        }
         return true;
     }
 	else
 	{
-		return false;
+		if (!input.isSubString("                ", databegin, error))
+        {
+            if (input.isChar(' ', databegin, error))
+            {
+                return true;
+            }
+            /*bool hasData = false;
+            bool spaces = false;
+            for (int j = databegin; j < databegin + 16; j++)
+            {
+                if (input.isChar(' ', j, error) && j == databegin)
+                {
+                    return true;
+                }
+
+                if (!input.isHex(j, 1, error))
+                {
+                    return true;
+                }
+                else
+                {
+                    hasData = true;
+                }
+
+                if (hasData == true && input.isChar(' ', j, error))
+                {
+                    spaces = true;
+                }
+                if (spaces == true && hasData == true && input.isHex(j, 1, error))
+                {
+                    return true;
+                }
+            }*/
+        }
+        int i = databegin;
+        bool error = false;
+        while (!input.isChar(' ', i, error))
+        {
+            if (!input.isHex(i, 1, error))
+            {
+                return true;
+            }
+            i++;
+        }
+        
+
+        if ((i - 1) % 2 != 0) //Checking if bytes is odd
+        {
+            return true;
+        }
+        return false;
 	}
 }
 
 bool Loader::isBadComRec(String input, int32_t lineNumber, String * pointer)
 {
 	bool error = false; 
-    if (input.isHex(0, comment, error) || !input.isSubString("|", comment, error) )
+    if (input.isHex(0, comment, error) || !input.isChar('|', comment, error) || !input.isSubString("                ", databegin, error)) 
     {
-        
         return true;
+    }
+    if (!input.isSubString(" ", 0, error))
+    {
+        if (!input.isSubString("0x", 0, error) )
+        {
+            return true;
+        }
     }
 	return false;
 }
