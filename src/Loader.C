@@ -198,6 +198,8 @@ bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, in
 	bool error = false;
     int32_t colon = 5;
     int32_t spaceAfterColon = 6;
+	int32_t address = input.convert2Hex(addrbegin, addrend - addrbegin + 1, error);
+
 	if (!input.isSubString(":", colon, error) || !input.isHex(addrbegin, addressLen, error) || !input.isChar('|', comment, error)
     || !input.isChar(' ', spaceAfterColon, error))
     {
@@ -239,22 +241,26 @@ bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, in
                 }
             }*/
         }
-        int i = databegin;
+        int32_t i = databegin;
         bool error = false;
-        while (!input.isChar(' ', i, error))
+        while (!input.isSubString(" ", i, error))
         {
             if (!input.isHex(i, 1, error))
             {
                 return true;
             }
+			
             i++;
-        }
-        
-
+		}
         if ((i - 1) % 2 != 0) //Checking if bytes is odd
         {
             return true;
         }
+		if (address < lastAddress) // lastAddress can never be greater
+		{
+			return true;
+		}
+
         return false;
 	}
 }
