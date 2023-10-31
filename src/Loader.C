@@ -131,45 +131,21 @@ bool Loader::load()
         String * pointer = &inputLine;
         bool error = false;
         //TODO
-        if (inputLine.isSubString("0x", 0, error)) //if line is a data record
-        {
-            //if error in data record 
-            int addressLength = 3;
-            if (!inputLine.isSubString(":", 5, error) || !inputLine.isHex(addrbegin, addressLength, error))
-            //|| !inputLine.isSubString("|", comment, error))
-            {
-                printErrMsg(baddata, lineNumber, pointer);
-                return false;
-            }
-            else
-            {
-                int dataend;
-                for (int i = databegin; i <= maxbytes; dataend++)
-                {
-                    if (inputLine.isHex(i, 1, error))
-                    {
-                        dataend = i;
-                        break;
-                    }
-					
-                }
-                uint32_t data = inputLine.convert2Hex(databegin, dataend, error);
-                int32_t address = inputLine.convert2Hex(addrbegin, addrend - addrbegin + 1, error);
-            
-                mem->putByte(data, address, error);
-            }
-        }
-        else //if line is a comment record
-        {
-            //if comment record is bad
-            
-            
-            if ( inputLine.isHex(0, comment, error) || !inputLine.isSubString("|", comment, error) )
-            {
-                printErrMsg(badcomment, lineNumber, pointer);
-                return false;
-            }
-        }
+		int32_t address = inputLine.convert2Hex(addrbegin, addrend - addrbegin + 1, error);
+		int32_t addressLength = 3;
+
+        if (isDataRec(inputLine) && isBadDataRec(inputLine, lineNumber, pointer, addressLength))
+		{  
+            printErrMsg(baddata, lineNumber, pointer);
+		}
+		else if (!isDataRec(inputLine) && isBadComRec(inputLine, lineNumber, pointer))
+		{
+			printErrMsg(badcomment, lineNumber, pointer);
+		}
+		else if (isDataRec(inputLine))
+		{
+			loadLine(inputLine, address);
+		}
         //Note: there are two kinds of records: data and comment
         //      A data record begins with a "0x"
         //
@@ -219,7 +195,7 @@ bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, in
 	bool error = false;
 	if (!input.isSubString(":", 5, error) || !input.isHex(addrbegin, addressLen, error))
     {
-        printErrMsg(baddata, lineNumber, pointer);
+        
         return true;
     }
 	else
@@ -233,7 +209,7 @@ bool Loader::isBadComRec(String input, int32_t lineNumber, String * pointer)
 	bool error = false; 
     if (input.isHex(0, comment, error) || !input.isSubString("|", comment, error) )
     {
-        printErrMsg(badcomment, lineNumber, pointer);
+        
         return true;
     }
 	return false;
