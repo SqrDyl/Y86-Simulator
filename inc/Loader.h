@@ -36,6 +36,7 @@ class Loader
 	  bool isBadDataRec(String, int32_t, String *, int32_t);
 	  bool isBadComRec(String, int32_t, String *);
 	  void loadLine(String, int32_t);
+	  bool isValidAddress(String, int32_t);
 	
 
       //TODO

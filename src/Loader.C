@@ -228,3 +228,7 @@ void Loader::loadLine(String input, int32_t address)
 		address++;
 	}
 }
+bool Loader::isValidAddress(String input, int32_t address) 
+{
+	return true
+}
