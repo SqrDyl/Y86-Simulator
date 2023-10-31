@@ -137,10 +137,12 @@ bool Loader::load()
         if (isDataRec(inputLine) && isBadDataRec(inputLine, lineNumber, pointer, addressLength))
 		{  
             printErrMsg(baddata, lineNumber, pointer);
+            break;
 		}
 		else if (!isDataRec(inputLine) && isBadComRec(inputLine, lineNumber, pointer))
 		{
 			printErrMsg(badcomment, lineNumber, pointer);
+            break;
 		}
 		else if (isDataRec(inputLine))
 		{
@@ -195,7 +197,16 @@ bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, in
 	bool error = false;
 	if (!input.isSubString(":", 5, error) || !input.isHex(addrbegin, addressLen, error))
     {
-        
+        int i = databegin;
+        bool error;
+        while (!input.isChar(' ', i, error))
+        {
+            if (!input.isHex(i, 1, error))
+            {
+                return false;
+            }
+            i++;
+        }
         return true;
     }
 	else
@@ -230,5 +241,6 @@ void Loader::loadLine(String input, int32_t address)
 }
 bool Loader::isValidAddress(String input, int32_t address) 
 {
-	return true
+    
+    return true;
 }
