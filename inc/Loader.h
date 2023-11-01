@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdint>
+#include <fstream>
 #include "Memory.h"
 #include "String.h"
 
