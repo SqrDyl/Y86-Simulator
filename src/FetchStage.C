@@ -9,6 +9,8 @@
 #include "Status.h"
 #include "F.h"
 #include "D.h"
+#include "M.h"
+#include "W.h"
 
 /*
  * doClockLow
@@ -103,6 +105,20 @@ void FetchStage::setDInput(PipeReg * dreg, uint64_t stat, uint64_t icode,
    dreg->set(D_VALC, valC);
    dreg->set(D_VALP, valP);
 }
+
+void selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
+{
+    uint64_t M_icode = mreg->get(M_ICODE);
+    uint64_t W_icode = wreg->get(W_ICODE);
+    //uint64_t F_predPC = freg->get(F_PREDPC);
+    word f_pc = [
+    M_icode == IJXX && !M_Cnd : M_valA;
+    W_icode == IRET : W_valM;
+    1: F_predPC;
+    ];
+
+}
+
 //TODO
 //Write your selectPC, needRegIds, needValC, PC increment, and predictPC methods
 //Remember to add declarations for these to FetchStage.h
@@ -119,6 +135,7 @@ word f_pc = [
 
 //needRegIds  method: input is f_icode
 bool need_regids = f_icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, IIRMOVQ, IRMMOVQ, IMRMOVQ };
+
 
 //needValC method: input is f_icode
 bool need_valC = f_icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL };

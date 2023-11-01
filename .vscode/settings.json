@@ -11,6 +11,9 @@
         "PipeReg.C": "cpp",
         "PipeRegField.C": "cpp",
         "FetchStage.C": "cpp",
-        "WritebackStage.C": "cpp"
+        "WritebackStage.C": "cpp",
+        "F.C": "cpp",
+        "M.C": "cpp",
+        "W.C": "cpp"
     }
 }
