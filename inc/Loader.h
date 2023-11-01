@@ -24,7 +24,8 @@ class Loader
       static const int32_t databegin = 7;  //begin data index
       static const int32_t comment = 28;   //index of |
       static const int32_t maxbytes = 10;  //max bytes in data record
-
+      static const int32_t dataend = 23;
+      
       int32_t lastAddress;  //last address stored to in memory
       Memory * mem;         //pointer to memory instance
       std::ifstream inf;    //file handle

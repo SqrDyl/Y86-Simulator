@@ -198,8 +198,8 @@ bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, in
 	bool error = false;
     int32_t colon = 5;
     int32_t spaceAfterColon = 6;
-	int32_t address = input.convert2Hex(addrbegin, addrend - addrbegin + 1, error);
-
+    int32_t numOfDataDig = 0;
+    int32_t address = input.convert2Hex(addrbegin, addrend - addrbegin + 1, error);
 	if (!input.isSubString(":", colon, error) || !input.isHex(addrbegin, addressLen, error) || !input.isChar('|', comment, error)
     || !input.isChar(' ', spaceAfterColon, error))
     {
@@ -209,26 +209,29 @@ bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, in
 	{
 		if (!input.isSubString("                ", databegin, error))
         {
-            if (input.isChar(' ', databegin, error))
+            /*if (input.isChar(' ', databegin, error))
             {
                 return true;
-            }
-            /*bool hasData = false;
+            }*/
+            bool hasData = false;
             bool spaces = false;
-            for (int j = databegin; j < databegin + 16; j++)
+            for (int j = databegin; j < dataend; j++)
             {
                 if (input.isChar(' ', j, error) && j == databegin)
                 {
                     return true;
                 }
-
-                if (!input.isHex(j, 1, error))
+                if (!input.isChar(' ', j, error))
                 {
-                    return true;
-                }
-                else
-                {
-                    hasData = true;
+                    if (!input.isHex(j, 1, error))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        hasData = true;
+                        numOfDataDig++;
+                    }
                 }
 
                 if (hasData == true && input.isChar(' ', j, error))
@@ -239,28 +242,32 @@ bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, in
                 {
                     return true;
                 }
-            }*/
+            }
         }
-        int32_t i = databegin;
+        int i = databegin;
         bool error = false;
-        while (!input.isSubString(" ", i, error))
+        /*while (!input.isChar(' ', i, error))
         {
             if (!input.isHex(i, 1, error))
             {
                 return true;
             }
-			
             i++;
-		}
-        if ((i - 1) % 2 != 0) //Checking if bytes is odd
+        }*/
+        
+
+        if ((numOfDataDig) % 2 != 0) //Checking if bytes is odd
         {
             return true;
         }
-		if (address < lastAddress) // lastAddress can never be greater
+        if (address < lastAddress) // lastAddress can never be greater
 		{
 			return true;
 		}
-
+        if (address + (numOfDataDig / 2) >= 1000)
+        {
+            return true;
+        }
         return false;
 	}
 }
