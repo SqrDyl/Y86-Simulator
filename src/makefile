@@ -7,7 +7,10 @@ OBJD = ../obj
 CFLAGS = -g -c -Wall -std=c++11 -I $(INC)
 
 LAB4SRCOBJS = $(OBJD)/Memory.o $(OBJD)/Tools.o $(OBJD)/RegisterFile.o $(OBJD)/ConditionCodes.o $(OBJD)/yess.o \
-	$(OBJD)/String.o $(OBJD)/Loader.o $(OBJD)/CPU.o $(OBJD)/D.o $(OBJD)/E.o $(OBJD)/F.o $(OBJD)/M.o $(OBJD)/W.o $(OBJD)/FetchStage.o $(OBJD)/DecodeStage.o $(OBJD)/ExecuteStage.o $(OBJD)/MemoryStage.o $(OBJD)/WritebackStage.o $(OBJD)/PipeRegArray.o $(OBJD)/PipeReg.o $(OBJD)/PipeRegField.o $(OBJD)/StageArray.o $(OBJD)/Stage.o 
+	$(OBJD)/String.o $(OBJD)/Loader.o $(OBJD)/CPU.o $(OBJD)/D.o $(OBJD)/E.o $(OBJD)/F.o $(OBJD)/M.o \
+	$(OBJD)/W.o $(OBJD)/FetchStage.o $(OBJD)/DecodeStage.o $(OBJD)/ExecuteStage.o $(OBJD)/MemoryStage.o \
+	$(OBJD)/WritebackStage.o $(OBJD)/PipeRegArray.o $(OBJD)/PipeReg.o \
+	$(OBJD)/PipeRegField.o $(OBJD)/StageArray.o $(OBJD)/Stage.o 
 #rule to match .C with object in another directory
 $(OBJD)/%.o: %.C 
 	@mkdir -p $(OBJD)
