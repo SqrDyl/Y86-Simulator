@@ -1,8 +1,10 @@
+
 #include "PipeRegArray.h"
 #include "DecodeStage.h"
 #include "Instruction.h"
 #include "Status.h"
 #include "D.h"
+#include "E.h"
 
 
 /*
@@ -17,29 +19,32 @@
 bool DecodeStage::doClockLow(PipeRegArray * pipeRegs)
 {
     PipeReg * dreg = pipeRegs->getDecodeReg();
-
+    PipeReg * ereg = pipeRegs->getExecuteReg();
     bool mem_error = false;
     uint64_t icode = Instruction::INOP, ifun = Instruction::FNONE;
     uint64_t rA = RegisterFile::RNONE, rB = RegisterFile::RNONE;
-    uint64_t valC = 0, valP = 0, stat = Status::SAOK, predPC = 0;
+    uint64_t valC = dreg->get(D_VALC), valP = dreg->get(D_VALP), stat = Status::SAOK, predPC = 0;
     bool needvalC = false;
     bool needregId = false;
-
-    setEInput(dreg, stat, icode, ifun, rA, rB, valC, valP);
+    stat = dreg->get(D_STAT);
+	icode = dreg->get(D_ICODE);
+	ifun = dreg->get(D_IFUN);
+	valC = dreg->get(D_VALC);
+    setEInput(ereg, stat, icode, ifun, valC, 0, 0, RegisterFile::RNONE, RegisterFile::RNONE,
+	RegisterFile::RNONE, RegisterFile::RNONE);
     return false;
 }
 
 void DecodeStage::setEInput(PipeReg * ereg, uint64_t stat, uint64_t icode,
-                           uint64_t ifun, uint64_t rA, uint64_t rB,
-                           uint64_t valC, uint64_t valP)
+                           uint64_t ifun, uint64_t valC, uint64_t valB,
+                           uint64_t destE, uint64_t destM, uint64_t srcA, uint64_t srcB)
 {
-   ereg->set(D_STAT, stat);
-   ereg->set(D_ICODE, icode);
-   ereg->set(D_IFUN, ifun);
-   ereg->set(D_RA, rA);
-   ereg->set(D_RB, rB);
-   ereg->set(D_VALC, valC);
-   ereg->set(D_VALP, valP);
+ 
+   ereg->set(E_STAT, stat);
+   ereg->set(E_ICODE, icode);
+   ereg->set(E_IFUN, ifun);
+   ereg->set(E_VALC, valC);
+   ereg->set(E_VALA, valP);
 }
 
 /* doClockHigh
@@ -51,10 +56,8 @@ void DecodeStage::setEInput(PipeReg * ereg, uint64_t stat, uint64_t icode,
 */
 void DecodeStage::doClockHigh(PipeRegArray * pipeRegs)
 {
-    PipeReg * freg = pipeRegs->getFetchReg();  
-    PipeReg * dreg = pipeRegs->getDecodeReg();
-    freg->normal();
-    dreg->normal();
+    PipeReg * ereg = pipeRegs->getExecuteReg();  
+	ereg->normal();
 }
 
 
