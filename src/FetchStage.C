@@ -111,11 +111,13 @@ void selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
     uint64_t M_icode = mreg->get(M_ICODE);
     uint64_t W_icode = wreg->get(W_ICODE);
     //uint64_t F_predPC = freg->get(F_PREDPC);
-    word f_pc = [
+    
+    //Uncomment this block
+    /*word f_pc = [
     M_icode == IJXX && !M_Cnd : M_valA;
     W_icode == IRET : W_valM;
     1: F_predPC;
-    ];
+    ];*/
 
 }
 
