@@ -20,18 +20,15 @@ bool DecodeStage::doClockLow(PipeRegArray * pipeRegs)
 {
     PipeReg * dreg = pipeRegs->getDecodeReg();
     PipeReg * ereg = pipeRegs->getExecuteReg();
-    bool mem_error = false;
-    uint64_t icode = Instruction::INOP, ifun = Instruction::FNONE;
-    uint64_t rA = RegisterFile::RNONE, rB = RegisterFile::RNONE;
-    uint64_t valC = dreg->get(D_VALC), valP = dreg->get(D_VALP), stat = Status::SAOK, predPC = 0;
-    bool needvalC = false;
-    bool needregId = false;
-    stat = dreg->get(D_STAT);
-	icode = dreg->get(D_ICODE);
-	ifun = dreg->get(D_IFUN);
-	valC = dreg->get(D_VALC);
+
+    uint64_t stat = dreg->get(D_STAT);
+	uint64_t icode = dreg->get(D_ICODE);
+	uint64_t ifun = dreg->get(D_IFUN);
+    uint64_t valC = dreg->get(D_VALC);
+
     setEInput(ereg, stat, icode, ifun, valC, 0, 0, RegisterFile::RNONE, RegisterFile::RNONE,
-	RegisterFile::RNONE, RegisterFile::RNONE);
+	    RegisterFile::RNONE, RegisterFile::RNONE);
+
     return false;
 }
 
@@ -40,11 +37,17 @@ void DecodeStage::setEInput(PipeReg * ereg, uint64_t stat, uint64_t icode,
                            uint64_t destE, uint64_t destM, uint64_t srcA, uint64_t srcB)
 {
  
-   ereg->set(E_STAT, stat);
-   ereg->set(E_ICODE, icode);
-   ereg->set(E_IFUN, ifun);
-   ereg->set(E_VALC, valC);
-   ereg->set(E_VALA, valP);
+    ereg->set(E_STAT, stat);
+    ereg->set(E_ICODE, icode);
+    ereg->set(E_IFUN, ifun);
+    ereg->set(E_VALC, valC);
+    ereg->set(E_VALA, valA);
+    ereg->set(E_VALB, valB);
+    ereg->set(E_DSTE, destE);
+    ereg->set(E_DSTM, destM);
+    ereg->set(E_SRCA, srcA);
+    ereg->set(E_SRCB, srcB);
+
 }
 
 /* doClockHigh
