@@ -45,35 +45,48 @@ $(OBJD)/Loader.o: $(INC)/Memory.h $(INC)/String.h $(INC)/Loader.h
 
 $(OBJD)/String.o: $(INC)/String.h
 
-$(OBJD)/PipeReg.o: $(inc)/PipeReg.h
+$(OBJD)/CPU.o: $(INC)/CPU.h $(INC)/PipeRegArray.h $(INC)/StageArray.h $(INC)/Memory.h\
+ $(INC)/ConditionCodes.h $(INC)/RegisterFile.h
 
-$(OBJD)/PipeRegArray.o: $(inc)/PipeReg.h $(inc)/PipeRegArray.h $(inc)/F.h $(inc)/D.h $(inc)/E.h $(inc)/M.h $(inc)/W.h 
+$(OBJD)/D.o: $(INC)/D.h $(INC)/Instruction.h $(INC)/RegisterFile.h $(INC)/PipeRegField.h\
+ $(INC)/Status.h
 
-$(OBJD)/PipeRegField.o: $(inc)/PipeRegField.h
+$(OBJD)/E.o: $(INC)/E.h $(INC)/Instruction.h $(INC)/RegisterFile.h $(INC)/PipeRegField.h\
+ $(INC)/Status.h
 
-$(OBJD)/Stage.o: $(inc)/Memory.h $(inc)/RegisterFile.h $(inc)/ConditionCodes.h $(inc)/Stage.h
+$(OBJD)/F.o: $(INC)/F.h $(INC)/PipeRegField.h
 
-$(OBJD)/FetchStage.o: $(inc)/PipeRegArray.h $(inc)/PipeReg.h $(inc)/Memory.h $(inc)/FetchStage.h $(inc)/Instruction.h $(inc)/RegisterFile.h $(inc)/Status.h $(inc)/F.h $(inc)/D.h
+$(OBJD)/M.o: $(INC)/M.h $(INC)/Instruction.h $(INC)/RegisterFile.h $(INC)/PipeRegField.h\
+ $(INC)/Status.h
 
-$(OBJD)/DecodeStage.o: $(inc)/PipeRegArray.h $(inc)/DecodeStage.h
+$(OBJD)/W.o: $(INC)/W.h $(INC)/Instruction.h $(INC)/RegisterFile.h $(INC)/PipeRegField.h\
+ $(INC)/Status.h
 
-$(OBJD)/ExecuteStage.o: $(inc)/PipeRegArray.h $(inc)/ExecuteStage.h
+$(OBJD)/FetchStage.o: $(INC)/PipeRegArray.h $(INC)/PipeReg.h $(INC)/Memory.h \
+ $(INC)/FetchStage.h $(INC)/Instruction.h $(INC)/RegisterFile.h $(INC)/Status.h \
+ $(INC)/F.h $(INC)/D.h
 
-$(OBJD)/MemoryStage.o: $(inc)/PipeRegArray.h $(inc)/MemoryStage.h
+$(OBJD)/DecodeStage.o: $(INC)/DecodeStage.h $(INC)/PipeRegArray.h
 
-$(OBJD)/WritebackStage.o: $(inc)/PipeRegArray.h $(inc)/WritebackStage.h
+$(OBJD)/ExecuteStage.o: $(INC)/ExecuteStage.h $(INC)/PipeRegArray.h
 
-$(OBJD)/CPU.o: $(inc)/CPU.h $(inc)/PipeRegArray.h $(inc)/StageArray.h $(inc)/Memory.h $(inc)/ConditionCodes.h $(inc)/RegisterFile.h
+$(OBJD)/MemoryStage.o: $(INC)/MemoryStage.h $(INC)/PipeRegArray.h
 
-$(OBJD)/F.o: $(inc)/PipeRegField.h $(inc)/F.h 
+$(OBJD)/WritebackStage.o: $(INC)/WritebackStage.h $(INC)/PipeRegArray.h
 
-$(OBJD)/D.o: $(inc)/Instruction.h $(inc)/RegisterFile.h $(inc)/PipeRegField.h $(inc)/D.h $(inc)/Status.h
+$(OBJD)/PipeRegArray.o: $(INC)/PipeReg.h $(INC)/PipeRegArray.h $(INC)/F.h $(INC)/D.h \
+ $(INC)/E.h $(INC)/M.h $(INC)/W.h
 
-$(OBJD)/E.o: $(inc)/RegisterFile.h $(inc)/Instruction.h $(inc)/PipeRegField.h $(inc)/E.h $(inc)/Status.h
+$(OBJD)/PipeReg.o: $(INC)/PipeReg.h
 
-$(OBJD)/M.o: $(inc)/RegisterFile.h $(inc)/Instruction.h $(inc)/PipeRegField.h $(inc)/M.h $(inc)/Status.h
+$(OBJD)/PipeRegField.o: $(INC)/PipeRegField.h
 
-$(OBJD)/W.o: $(inc)/RegisterFile.h $(inc)/Instruction.h $(inc)/PipeRegField.h $(inc)/W.h $(inc)/Status.h
+$(OBJD)/StageArray.o: $(INC)/StageArray.h $(INC)/Stage.h $(INC)/FetchStage.h \
+ $(INC)/DecodeStage.h $(INC)/ExecuteStage.h $(INC)/MemoryStage.h $(INC)/WritebackStage.h
+
+$(OBJD)/Stage.o: $(INC)/Memory.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h \
+ $(INC)/Stage.h
+
 
 
 
