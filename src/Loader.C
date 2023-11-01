@@ -244,18 +244,7 @@ bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, in
                 }
             }
         }
-        int i = databegin;
-        bool error = false;
-        /*while (!input.isChar(' ', i, error))
-        {
-            if (!input.isHex(i, 1, error))
-            {
-                return true;
-            }
-            i++;
-        }*/
         
-
         if ((numOfDataDig) % 2 != 0) //Checking if bytes is odd
         {
             return true;
@@ -301,9 +290,4 @@ void Loader::loadLine(String input, int32_t address)
 		i += 2;
 		address++;
 	}
-}
-bool Loader::isValidAddress(String input, int32_t address) 
-{
-    
-    return true;
 }
