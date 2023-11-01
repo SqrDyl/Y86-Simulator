@@ -1,5 +1,7 @@
 #include "PipeRegArray.h"
 #include "Stage.h"
+#include "Status.h"
+#include "W.h"
 
 #ifndef WRITEBACKSTAGE_H
 #define WRITEBACKSTAGE_H

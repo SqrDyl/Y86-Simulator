@@ -10,6 +10,7 @@
         "PipeRegArray.C": "cpp",
         "PipeReg.C": "cpp",
         "PipeRegField.C": "cpp",
-        "FetchStage.C": "cpp"
+        "FetchStage.C": "cpp",
+        "WritebackStage.C": "cpp"
     }
 }
