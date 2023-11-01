@@ -2,6 +2,14 @@
     "files.associations": {
         "Loader.C": "cpp",
         "String.C": "cpp",
-        "lab5.C": "cpp"
+        "lab5.C": "cpp",
+        "DecodeStage.C": "cpp",
+        "E.C": "cpp",
+        "D.C": "cpp",
+        "CPU.C": "cpp",
+        "PipeRegArray.C": "cpp",
+        "PipeReg.C": "cpp",
+        "PipeRegField.C": "cpp",
+        "FetchStage.C": "cpp"
     }
 }
