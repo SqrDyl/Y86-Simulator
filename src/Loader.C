@@ -264,7 +264,7 @@ bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, in
 		{
 			return true;
 		}
-        if (address + (numOfDataDig / 2) >= 1000)
+        if (address + (numOfDataDig / 2) >= 4096)
         {
             return true;
         }
