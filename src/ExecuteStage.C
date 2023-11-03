@@ -1,5 +1,9 @@
 #include "PipeRegArray.h"
 #include "ExecuteStage.h"
+#include "Instruction.h"
+#include "Status.h"
+#include "E.h"
+#include "M.h"
 
 /*
  * doClockLow
@@ -12,7 +16,26 @@
  */
 bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
 {
-   return false;
+	PipeReg * ereg = pipeRegs->getExecuteReg();
+	PipeReg * mreg = pipeRegs->getMemoryReg();
+   
+	uint64_t stat = ereg->get(E_STAT);
+	uint64_t icode = ereg->get(E_ICODE);
+    uint64_t dstM = ereg->get(E_DSTM);
+
+	return false;
+}
+
+void ExecuteStage::setMInput(PipeReg * mreg, uint64_t stat, uint64_t icode,
+                           uint64_t ifun, uint64_t valC, uint64_t valA, uint64_t valB,
+                           uint64_t destE, uint64_t destM, uint64_t srcA, uint64_t srcB)
+{
+	mreg->set(M_STAT, stat);
+    mreg->set(M_ICODE, icode);
+    mreg->set(M_DSTM, destM);
+
+
+
 }
 
 /* doClockHigh
@@ -24,7 +47,8 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
 */
 void ExecuteStage::doClockHigh(PipeRegArray * pipeRegs)
 {
-
+	PipeReg * mreg = pipeRegs->getMemoryReg();
+	mreg->normal();
 }
 
 
