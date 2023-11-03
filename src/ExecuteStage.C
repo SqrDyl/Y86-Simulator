@@ -33,9 +33,6 @@ void ExecuteStage::setMInput(PipeReg * mreg, uint64_t stat, uint64_t icode,
 	mreg->set(M_STAT, stat);
     mreg->set(M_ICODE, icode);
     mreg->set(M_DSTM, destM);
-
-
-
 }
 
 /* doClockHigh
