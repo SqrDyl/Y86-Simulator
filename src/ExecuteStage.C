@@ -23,16 +23,23 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
 	uint64_t icode = ereg->get(E_ICODE);
     uint64_t dstM = ereg->get(E_DSTM);
 
+
+	setMInput(mreg, stat, icode, 0, 0, 0, RegisterFile::RNONE, RegisterFile::RNONE, dstM);
+
 	return false;
 }
 
 void ExecuteStage::setMInput(PipeReg * mreg, uint64_t stat, uint64_t icode,
-                           uint64_t ifun, uint64_t valC, uint64_t valA, uint64_t valB,
-                           uint64_t destE, uint64_t destM, uint64_t srcA, uint64_t srcB)
+                           uint64_t Cnd, uint64_t valE, uint64_t valA, 
+                           uint64_t destE, uint64_t destM)
 {
 	mreg->set(M_STAT, stat);
     mreg->set(M_ICODE, icode);
-    mreg->set(M_DSTM, destM);
+	mreg->set(M_CND, Cnd);
+	mreg->set(M_VALE, valE);
+	mreg->set(M_VALA, valA);
+	mreg->set(M_DSTE, destE);
+	mreg->set(M_DSTM, destM);
 }
 
 /* doClockHigh
