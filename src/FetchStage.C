@@ -106,7 +106,7 @@ void FetchStage::setDInput(PipeReg * dreg, uint64_t stat, uint64_t icode,
    dreg->set(D_VALP, valP);
 }
 
-void selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
+void FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
 {
     uint64_t M_icode = mreg->get(M_ICODE);
     uint64_t W_icode = wreg->get(W_ICODE);
@@ -119,6 +119,11 @@ void selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
     1: F_predPC;
     ];*/
 
+}
+
+bool FetchStage::needRegIds(PipeReg * freg)
+{
+   return false;
 }
 
 //TODO
