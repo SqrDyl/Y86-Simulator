@@ -22,12 +22,12 @@ bool MemoryStage::doClockLow(PipeRegArray * pipeRegs)
    uint64_t dstE = mreg->get(M_DSTE);
    uint64_t dstM = mreg->get(M_DSTM);
    // Undefined Reference Error for below???? 
-   // setWInput(wreg, stat, icode, valE, 0, dstE, dstM);
+   setWInput(wreg, stat, icode, valE, 0, dstE, dstM);
 
    return false;
 }
 
-void setWInput(PipeReg * wreg, uint64_t stat, uint64_t icode, uint64_t valE,
+void MemoryStage::setWInput(PipeReg * wreg, uint64_t stat, uint64_t icode, uint64_t valE,
 		uint64_t valM, uint64_t dstE, uint64_t dstM)
 {
 	wreg->set(W_STAT, stat);
