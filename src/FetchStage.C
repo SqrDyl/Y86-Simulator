@@ -59,7 +59,7 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
 
     if (icode == Instruction::IHALT)
     {
-
+        stat = Status::SHLT;
     }
     
     
@@ -185,7 +185,10 @@ uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valC, uint64_t f_val
 	}
 }
 
+uint64_t FetchStage::PCincrement(uint64_t f_pc, uint64_t needRegRes, bool needValCRes)
+{
 
+}
 //TODO
 //Write your selectPC, needRegIds, needValC, PC increment, and predictPC methods
 //Remember to add declarations for these to FetchStage.h
