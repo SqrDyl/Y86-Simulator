@@ -107,7 +107,7 @@ void FetchStage::setDInput(PipeReg * dreg, uint64_t stat, uint64_t icode,
    dreg->set(D_VALP, valP);
 }
 
-void FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
+uint64_t FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
 {
     uint64_t M_icode = mreg->get(M_ICODE);
     uint64_t W_icode = wreg->get(W_ICODE);
@@ -118,14 +118,17 @@ void FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
     if (M_icode == Tools::getByte(M_icode, 0) && !M_Cnd)
     {
         freg->set(F_PREDPC, M_valA);
+		return freg->get(F_PREDPC);
     }
     else if (W_icode == Tools::getByte(W_icode, 0))
     {
         freg->set(F_PREDPC, W_valM);
+		return freg->get(F_PREDPC);
     }
     else
     {
         freg->set(F_PREDPC, 1);
+		return freg->get(F_PREDPC);
     }
     //Uncomment this block
     /*word f_pc = [
@@ -164,6 +167,24 @@ bool FetchStage::need_valC(uint64_t f_icode)
     uint64_t icall = 8;
     
     return (num == irmovq || num == rmmovq || num == ijxx || num == icall);
+}
+
+
+uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valC, uint64_t f_valP)
+{
+	uint64_t num = Tools::getBits(f_icode, 0, 4);
+	uint64_t icall = 8;
+	uint64_t ijxx = 7;
+	if (num == icall || num == ijxx)
+	{
+		freg->set(F_PREDPC, M_valA);
+		return freg->get(F_PREDPC);
+	}
+	else
+	{
+		freg->set(F_PREDPC, f_valP);
+		return freg->get(F_PREDPC);
+	}
 }
 //TODO
 //Write your selectPC, needRegIds, needValC, PC increment, and predictPC methods
