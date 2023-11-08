@@ -69,7 +69,7 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
 
    //TODO
    //calculate the predicted PC value
-   //predPC = .... call your function that predicts the next PC   
+   //predPC = .... call your function that predicts the next PoC   
 
    //set the input for the PREDPC pipe register field in the F register
    freg->set(F_PREDPC, predPC);
@@ -185,9 +185,15 @@ uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valC, uint64_t f_val
 	}
 }
 
-uint64_t FetchStage::PCincrement(uint64_t f_pc, uint64_t needRegRes, bool needValCRes)
+uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegRes, bool needValCRes)
 {
-
+	// F_PC + length of current intruction (Get length from if needRegRes or needValCRes)
+	if (needRegRes == true)
+	{
+		uint64_t byteNumber = 6;
+	}
+	return f_pc; 
+	
 }
 //TODO
 //Write your selectPC, needRegIds, needValC, PC increment, and predictPC methods
