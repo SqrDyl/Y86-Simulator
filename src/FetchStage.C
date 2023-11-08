@@ -32,8 +32,8 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
    uint64_t icode = Instruction::INOP, ifun = Instruction::FNONE;
    uint64_t rA = RegisterFile::RNONE, rB = RegisterFile::RNONE;
    uint64_t valC = 0, valP = 0, stat = Status::SAOK, predPC = 0;
-   bool needvalC = false;
-   bool needregId = false;
+   bool needValC = false;
+   bool needRegId = false;
 
    //TODO: read lab assignment
    //TODO 
@@ -61,25 +61,25 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     {
         stat = Status::SHLT;
     }
-    bool needRegRes = FetchStage::needRegIds(icode);
-    bool needValRes = FetchStage::need_valC(icode);
+    needRegId = FetchStage::needRegIds(icode);
+    needValC = FetchStage::need_valC(icode);
     
    //TODO
    //determine the address of the next sequential function
    //valP = ..... call your PC increment function 
-   valP = PCincrement(f_pc, needRegRes, needValRes);
+   valP = PCincrement(f_pc, needRegId, needValC);
    
    //TODO
    //calculate the predicted PC value
    //predPC = .... call your function that predicts the next PoC   
-   uint64_t predicted = predictPC(icode, valC, valP);
+    predPC = predictPC(icode, valC, valP);
 
    //set the input for the PREDPC pipe register field in the F register
-   freg->set(F_PREDPC, predicted);
+    freg->set(F_PREDPC, predPC);
 
    //set the inputs for the D register
-   setDInput(dreg, stat, icode, ifun, rA, rB, valC, valP);
-   return false;
+    setDInput(dreg, stat, icode, ifun, rA, rB, valC, valP);
+    return false;
 }
 
 /* doClockHigh
