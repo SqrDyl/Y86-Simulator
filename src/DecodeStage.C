@@ -63,4 +63,82 @@ void DecodeStage::doClockHigh(PipeRegArray * pipeRegs)
 }
 
 
+uint64_t DecodeStage::srcA(PipeReg * dreg)
+{
+	uint64_t d_Icode = dreg->get(D_ICODE);
+	if (d_Icode == Instruction::IRRMOVQ || d_Icode == Instruction::IRMMOVQ ||
+		d_Icode == Instruction::IOPQ || d_Icode == Instruction::IPUSHQ)
+	{
+		return dreg->get(D_RA);	
+	}
+	else if (d_Icode == Instruction::IPOPQ || d_Icode == Instruction::IRET)
+	{
+		return dreg->get(RegisterFile::rsp);
+	}
+	else
+	{
 
+		return RegisterFile::RNONE;
+	}
+}
+
+uint64_t DecodeStage::srcB(PipeReg * dreg)
+{
+	uint64_t d_Icode = dreg->get(D_ICODE);
+	if (d_Icode == Instruction::IOPQ || d_Icode == Instruction::IRMMOVQ || 
+			d_Icode == Instruction::IMRMOVQ)
+	{
+		return dreg->get(D_RB);
+	}
+	else if (d_Icode == Instruction::IPUSHQ || d_Icode == Instruction::IPOPQ ||
+			d_Icode == Instruction::ICALL || d_Icode == Instruction::IRET)
+	{
+		return dreg->get(RegisterFile::rsp);
+	}
+	else
+	{
+		return RegisterFile::RNONE;
+	}
+}
+
+uint64_t DecodeStage::dstE(PipeReg * dreg)
+{
+	uint64_t d_Icode = dreg->get(D_ICODE);
+	if (d_Icode == Instruction::IRRMOVQ || d_Icode == Instruction::IIRMOVQ ||
+			d_Icode == Instruction::IOPQ)
+	{
+		return dreg->get(D_RB);
+	}
+	else if (d_Icode == Instruction::IPUSHQ || d_Icode == Instruction::IPOPQ ||
+			d_Icode == Instruction::ICALL || d_Icode == Instruction::IRET)
+	{
+		return dreg->get(RegisterFile::rsp);
+	}
+	else 
+	{
+		return RegisterFile::RNONE;
+	}
+}
+
+uint64_t DecodeStage::dstM(PipeReg * dreg)
+{
+	uint64_t d_Icode = dreg->get(D_ICODE);
+	if (d_Icode == Instruction::IMRMOVQ || d_Icode == Instruction::IPOPQ)
+	{
+		return dreg->get(D_RA);
+	}
+	else
+	{
+		return RegisterFile::RNONE;
+	}
+}
+
+uint64_t DecodeStage::FwdA(PipeReg * dreg, uint64_t srcA1)
+{
+	return dreg->get(D_RA);
+}
+
+uint64_t DecodeStage::FwdB(PipeReg * dreg, uint64_t srcB1)
+{
+	return dreg->get(D_RB);
+}
