@@ -22,9 +22,9 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
 	uint64_t stat = ereg->get(E_STAT);
 	uint64_t icode = ereg->get(E_ICODE);
     uint64_t dstM = ereg->get(E_DSTM);
+    uint64_t valA = mreg->get(M_VALA);
 
-
-	setMInput(mreg, stat, icode, 0, 0, RegisterFile::RNONE, RegisterFile::RNONE, dstM);
+	setMInput(mreg, stat, icode, 0, 0, valA, RegisterFile::RNONE, dstM);
 
 	return false;
 }

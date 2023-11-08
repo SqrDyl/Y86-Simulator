@@ -16,6 +16,8 @@
         "M.C": "cpp",
         "W.C": "cpp",
         "Tools.C": "cpp",
-        "Memory.C": "cpp"
+        "Memory.C": "cpp",
+        "yess.C": "cpp",
+        "ExecuteStage.C": "cpp"
     }
 }

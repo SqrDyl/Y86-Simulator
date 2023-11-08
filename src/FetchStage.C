@@ -54,8 +54,8 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     uint64_t f_pc = selectPC(freg, mreg, wreg);
 
     uint8_t insByte = mem->getByte(f_pc, mem_error);
-    icode = Tools::getBits(insByte, 0, 4);
-    ifun = Tools::getBits(insByte, 5, 9);
+    icode = Tools::getBits(insByte, 4, 7);
+    ifun = Tools::getBits(insByte, 0, 3);
 
     if (icode == Instruction::IHALT)
     {
@@ -130,21 +130,19 @@ uint64_t FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
     uint64_t M_valA = mreg->get(M_VALA);
     uint64_t M_Cnd = mreg->get(M_CND);
     uint64_t W_valM = wreg->get(W_VALM);
-    //uint64_t F_predPC = freg->get(F_PREDPC);
-    if (M_icode == Tools::getByte(M_icode, 0) && !M_Cnd)
+    uint64_t pred_pc = freg->get(F_PREDPC);
+
+    if (M_icode == Instruction::IJXX && !M_Cnd)
     {
-        freg->set(F_PREDPC, M_valA);
 		return M_valA;
     }
-    else if (W_icode == Tools::getByte(W_icode, 0))
+    else if (W_icode == Instruction::IRET) 
     {
-        freg->set(F_PREDPC, W_valM);
 		return W_valM;
     }
     else
     {
-        freg->set(F_PREDPC, 1);
-		return 1;
+		return pred_pc;
     }
 }
 
@@ -195,7 +193,7 @@ uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegRes, bool needValCRe
 	{
         f_pc += 8;	
 	}
-	return f_pc++; 
+	return f_pc + 1; 
 	
 }
 //TODO

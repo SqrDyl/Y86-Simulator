@@ -136,13 +136,11 @@ bool Loader::load()
 
         if (isDataRec(inputLine) && isBadDataRec(inputLine, lineNumber, pointer, addressLength))
 		{  
-            printErrMsg(baddata, lineNumber, pointer);
-            break;
+            return printErrMsg(baddata, lineNumber, pointer);
 		}
 		else if (!isDataRec(inputLine) && isBadComRec(inputLine, lineNumber, pointer))
 		{
-			printErrMsg(badcomment, lineNumber, pointer);
-            break;
+			return printErrMsg(badcomment, lineNumber, pointer);
 		}
 		else if (isDataRec(inputLine))
 		{
