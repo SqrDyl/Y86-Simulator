@@ -62,18 +62,20 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
         stat = Status::SHLT;
     }
     bool needRegRes = FetchStage::needRegIds(icode);
-    bool needValC = FetchStage::need_valC(icode);
+    bool needValRes = FetchStage::need_valC(icode);
     
    //TODO
    //determine the address of the next sequential function
    //valP = ..... call your PC increment function 
-
+   valP = PCincrement(f_pc, needRegRes, needValRes);
+   
    //TODO
    //calculate the predicted PC value
    //predPC = .... call your function that predicts the next PoC   
+   uint64_t predicted = predictPC(icode, valC, valP);
 
    //set the input for the PREDPC pipe register field in the F register
-   freg->set(F_PREDPC, predPC);
+   freg->set(F_PREDPC, predicted);
 
    //set the inputs for the D register
    setDInput(dreg, stat, icode, ifun, rA, rB, valC, valP);
