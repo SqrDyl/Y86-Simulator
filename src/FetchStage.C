@@ -193,7 +193,7 @@ uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegRes, bool needValCRe
 	{
 		f_pc += 2;
 	}
-	else if (needValCRes == true)
+	if (needValCRes == true)
 	{
         f_pc += 8;	
 	}
