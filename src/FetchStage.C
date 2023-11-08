@@ -26,6 +26,8 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
 {
    PipeReg * freg = pipeRegs->getFetchReg();
    PipeReg * dreg = pipeRegs->getDecodeReg();
+   PipeReg * mreg = pipeRegs->getMemoryReg();
+   PipeReg * wreg = pipeRegs->getWritebackReg();
    bool mem_error = false;
    uint64_t icode = Instruction::INOP, ifun = Instruction::FNONE;
    uint64_t rA = RegisterFile::RNONE, rB = RegisterFile::RNONE;
@@ -49,7 +51,18 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
    //immediate field and a register byte. (Look at the instruction encodings.)
    //needvalC =  .... call your need valC function
    //needregId = .... call your need regId function
+    uint64_t f_pc = selectPC(freg, mreg, wreg);
 
+    uint8_t insByte = mem->getByte(f_pc, mem_error);
+    icode = Tools::getBits(insByte, 0, 4);
+    ifun = Tools::getBits(insByte, 5, 9);
+
+    if (icode == Instruction::IHALT)
+    {
+        
+    }
+    
+    
    //TODO
    //determine the address of the next sequential function
    //valP = ..... call your PC increment function 
@@ -183,6 +196,8 @@ uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valC, uint64_t f_val
 		return f_valP;
 	}
 }
+
+
 //TODO
 //Write your selectPC, needRegIds, needValC, PC increment, and predictPC methods
 //Remember to add declarations for these to FetchStage.h
