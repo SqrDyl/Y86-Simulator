@@ -25,8 +25,12 @@ bool DecodeStage::doClockLow(PipeRegArray * pipeRegs)
 	uint64_t ifun = dreg->get(D_IFUN);
     uint64_t valC = dreg->get(D_VALC);
 
-    setEInput(ereg, stat, icode, ifun, valC, 0, 0, RegisterFile::RNONE, RegisterFile::RNONE,
-	    RegisterFile::RNONE, RegisterFile::RNONE);
+	uint64_t srcAR = srcA(dreg);
+	uint64_t srcBR = srcB(dreg);
+	
+    setEInput(ereg, stat, icode, ifun, valC, 0, 0, dstE(dreg), dstM(dreg),
+	    fwdA(dreg, srcAR), fwdB(dreg, srcBR));
+
 
     return false;
 }
@@ -133,12 +137,12 @@ uint64_t DecodeStage::dstM(PipeReg * dreg)
 	}
 }
 
-uint64_t DecodeStage::FwdA(PipeReg * dreg, uint64_t srcA1)
+uint64_t DecodeStage::fwdA(PipeReg * dreg, uint64_t srcA1)
 {
 	return dreg->get(D_RA);
 }
 
-uint64_t DecodeStage::FwdB(PipeReg * dreg, uint64_t srcB1)
+uint64_t DecodeStage::fwdB(PipeReg * dreg, uint64_t srcB1)
 {
 	return dreg->get(D_RB);
 }
