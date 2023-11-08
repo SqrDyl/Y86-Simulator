@@ -156,15 +156,9 @@ bool FetchStage::needRegIds(uint64_t f_icode)
 {
     //needRegIds  method: input is f_icode
     //bool need_regids = f_icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, IIRMOVQ, IRMMOVQ, IMRMOVQ };
-    uint64_t irmovq = 3;
-    uint64_t iopq = 6;
-    uint64_t ipushq = 0xA;
-    uint64_t ipopq = 0xB;
-    uint64_t rmmovq = 5;
-    uint64_t mrmovq = 4;
     uint64_t num = Tools::getBits(f_icode, 0, 4);
-    return ((num == irmovq) || (num == iopq) || (num == ipushq) 
-        || (num == ipopq) || (num == rmmovq) || (num == mrmovq));
+    return ((num == Instruction::IRRMOVQ) || (num == Instruction::IOPQ) || (num == Instruction::IPUSHQ) 
+        || (num == Instruction::IPOPQ) || (num == Instruction::IIRMOVQ) || (num == Instruction::IRMMOVQ) || (num == Instruction::IMRMOVQ));
 }
 
 bool FetchStage::need_valC(uint64_t f_icode)
@@ -172,22 +166,15 @@ bool FetchStage::need_valC(uint64_t f_icode)
     //needValC method: input is f_icode
     //bool need_valC = f_icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL };   
     uint64_t num = Tools::getBits(f_icode, 0, 4); //will return 0x61
-
-    uint64_t irmovq = 3;
-    uint64_t rmmovq = 5;
-    uint64_t ijxx = 7;
-    uint64_t icall = 8;
-    
-    return (num == irmovq || num == rmmovq || num == ijxx || num == icall);
+    return (num == Instruction::IIRMOVQ || num == Instruction::IRMMOVQ ||
+	 	num == Instruction::IMRMOVQ || num == Instruction::IJXX || num == Instruction::ICALL);
 }
 
 
 uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valC, uint64_t f_valP)
 {
 	uint64_t num = Tools::getBits(f_icode, 0, 4);
-	uint64_t icall = 8;
-	uint64_t ijxx = 7;
-	if (num == icall || num == ijxx)
+	if (num == Instruction::ICALL || num == Instruction::IJXX)
 	{
 		return f_valC;
 	}
