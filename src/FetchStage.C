@@ -11,6 +11,7 @@
 #include "D.h"
 #include "M.h"
 #include "W.h"
+#include "Tools.h"
 
 /*
  * doClockLow
@@ -110,8 +111,22 @@ void FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
 {
     uint64_t M_icode = mreg->get(M_ICODE);
     uint64_t W_icode = wreg->get(W_ICODE);
+    uint64_t M_valA = mreg->get(M_VALA);
+    uint64_t M_Cnd = mreg->get(M_CND);
+    uint64_t W_valM = wreg->get(W_VALM);
     //uint64_t F_predPC = freg->get(F_PREDPC);
-    
+    if (M_icode == Tools::getByte(M_icode, 0) && !M_Cnd)
+    {
+        freg->set(F_PREDPC, M_valA);
+    }
+    else if (W_icode == Tools::getByte(W_icode, 0))
+    {
+        freg->set(F_PREDPC, W_valM);
+    }
+    else
+    {
+        freg->set(F_PREDPC, 1);
+    }
     //Uncomment this block
     /*word f_pc = [
     M_icode == IJXX && !M_Cnd : M_valA;
@@ -121,11 +136,35 @@ void FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
 
 }
 
-bool FetchStage::needRegIds(PipeReg * freg)
+bool FetchStage::needRegIds(uint64_t f_icode)
 {
-   return false;
+    //needRegIds  method: input is f_icode
+    //bool need_regids = f_icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, IIRMOVQ, IRMMOVQ, IMRMOVQ };
+    uint64_t irmovq = 0x30;
+    uint64_t iopq = 0x6;
+    uint64_t ipushq = 0xA0;
+    uint64_t ipopq = 0xB0;
+    uint64_t rmmovq = 0x50;
+    uint64_t mrmovq = 4;
+    uint64_t num = Tools::getBits(f_icode, 0, 4);
+    return ((num == irmovq) || (num == iopq) || (num == ipushq) 
+        || (num == ipopq) || (num == rmmovq) || (num == mrmovq));
 }
 
+bool FetchStage::need_valC(uint64_t f_icode)
+{
+    //needValC method: input is f_icode
+    //bool need_valC = f_icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL };   
+    uint64_t num = Tools::getBits(f_icode, 0, 4); //will return 0x61
+
+    uint64_t irmovq = 3;
+    uint64_t rmmovq = 5;
+    uint64_t mrmovq = 4;
+    uint64_t ijxx = 7;
+    uint64_t icall = 8;
+    
+    return (num == irmovq || num == rmmovq || num == ijxx || num == icall);
+}
 //TODO
 //Write your selectPC, needRegIds, needValC, PC increment, and predictPC methods
 //Remember to add declarations for these to FetchStage.h
@@ -142,6 +181,7 @@ word f_pc = [
 
 //needRegIds  method: input is f_icode
 bool need_regids = f_icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, IIRMOVQ, IRMMOVQ, IMRMOVQ };
+
 
 
 //needValC method: input is f_icode

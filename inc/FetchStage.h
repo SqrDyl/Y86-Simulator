@@ -13,7 +13,8 @@ class FetchStage: public Stage
                      uint64_t rA, uint64_t rB,
                      uint64_t valC, uint64_t valP);
       void selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg);
-	  bool needRegIds(PipeReg * freg);
+	  bool needRegIds(uint64_t f_icode);
+      bool need_valC(uint64_t f_icode);
 
    public:
       //These are the only methods called outside of the class

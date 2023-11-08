@@ -14,6 +14,8 @@
         "WritebackStage.C": "cpp",
         "F.C": "cpp",
         "M.C": "cpp",
-        "W.C": "cpp"
+        "W.C": "cpp",
+        "Tools.C": "cpp",
+        "Memory.C": "cpp"
     }
 }
