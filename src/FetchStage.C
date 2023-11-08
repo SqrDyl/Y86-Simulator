@@ -188,9 +188,21 @@ uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valC, uint64_t f_val
 uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegRes, bool needValCRes)
 {
 	// F_PC + length of current intruction (Get length from if needRegRes or needValCRes)
-	if (needRegRes == true)
+	if (needRegRes == true && needValC == true)
+	{
+
+	}
+	else if (needRegRes == true)
 	{
 		uint64_t byteNumber = 6;
+	}
+	else if (needValC == true)
+	{
+       
+	}
+	else
+	{
+
 	}
 	return f_pc; 
 	
