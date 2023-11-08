@@ -143,11 +143,11 @@ bool FetchStage::needRegIds(uint64_t f_icode)
 {
     //needRegIds  method: input is f_icode
     //bool need_regids = f_icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, IIRMOVQ, IRMMOVQ, IMRMOVQ };
-    uint64_t irmovq = 0x30;
-    uint64_t iopq = 0x6;
-    uint64_t ipushq = 0xA0;
-    uint64_t ipopq = 0xB0;
-    uint64_t rmmovq = 0x50;
+    uint64_t irmovq = 3;
+    uint64_t iopq = 6;
+    uint64_t ipushq = 0xA;
+    uint64_t ipopq = 0xB;
+    uint64_t rmmovq = 5;
     uint64_t mrmovq = 4;
     uint64_t num = Tools::getBits(f_icode, 0, 4);
     return ((num == irmovq) || (num == iopq) || (num == ipushq) 
@@ -177,13 +177,11 @@ uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valC, uint64_t f_val
 	uint64_t ijxx = 7;
 	if (num == icall || num == ijxx)
 	{
-		freg->set(F_PREDPC, M_valA);
-		return freg->get(F_PREDPC);
+		return f_valC;
 	}
 	else
 	{
-		freg->set(F_PREDPC, f_valP);
-		return freg->get(F_PREDPC);
+		return f_valP;
 	}
 }
 //TODO
