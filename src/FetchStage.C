@@ -162,7 +162,6 @@ bool FetchStage::need_valC(uint64_t f_icode)
 
     uint64_t irmovq = 3;
     uint64_t rmmovq = 5;
-    uint64_t mrmovq = 4;
     uint64_t ijxx = 7;
     uint64_t icall = 8;
     
