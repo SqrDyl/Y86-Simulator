@@ -61,7 +61,8 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     {
         stat = Status::SHLT;
     }
-    
+    bool needRegRes = FetchStage::needRegIds(icode);
+    bool needValC = FetchStage::need_valC(icode);
     
    //TODO
    //determine the address of the next sequential function
