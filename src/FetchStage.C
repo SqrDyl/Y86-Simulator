@@ -30,7 +30,6 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
    PipeReg * wreg = pipeRegs->getWritebackReg();
    bool mem_error = false;
    uint64_t icode = Instruction::INOP, ifun = Instruction::FNONE;
-   uint64_t rA = RegisterFile::RNONE, rB = RegisterFile::RNONE;
    uint64_t valC = 0, valP = 0, stat = Status::SAOK, predPC = 0;
    bool needValC = false;
    bool needRegId = false;
@@ -52,7 +51,7 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
    //needvalC =  .... call your need valC function
    //needregId = .... call your need regId function
     uint64_t f_pc = selectPC(freg, mreg, wreg);
-
+    uint64_t rA = RegisterFile::RNONE, rB = RegisterFile::RNONE;
     uint8_t insByte = mem->getByte(f_pc, mem_error);
     icode = Tools::getBits(insByte, 4, 7);
     ifun = Tools::getBits(insByte, 0, 3);
@@ -77,8 +76,12 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
    //set the input for the PREDPC pipe register field in the F register
     freg->set(F_PREDPC, predPC);
 
+    //Lab7 calls
+    getRegs(needRegId, f_pc, rA, rB);
+
+
    //set the inputs for the D register
-    setDInput(dreg, stat, icode, ifun, rA, rB, valC, valP);
+    setDInput(dreg, stat, icode, ifun, rA, rB, buildValC(needValC, needRegId, f_pc), valP);
     return false;
 }
 
@@ -196,6 +199,46 @@ uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegRes, bool needValCRe
 	return f_pc + 1; 
 	
 }
+
+
+//Lab7
+//=============================================================================
+void FetchStage::getRegs(bool needReg, uint64_t f_pc, uint64_t &rA, uint64_t &rB)
+{
+    bool error = false;
+    if (needReg)
+    {
+        uint8_t regs = mem->getByte(f_pc + 1, error);
+        rA = Tools::getBits(regs, 4, 7);
+        rB = Tools::getBits(regs, 0, 3);
+    }
+}
+
+uint64_t FetchStage::buildValC(bool needValC, bool needRegs, uint64_t f_pc)
+{
+    bool error = false;
+    if (needValC)
+    {
+        f_pc++; //move past the instruction and function byte
+        uint8_t bytes[8];
+        if (needRegs)
+        {
+            f_pc++;
+        }
+        for (int i = 0; i < 8; i++)
+        {
+            bytes[i] = mem->getByte(f_pc, error);
+            f_pc++;   
+        }
+        uint64_t valC = Tools::buildLong(bytes);
+        return valC;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 //TODO
 //Write your selectPC, needRegIds, needValC, PC increment, and predictPC methods
 //Remember to add declarations for these to FetchStage.h

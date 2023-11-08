@@ -17,6 +17,8 @@ class FetchStage: public Stage
       bool need_valC(uint64_t f_icode);
 	  uint64_t predictPC(uint64_t f_icode, uint64_t f_valC, uint64_t f_valP);
       uint64_t PCincrement(uint64_t f_pc, bool needReg, bool needValC);
+      void getRegs(bool needReg, uint64_t f_pc, uint64_t &rA, uint64_t &rB);
+      uint64_t buildValC(bool needValC, bool needRegs, uint64_t f_pc);
 
    public:
       //These are the only methods called outside of the class
