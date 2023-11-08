@@ -18,6 +18,7 @@
         "Tools.C": "cpp",
         "Memory.C": "cpp",
         "yess.C": "cpp",
-        "ExecuteStage.C": "cpp"
+        "ExecuteStage.C": "cpp",
+        "RegisterFile.C": "cpp"
     }
 }
