@@ -59,7 +59,7 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
 
     if (icode == Instruction::IHALT)
     {
-        
+
     }
     
     
@@ -158,7 +158,8 @@ bool FetchStage::needRegIds(uint64_t f_icode)
     //bool need_regids = f_icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, IIRMOVQ, IRMMOVQ, IMRMOVQ };
     uint64_t num = Tools::getBits(f_icode, 0, 4);
     return ((num == Instruction::IRRMOVQ) || (num == Instruction::IOPQ) || (num == Instruction::IPUSHQ) 
-        || (num == Instruction::IPOPQ) || (num == Instruction::IIRMOVQ) || (num == Instruction::IRMMOVQ) || (num == Instruction::IMRMOVQ));
+        || (num == Instruction::IPOPQ) || (num == Instruction::IIRMOVQ) || (num == Instruction::IRMMOVQ) 
+        || (num == Instruction::IMRMOVQ));
 }
 
 bool FetchStage::need_valC(uint64_t f_icode)
@@ -166,8 +167,8 @@ bool FetchStage::need_valC(uint64_t f_icode)
     //needValC method: input is f_icode
     //bool need_valC = f_icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL };   
     uint64_t num = Tools::getBits(f_icode, 0, 4); //will return 0x61
-    return (num == Instruction::IIRMOVQ || num == Instruction::IRMMOVQ ||
-	 	num == Instruction::IMRMOVQ || num == Instruction::IJXX || num == Instruction::ICALL);
+    return (num == Instruction::IIRMOVQ || num == Instruction::IRMMOVQ 
+        || num == Instruction::IMRMOVQ || num == Instruction::IJXX || num == Instruction::ICALL);
 }
 
 
