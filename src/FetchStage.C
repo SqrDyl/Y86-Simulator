@@ -67,7 +67,7 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
    //TODO
    //determine the address of the next sequential function
    //valP = ..... call your PC increment function 
-   valP = PCincrement(f_pc, needRegId, needValC);
+    valP = PCincrement(f_pc, needRegId, needValC);
    
    //TODO
    //calculate the predicted PC value
@@ -134,51 +134,47 @@ uint64_t FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
     if (M_icode == Tools::getByte(M_icode, 0) && !M_Cnd)
     {
         freg->set(F_PREDPC, M_valA);
-		return freg->get(F_PREDPC);
+		return M_valA;
     }
     else if (W_icode == Tools::getByte(W_icode, 0))
     {
         freg->set(F_PREDPC, W_valM);
-		return freg->get(F_PREDPC);
+		return W_valM;
     }
     else
     {
         freg->set(F_PREDPC, 1);
-		return freg->get(F_PREDPC);
+		return 1;
     }
-    //Uncomment this block
-    /*word f_pc = [
-    M_icode == IJXX && !M_Cnd : M_valA;
-    W_icode == IRET : W_valM;
-    1: F_predPC;
-    ];*/
-
 }
 
-bool FetchStage::needRegIds(uint64_t f_icode)
+bool FetchStage::needRegIds(uint64_t icode)
 {
     //needRegIds  method: input is f_icode
     //bool need_regids = f_icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, IIRMOVQ, IRMMOVQ, IMRMOVQ };
-    uint64_t num = Tools::getBits(f_icode, 0, 4);
-    return ((num == Instruction::IRRMOVQ) || (num == Instruction::IOPQ) || (num == Instruction::IPUSHQ) 
-        || (num == Instruction::IPOPQ) || (num == Instruction::IIRMOVQ) || (num == Instruction::IRMMOVQ) 
-        || (num == Instruction::IMRMOVQ));
+    //uint64_t num = Tools::getBits(f_icode, 0, 4);
+
+    return ((icode == Instruction::IRRMOVQ) || (icode == Instruction::IOPQ) || (icode == Instruction::IPUSHQ) 
+        || (icode == Instruction::IPOPQ) || (icode == Instruction::IIRMOVQ) || (icode == Instruction::IRMMOVQ) 
+        || (icode == Instruction::IMRMOVQ));
 }
 
-bool FetchStage::need_valC(uint64_t f_icode)
+bool FetchStage::need_valC(uint64_t icode)
 {
     //needValC method: input is f_icode
     //bool need_valC = f_icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL };   
-    uint64_t num = Tools::getBits(f_icode, 0, 4); //will return 0x61
-    return (num == Instruction::IIRMOVQ || num == Instruction::IRMMOVQ 
-        || num == Instruction::IMRMOVQ || num == Instruction::IJXX || num == Instruction::ICALL);
+    //uint64_t num = Tools::getBits(f_icode, 0, 4); //will return 0x61
+
+    return (icode == Instruction::IIRMOVQ || icode == Instruction::IRMMOVQ 
+        || icode == Instruction::IMRMOVQ || icode == Instruction::IJXX || icode == Instruction::ICALL);
 }
 
 
-uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valC, uint64_t f_valP)
+uint64_t FetchStage::predictPC(uint64_t icode, uint64_t f_valC, uint64_t f_valP)
 {
-	uint64_t num = Tools::getBits(f_icode, 0, 4);
-	if (num == Instruction::ICALL || num == Instruction::IJXX)
+	//uint64_t num = Tools::getBits(f_icode, 0, 4);
+    
+	if (icode == Instruction::ICALL || icode == Instruction::IJXX)
 	{
 		return f_valC;
 	}
@@ -193,7 +189,7 @@ uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegRes, bool needValCRe
 	// F_PC + length of current intruction (Get length from if needRegRes or needValCRes)
 	if (needRegRes == true)
 	{
-		f_pc += 2;
+	    f_pc++;
 	}
 	if (needValCRes == true)
 	{
