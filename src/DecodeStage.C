@@ -28,8 +28,8 @@ bool DecodeStage::doClockLow(PipeRegArray * pipeRegs)
 	uint64_t srcAR = srcA(dreg);
 	uint64_t srcBR = srcB(dreg);
 	
-    setEInput(ereg, stat, icode, ifun, valC, 0, 0, dstE(dreg), dstM(dreg),
-	    fwdA(dreg, srcAR), fwdB(dreg, srcBR));
+    setEInput(ereg, stat, icode, ifun, valC,  fwdA(dreg, srcAR), fwdB(dreg, srcBR), dstE(dreg), dstM(dreg),
+	   srcAR, srcBR);
 
 
     return false;
@@ -77,7 +77,7 @@ uint64_t DecodeStage::srcA(PipeReg * dreg)
 	}
 	else if (d_Icode == Instruction::IPOPQ || d_Icode == Instruction::IRET)
 	{
-		return dreg->get(RegisterFile::rsp);
+		return RegisterFile::rsp;
 	}
 	else
 	{
@@ -97,7 +97,7 @@ uint64_t DecodeStage::srcB(PipeReg * dreg)
 	else if (d_Icode == Instruction::IPUSHQ || d_Icode == Instruction::IPOPQ ||
 			d_Icode == Instruction::ICALL || d_Icode == Instruction::IRET)
 	{
-		return dreg->get(RegisterFile::rsp);
+		return RegisterFile::rsp;
 	}
 	else
 	{
@@ -116,7 +116,7 @@ uint64_t DecodeStage::dstE(PipeReg * dreg)
 	else if (d_Icode == Instruction::IPUSHQ || d_Icode == Instruction::IPOPQ ||
 			d_Icode == Instruction::ICALL || d_Icode == Instruction::IRET)
 	{
-		return dreg->get(RegisterFile::rsp);
+		return RegisterFile::rsp;
 	}
 	else 
 	{
@@ -139,10 +139,12 @@ uint64_t DecodeStage::dstM(PipeReg * dreg)
 
 uint64_t DecodeStage::fwdA(PipeReg * dreg, uint64_t srcA1)
 {
-	return dreg->get(D_RA);
+	bool error; 
+	return rf->readRegister(srcA1, error);
 }
 
 uint64_t DecodeStage::fwdB(PipeReg * dreg, uint64_t srcB1)
 {
-	return dreg->get(D_RB);
+	bool error;
+	return rf->readRegister(srcB1, error);
 }

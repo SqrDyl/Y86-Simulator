@@ -24,8 +24,9 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
     uint64_t dstM = ereg->get(E_DSTM);
     uint64_t valA = mreg->get(M_VALA);
     uint64_t e_valE = ereg->get(E_VALC);
+	uint64_t e_dstE = ereg->get(E_DSTE);
 	//setMInput(mreg, stat, icode, 0, 0, valA, RegisterFile::RNONE, dstM);  this was before changes
-    setMInput(mreg, stat, icode, 0, e_valE, valA, RegisterFile::RNONE, dstM);
+    setMInput(mreg, stat, icode, 0, e_valE, valA, e_dstE, dstM);
 	return false;
 }
 
