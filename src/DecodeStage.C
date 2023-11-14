@@ -27,11 +27,13 @@ bool DecodeStage::doClockLow(PipeRegArray * pipeRegs)
 	uint64_t ifun = dreg->get(D_IFUN);
     uint64_t valC = dreg->get(D_VALC);
 
-	uint64_t srcAR = srcA(dreg);
-	uint64_t srcBR = srcB(dreg);
+	d_srcA = srcA(dreg);
+	d_srcB = srcB(dreg);
 	
-    setEInput(ereg, stat, icode, ifun, valC,  fwdA(srcAR, pipeRegs), fwdB(srcBR, pipeRegs), dstE(dreg), dstM(dreg),
-	   srcAR, srcBR);
+
+
+    setEInput(ereg, stat, icode, ifun, valC, fwdA(pipeRegs), fwdB(pipeRegs), dstE(dreg), dstM(dreg),
+	   d_srcA, d_srcB);
 
 
     return false;
@@ -139,29 +141,14 @@ uint64_t DecodeStage::dstM(PipeReg * dreg)
 	}
 }
 
-uint64_t DecodeStage::fwdA(uint64_t srcA1, PipeRegArray * PipeRegs)
+uint64_t DecodeStage::fwdA(PipeRegArray * PipeRegs)
 {
 	bool error; 
-	return rf->readRegister(srcA1, error);
-}
-
-uint64_t DecodeStage::fwdB(uint64_t srcB1, PipeRegArray * PipeRegs)
-{
-	bool error;
-	return rf->readRegister(srcB1, error);
-}
-
-uint64_t DecodeStage::d_valA(PipeRegArray * PipeRegs, uint64_t srcA)
-{
-	bool error; 
-	PipeReg * ereg = PipeRegs->getExecuteReg();
 	PipeReg * mreg = PipeRegs->getMemoryReg();
 	PipeReg * wreg = PipeRegs->getWritebackReg();
-	PipeReg * dreg = PipeRegs->getDecodeReg();
-	uint64_t d_srcA = rf->readRegister(srcA, error);
-	if (d_srcA == ereg->get(E_DSTE))
+	if (d_srcA == e_dstE)
 	{
-		return ereg->get(e_valE);
+		return e_valE;
 	}
 	else if (d_srcA == mreg->get(M_DSTE))
 	{
@@ -173,19 +160,19 @@ uint64_t DecodeStage::d_valA(PipeRegArray * PipeRegs, uint64_t srcA)
 	}
 	else
 	{
-		return dreg->get(D_RA);
+		return rf->readRegister(d_srcA, error);
 	}
 }
 
-uint64_t DecodeStage::d_valB(PipeRegArray * PipeRegs, uint64_t srcB)
+uint64_t DecodeStage::fwdB(PipeRegArray * PipeRegs)
 {
 	bool error;
 	PipeReg * ereg = PipeRegs->getExecuteReg();
 	PipeReg * mreg = PipeRegs->getMemoryReg();
 	PipeReg * wreg = PipeRegs->getWritebackReg();
 	PipeReg * dreg = PipeRegs->getDecodeReg();
-	uint64_t d_srcB = rf->readRegister(srcB, error);
-	if (d_srcB == ereg->get(E_DSTE))
+
+	if (d_srcB == e_dstE)
 	{
 		return e_valE;
 	}
@@ -199,7 +186,7 @@ uint64_t DecodeStage::d_valB(PipeRegArray * PipeRegs, uint64_t srcB)
 	}
 	else 
 	{
-		return dreg->get(D_RA);
+		return rf->readRegister(d_srcB, error);
 	}
-
 }
+

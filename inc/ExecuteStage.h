@@ -15,7 +15,7 @@ class ExecuteStage: public Stage
       uint64_t AluFunComp(PipeReg * ereg);
       bool setCC(PipeReg * ereg);
       uint64_t dstEComp(PipeReg * ereg);
-      void cc(bool setCC);
+      void ccMethod(bool setCC, uint64_t aluRes, uint64_t aluA, uint64_t aluB, uint64_t aluFun);
       uint64_t alu(uint64_t aluFun);
    public:
       //These are the only methods called outside of the class

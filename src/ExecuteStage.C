@@ -5,6 +5,7 @@
 #include "E.h"
 #include "M.h"
 #include "ConditionCodes.h"
+#include "Tools.h"
 
 /*
  * doClockLow
@@ -146,20 +147,26 @@ uint64_t ExecuteStage::dstEComp(PipeReg * ereg)
     }
 }
 
-void ExecuteStage::cc(bool setCC)
+void ExecuteStage::ccMethod(bool setCC, uint64_t aluRes, uint64_t aluA, uint64_t aluB, uint64_t aluFun)
 {
     bool error = false;
-    if (setCC)
+    if (!setCC)
     {
-        cc->setConditionCode(0, ConditionCodes::ZF, error);
-        cc->setConditionCode(0, ConditionCodes::SF, error);
-        cc->setConditionCode(0, ConditionCodes::OF, error);
+        return;
+    }
+    cc->setConditionCode(aluRes == 0, ConditionCodes::ZF, error);
+    cc->setConditionCode(Tools::sign(aluRes), ConditionCodes::SF, error);
+    if (aluFun == Instruction::ADDQ)
+    {
+        cc->setConditionCode(Tools::addOverflow(aluA, aluB), ConditionCodes::OF, error);
+    }
+    else if (aluFun == Instruction::SUBQ)
+    {
+        cc->setConditionCode(Tools::subOverflow(aluA, aluB), ConditionCodes::OF, error);
     }
     else
     {
-        cc->setConditionCode(1, ConditionCodes::ZF, error);
-        cc->setConditionCode(1, ConditionCodes::SF, error);
-        cc->setConditionCode(1, ConditionCodes::OF, error);
+        cc->setConditionCode(0, ConditionCodes::OF, error);
     }
 }
 
