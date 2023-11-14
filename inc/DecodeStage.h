@@ -13,8 +13,10 @@ class DecodeStage: public Stage
 	uint64_t srcB(PipeReg * dreg);
 	uint64_t dstE(PipeReg * dreg);
 	uint64_t dstM(PipeReg * dreg);
-	uint64_t fwdA(PipeReg * dreg, uint64_t srcA1);
-	uint64_t fwdB(PipeReg * dreg, uint64_t srcB1);
+	uint64_t fwdA(uint64_t srcA1, PipeRegArray * PipeReg);
+	uint64_t fwdB(uint64_t srcB1, PipeRegArray * PipeReg);
+	uint64_t d_valA(PipeRegArray * PipeRegs, uint64_t srcA);
+	uint64_t d_valB(PipeRegArray * PipeRegs, uint64_t srcB);
       //TODO: provide declarations for new methods
    public:
       //These are the only methods called outside of the class

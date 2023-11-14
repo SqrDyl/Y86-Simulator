@@ -4,6 +4,8 @@
 #include "Status.h"
 #include "D.h"
 #include "E.h"
+#include "W.h"
+#include "M.h"
 
 
 /*
@@ -28,7 +30,7 @@ bool DecodeStage::doClockLow(PipeRegArray * pipeRegs)
 	uint64_t srcAR = srcA(dreg);
 	uint64_t srcBR = srcB(dreg);
 	
-    setEInput(ereg, stat, icode, ifun, valC,  fwdA(dreg, srcAR), fwdB(dreg, srcBR), dstE(dreg), dstM(dreg),
+    setEInput(ereg, stat, icode, ifun, valC,  fwdA(srcAR, pipeRegs), fwdB(srcBR, pipeRegs), dstE(dreg), dstM(dreg),
 	   srcAR, srcBR);
 
 
@@ -137,14 +139,67 @@ uint64_t DecodeStage::dstM(PipeReg * dreg)
 	}
 }
 
-uint64_t DecodeStage::fwdA(PipeReg * dreg, uint64_t srcA1)
+uint64_t DecodeStage::fwdA(uint64_t srcA1, PipeRegArray * PipeRegs)
 {
 	bool error; 
 	return rf->readRegister(srcA1, error);
 }
 
-uint64_t DecodeStage::fwdB(PipeReg * dreg, uint64_t srcB1)
+uint64_t DecodeStage::fwdB(uint64_t srcB1, PipeRegArray * PipeRegs)
 {
 	bool error;
 	return rf->readRegister(srcB1, error);
+}
+
+uint64_t DecodeStage::d_valA(PipeRegArray * PipeRegs, uint64_t srcA)
+{
+	bool error; 
+	PipeReg * ereg = PipeRegs->getExecuteReg();
+	PipeReg * mreg = PipeRegs->getMemoryReg();
+	PipeReg * wreg = PipeRegs->getWritebackReg();
+	PipeReg * dreg = PipeRegs->getDecodeReg();
+	uint64_t d_srcA = rf->readRegister(srcA, error);
+	if (d_srcA == ereg->get(E_DSTE))
+	{
+		return ereg->get(e_valE);
+	}
+	else if (d_srcA == mreg->get(M_DSTE))
+	{
+		return mreg->get(M_VALE);
+	}
+	else if (d_srcA == wreg->get(W_DSTE))
+	{
+		return wreg->get(W_VALE);
+	}
+	else
+	{
+		return dreg->get(D_RA);
+	}
+}
+
+uint64_t DecodeStage::d_valB(PipeRegArray * PipeRegs, uint64_t srcB)
+{
+	bool error;
+	PipeReg * ereg = PipeRegs->getExecuteReg();
+	PipeReg * mreg = PipeRegs->getMemoryReg();
+	PipeReg * wreg = PipeRegs->getWritebackReg();
+	PipeReg * dreg = PipeRegs->getDecodeReg();
+	uint64_t d_srcB = rf->readRegister(srcB, error);
+	if (d_srcB == ereg->get(E_DSTE))
+	{
+		return e_valE;
+	}
+	else if (d_srcB == mreg->get(M_DSTE))
+	{
+		return mreg->get(M_VALE);
+	}
+	else if (d_srcB == wreg->get(W_DSTE))
+	{
+		return wreg->get(W_VALE);
+	}
+	else 
+	{
+		return dreg->get(D_RA);
+	}
+
 }
