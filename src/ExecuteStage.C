@@ -28,8 +28,17 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
     uint64_t e_valE = ereg->get(E_VALC);
 	uint64_t e_dstE = ereg->get(E_DSTE);
 	//setMInput(mreg, stat, icode, 0, 0, valA, RegisterFile::RNONE, dstM);  this was before changes
+    e_dstE = dstEComp(ereg);
+    bool ccRes = setCC(ereg);
+    uint64_t fun = aluFunComp(ereg);
+    uint64_t op1 = aluAComp(ereg);
+    uint64_t op2 = aluBComp(ereg);
+    e_valE = alu(fun, op1, op2);
+    ccMethod(ccRes, e_valE, op1, op2, fun);    
 
+    //Should the 0 be e_Cnd?
     setMInput(mreg, stat, icode, 0, e_valE, valA, e_dstE, dstM);
+
 	return false;
 }
 
@@ -111,7 +120,7 @@ uint64_t ExecuteStage::aluBComp(PipeReg * ereg)
     }
 }
 
-uint64_t ExecuteStage::AluFunComp(PipeReg * ereg)
+uint64_t ExecuteStage::aluFunComp(PipeReg * ereg)
 {
     uint64_t e_icode = ereg->get(E_ICODE);
     uint64_t e_ifun = ereg->get(E_IFUN);
@@ -135,7 +144,6 @@ bool ExecuteStage::setCC(PipeReg * ereg)
 uint64_t ExecuteStage::dstEComp(PipeReg * ereg)
 {
     uint64_t e_icode = ereg->get(E_ICODE);
-    uint64_t e_dstE = ereg->get(E_DSTE);
 
     if (e_icode == Instruction::IRRMOVQ && !e_Cnd)
     {
@@ -170,9 +178,24 @@ void ExecuteStage::ccMethod(bool setCC, uint64_t aluRes, uint64_t aluA, uint64_t
     }
 }
 
-uint64_t ExecuteStage::alu(uint64_t aluFun)
+uint64_t ExecuteStage::alu(uint64_t aluFun, uint64_t op1, uint64_t op2)
 {
-
+    if (aluFun == Instruction::ADDQ)
+    {
+        return op1 + op2;
+    }
+    else if (aluFun == Instruction::SUBQ)
+    {
+        return op1 - op2;
+    }
+    else if (aluFun == Instruction::ANDQ)
+    {
+        return op1 & op2;
+    }
+    else if (aluFun == Instruction::XORQ)
+    {
+        return op1 ^ op2;
+    }
 }
 
 
