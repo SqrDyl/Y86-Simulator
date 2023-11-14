@@ -4,6 +4,7 @@
 #include "Status.h"
 #include "E.h"
 #include "M.h"
+#include "ConditionCodes.h"
 
 /*
  * doClockLow
@@ -26,6 +27,7 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
     uint64_t e_valE = ereg->get(E_VALC);
 	uint64_t e_dstE = ereg->get(E_DSTE);
 	//setMInput(mreg, stat, icode, 0, 0, valA, RegisterFile::RNONE, dstM);  this was before changes
+
     setMInput(mreg, stat, icode, 0, e_valE, valA, e_dstE, dstM);
 	return false;
 }
@@ -56,5 +58,114 @@ void ExecuteStage::doClockHigh(PipeRegArray * pipeRegs)
 	mreg->normal();
 }
 
+
+//LAB 8 
+//==============================
+uint64_t ExecuteStage::aluAComp(PipeReg * ereg)
+{
+    uint64_t e_icode = ereg->get(E_ICODE);
+    uint64_t e_valA = ereg->get(E_VALA);
+    uint64_t e_valC = ereg->get(E_VALC);
+
+    if (e_icode == Instruction::IIRMOVQ || e_icode == Instruction::IOPQ)
+    {
+        return e_valA;
+    }
+    else if (e_icode == Instruction::IIRMOVQ || e_icode == Instruction::IRMMOVQ || e_icode == Instruction::IMRMOVQ)
+    {
+        return e_valC;
+    }
+    else if (e_icode == Instruction::ICALL || e_icode == Instruction::IPUSHQ)
+    {
+        return -8;
+    }
+    else if (e_icode == Instruction::IRET ||e_icode == Instruction::IPOPQ)
+    {
+        return 8;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+uint64_t ExecuteStage::aluBComp(PipeReg * ereg)
+{
+    uint64_t e_icode = ereg->get(E_ICODE);
+    uint64_t e_valB = ereg->get(E_VALB);
+
+    if (e_icode == Instruction::IRMMOVQ || e_icode == Instruction::IMRMOVQ || e_icode == Instruction::IOPQ 
+        || e_icode == Instruction::ICALL || e_icode == Instruction::IPUSHQ || e_icode == Instruction::IRET
+        || e_icode == Instruction::IPOPQ)
+    {
+        return e_valB;
+    }
+    else if (e_icode == Instruction::IRRMOVQ || e_icode == Instruction::IIRMOVQ)
+    {
+        return 0;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+uint64_t ExecuteStage::AluFunComp(PipeReg * ereg)
+{
+    uint64_t e_icode = ereg->get(E_ICODE);
+    uint64_t e_ifun = ereg->get(E_IFUN);
+
+    if (e_icode == Instruction::IOPQ)
+    {
+        return e_ifun;
+    }
+    else
+    {
+        return Instruction::ADDQ;
+    }
+}
+
+bool ExecuteStage::setCC(PipeReg * ereg)
+{
+    uint64_t e_icode = ereg->get(E_ICODE);
+    return (e_icode == Instruction::IOPQ);
+}
+
+uint64_t ExecuteStage::dstEComp(PipeReg * ereg)
+{
+    uint64_t e_icode = ereg->get(E_ICODE);
+    uint64_t e_dstE = ereg->get(E_DSTE);
+
+    if (e_icode == Instruction::IRRMOVQ && !e_Cnd)
+    {
+        return RegisterFile::RNONE;
+    }
+    else
+    {
+        return e_dstE;
+    }
+}
+
+void ExecuteStage::cc(bool setCC)
+{
+    bool error = false;
+    if (setCC)
+    {
+        cc->setConditionCode(0, ConditionCodes::ZF, error);
+        cc->setConditionCode(0, ConditionCodes::SF, error);
+        cc->setConditionCode(0, ConditionCodes::OF, error);
+    }
+    else
+    {
+        cc->setConditionCode(1, ConditionCodes::ZF, error);
+        cc->setConditionCode(1, ConditionCodes::SF, error);
+        cc->setConditionCode(1, ConditionCodes::OF, error);
+    }
+}
+
+uint64_t ExecuteStage::alu(uint64_t aluFun)
+{
+
+}
 
 
