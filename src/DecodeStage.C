@@ -27,12 +27,13 @@ bool DecodeStage::doClockLow(PipeRegArray * pipeRegs)
 	uint64_t ifun = dreg->get(D_IFUN);
     uint64_t valC = dreg->get(D_VALC);
 
+    //Lab 8 function calls
+    uint64_t destE = dstE(dreg);
 	d_srcA = srcA(dreg);
 	d_srcB = srcB(dreg);
 	
 
-
-    setEInput(ereg, stat, icode, ifun, valC, fwdA(pipeRegs), fwdB(pipeRegs), dstE(dreg), dstM(dreg),
+    setEInput(ereg, stat, icode, ifun, valC, fwdA(pipeRegs), fwdB(pipeRegs), destE, dstM(dreg),
 	   d_srcA, d_srcB);
 
 
@@ -146,7 +147,11 @@ uint64_t DecodeStage::fwdA(PipeRegArray * PipeRegs)
 	bool error; 
 	PipeReg * mreg = PipeRegs->getMemoryReg();
 	PipeReg * wreg = PipeRegs->getWritebackReg();
-	if (d_srcA == e_dstE)
+	if (d_srcA == RegisterFile::RNONE)
+    {
+        return 0;
+    }
+    else if (d_srcA == e_dstE)
 	{
 		return e_valE;
 	}
@@ -166,13 +171,16 @@ uint64_t DecodeStage::fwdA(PipeRegArray * PipeRegs)
 
 uint64_t DecodeStage::fwdB(PipeRegArray * PipeRegs)
 {
-	bool error;
+	bool error = false;
 	PipeReg * ereg = PipeRegs->getExecuteReg();
 	PipeReg * mreg = PipeRegs->getMemoryReg();
 	PipeReg * wreg = PipeRegs->getWritebackReg();
-	PipeReg * dreg = PipeRegs->getDecodeReg();
 
-	if (d_srcB == e_dstE)
+    if (d_srcB == RegisterFile::RNONE)
+    {
+        return 0;
+    }
+	else if (d_srcB == e_dstE)
 	{
 		return e_valE;
 	}
