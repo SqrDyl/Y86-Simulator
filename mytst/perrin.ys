@@ -1,0 +1,144 @@
+# perrin.ys
+.pos 0  
+.align 16
+
+# Initialize registers
+irmovq $3, %rax   
+irmovq $0, %rcx   
+irmovq $2, %rdx   
+
+# Initialize remaining registers to 0
+irmovq $0, %rbx
+irmovq $0, %rsp
+irmovq $0, %rbp
+irmovq $0, %rsi
+irmovq $0, %rdi
+irmovq $0, %r8
+irmovq $0, %r9
+irmovq $0, %r10
+irmovq $0, %r11
+irmovq $0, %r12
+irmovq $0, %r13
+irmovq $0, %r14
+irmovq $0, %r15
+	
+addq %rax, %rbx
+nop
+nop
+nop
+addq %rcx, %rbx
+
+nop
+nop
+nop
+	
+addq %rcx, %rsp
+nop
+nop
+nop
+addq %rdx, %rsp
+	
+nop
+nop
+nop	
+	
+addq %rdx, %rbp
+nop
+nop
+nop
+addq %rbx, %rbp
+	
+nop
+nop	
+nop
+	
+addq %rbx, %rsi
+nop
+nop
+nop
+addq %rsp, %rsi
+	
+nop
+nop
+nop	
+	
+addq %rsp,%rdi
+nop
+nop
+nop
+addq %rbp,%rdi
+
+nop
+nop
+nop
+	
+addq %rbp, %r8
+nop
+nop
+nop
+addq %rsi, %r8
+
+nop
+nop
+nop
+	
+addq %rsi, %r9
+nop
+nop
+nop
+addq %rdi, %r9
+
+nop
+nop
+nop
+	
+addq %rdi, %r10
+nop
+nop
+nop
+addq %r8, %r10
+	
+nop
+nop
+nop	
+	
+addq %r8, %r11
+nop
+nop
+nop
+addq %r9, %r11
+
+nop
+nop
+nop
+	
+addq %r9, %r12
+nop
+nop
+nop
+addq %r10, %r12
+	
+nop
+nop
+nop
+	
+addq %r10, %r13
+nop
+nop
+nop
+addq %r11, %r13
+
+nop
+nop
+nop
+	
+addq %r11, %r14
+nop
+nop
+nop
+addq %r12, %r14
+
+
+
+halt  
+
