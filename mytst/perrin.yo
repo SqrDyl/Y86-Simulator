@@ -1,6 +1,6 @@
                             | # perrin.ys
 0x000:                      | .pos 0  
-0x000:                      | .align 4
+0x000:                      | .align 16
                             | 
                             | # Initialize registers
 0x000: 30f00300000000000000 | irmovq $3, %rax   
@@ -137,7 +137,68 @@
 0x108: 10                   | nop
 0x109: 60ce                 | addq %r12, %r14
                             | 
-                            | 
-                            | 
-0x10b: 00                   | halt  
+0x10b: 6130                 | subq %rbx, %rax
+0x10d: 10                   | nop
+0x10e: 10                   | nop
+0x10f: 10                   | nop
+0x110: 60e0                 | addq %r14, %rax
+0x112: 61ee                 | subq %r14, %r14
+0x114: 10                   | nop
+0x115: 10                   | nop
+0x116: 10                   | nop
+0x117: 603e                 | addq %rbx, %r14
+0x119: 60d1                 | addq %r13, %rcx
+0x11b: 61dd                 | subq %r13, %r13
+0x11d: 6122                 | subq %rdx, %rdx
+0x11f: 10                   | nop
+0x120: 10                   | nop
+0x121: 10                   | nop
+0x122: 60c2                 | addq %r12, %rdx
+0x124: 61cc                 | subq %r12, %r12
+0x126: 10                   | nop
+0x127: 10                   | nop
+0x128: 10                   | nop
+0x129: 604c                 | addq %rsp, %r12
+0x12b: 6133                 | subq %rbx, %rbx
+0x12d: 10                   | nop
+0x12e: 10                   | nop
+0x12f: 10                   | nop
+0x130: 60b3                 | addq %r11, %rbx
+0x132: 61bb                 | subq %r11, %r11
+0x134: 10                   | nop
+0x135: 10                   | nop
+0x136: 10                   | nop
+0x137: 60eb                 | addq %r14, %r11
+0x139: 6144                 | subq %rsp, %rsp
+0x13b: 10                   | nop
+0x13c: 10                   | nop
+0x13d: 10                   | nop
+0x13e: 60a4                 | addq %r10, %rsp
+0x140: 61aa                 | subq %r10, %r10
+0x142: 10                   | nop
+0x143: 10                   | nop
+0x144: 10                   | nop
+0x145: 60ca                 | addq  %r12, %r10
+0x147: 6155                 | subq %rbp, %rbp
+0x149: 10                   | nop
+0x14a: 10                   | nop
+0x14b: 10                   | nop
+0x14c: 6095                 | addq %r9, %rbp
+0x14e: 6199                 | subq %r9, %r9
+0x150: 10                   | nop
+0x151: 10                   | nop
+0x152: 10                   | nop
+0x153: 60c9                 | addq %r12, %r9
+0x155: 60e9                 | addq %r14, %r9
+0x157: 6166                 | subq %rsi, %rsi
+0x159: 10                   | nop
+0x15a: 10                   | nop
+0x15b: 10                   | nop
+0x15c: 6086                 | addq %r8,%rsi
+0x15e: 6188                 | subq %r8,%r8
+0x160: 10                   | nop
+0x161: 10                   | nop
+0x162: 10                   | nop
+0x163: 6098                 | addq %r9, %r8
+0x165: 00                   | halt  
                             | 

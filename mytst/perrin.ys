@@ -1,6 +1,6 @@
 # perrin.ys
 .pos 0  
-.align 4
+.align 16
 
 # Initialize registers
 irmovq $3, %rax   
@@ -137,7 +137,68 @@ nop
 nop
 addq %r12, %r14
 
-
-
+subq %rbx, %rax
+nop
+nop
+nop
+addq %r14, %rax
+subq %r14, %r14
+nop
+nop
+nop
+addq %rbx, %r14
+addq %r13, %rcx
+subq %r13, %r13
+subq %rdx, %rdx
+nop
+nop
+nop
+addq %r12, %rdx
+subq %r12, %r12
+nop
+nop
+nop
+addq %rsp, %r12
+subq %rbx, %rbx
+nop
+nop
+nop
+addq %r11, %rbx
+subq %r11, %r11
+nop
+nop
+nop
+addq %r14, %r11
+subq %rsp, %rsp
+nop
+nop
+nop
+addq %r10, %rsp
+subq %r10, %r10
+nop
+nop
+nop
+addq  %r12, %r10
+subq %rbp, %rbp
+nop
+nop
+nop
+addq %r9, %rbp
+subq %r9, %r9
+nop
+nop
+nop
+addq %r12, %r9
+addq %r14, %r9
+subq %rsi, %rsi
+nop
+nop
+nop
+addq %r8,%rsi
+subq %r8,%r8
+nop
+nop
+nop
+addq %r9, %r8
 halt  
 
