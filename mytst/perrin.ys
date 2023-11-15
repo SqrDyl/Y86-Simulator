@@ -1,6 +1,6 @@
 # perrin.ys
 .pos 0  
-.align 16
+.align 4
 
 # Initialize registers
 irmovq $3, %rax   
@@ -20,7 +20,6 @@ irmovq $0, %r11
 irmovq $0, %r12
 irmovq $0, %r13
 irmovq $0, %r14
-irmovq $0, %r15
 	
 addq %rax, %rbx
 nop

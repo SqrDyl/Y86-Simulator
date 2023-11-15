@@ -1,0 +1,143 @@
+                            | # perrin.ys
+0x000:                      | .pos 0  
+0x000:                      | .align 4
+                            | 
+                            | # Initialize registers
+0x000: 30f00300000000000000 | irmovq $3, %rax   
+0x00a: 30f10000000000000000 | irmovq $0, %rcx   
+0x014: 30f20200000000000000 | irmovq $2, %rdx   
+                            | 
+                            | # Initialize remaining registers to 0
+0x01e: 30f30000000000000000 | irmovq $0, %rbx
+0x028: 30f40000000000000000 | irmovq $0, %rsp
+0x032: 30f50000000000000000 | irmovq $0, %rbp
+0x03c: 30f60000000000000000 | irmovq $0, %rsi
+0x046: 30f70000000000000000 | irmovq $0, %rdi
+0x050: 30f80000000000000000 | irmovq $0, %r8
+0x05a: 30f90000000000000000 | irmovq $0, %r9
+0x064: 30fa0000000000000000 | irmovq $0, %r10
+0x06e: 30fb0000000000000000 | irmovq $0, %r11
+0x078: 30fc0000000000000000 | irmovq $0, %r12
+0x082: 30fd0000000000000000 | irmovq $0, %r13
+0x08c: 30fe0000000000000000 | irmovq $0, %r14
+                            | 	
+0x096: 6003                 | addq %rax, %rbx
+0x098: 10                   | nop
+0x099: 10                   | nop
+0x09a: 10                   | nop
+0x09b: 6013                 | addq %rcx, %rbx
+                            | 
+0x09d: 10                   | nop
+0x09e: 10                   | nop
+0x09f: 10                   | nop
+                            | 	
+0x0a0: 6014                 | addq %rcx, %rsp
+0x0a2: 10                   | nop
+0x0a3: 10                   | nop
+0x0a4: 10                   | nop
+0x0a5: 6024                 | addq %rdx, %rsp
+                            | 	
+0x0a7: 10                   | nop
+0x0a8: 10                   | nop
+0x0a9: 10                   | nop	
+                            | 	
+0x0aa: 6025                 | addq %rdx, %rbp
+0x0ac: 10                   | nop
+0x0ad: 10                   | nop
+0x0ae: 10                   | nop
+0x0af: 6035                 | addq %rbx, %rbp
+                            | 	
+0x0b1: 10                   | nop
+0x0b2: 10                   | nop	
+0x0b3: 10                   | nop
+                            | 	
+0x0b4: 6036                 | addq %rbx, %rsi
+0x0b6: 10                   | nop
+0x0b7: 10                   | nop
+0x0b8: 10                   | nop
+0x0b9: 6046                 | addq %rsp, %rsi
+                            | 	
+0x0bb: 10                   | nop
+0x0bc: 10                   | nop
+0x0bd: 10                   | nop	
+                            | 	
+0x0be: 6047                 | addq %rsp,%rdi
+0x0c0: 10                   | nop
+0x0c1: 10                   | nop
+0x0c2: 10                   | nop
+0x0c3: 6057                 | addq %rbp,%rdi
+                            | 
+0x0c5: 10                   | nop
+0x0c6: 10                   | nop
+0x0c7: 10                   | nop
+                            | 	
+0x0c8: 6058                 | addq %rbp, %r8
+0x0ca: 10                   | nop
+0x0cb: 10                   | nop
+0x0cc: 10                   | nop
+0x0cd: 6068                 | addq %rsi, %r8
+                            | 
+0x0cf: 10                   | nop
+0x0d0: 10                   | nop
+0x0d1: 10                   | nop
+                            | 	
+0x0d2: 6069                 | addq %rsi, %r9
+0x0d4: 10                   | nop
+0x0d5: 10                   | nop
+0x0d6: 10                   | nop
+0x0d7: 6079                 | addq %rdi, %r9
+                            | 
+0x0d9: 10                   | nop
+0x0da: 10                   | nop
+0x0db: 10                   | nop
+                            | 	
+0x0dc: 607a                 | addq %rdi, %r10
+0x0de: 10                   | nop
+0x0df: 10                   | nop
+0x0e0: 10                   | nop
+0x0e1: 608a                 | addq %r8, %r10
+                            | 	
+0x0e3: 10                   | nop
+0x0e4: 10                   | nop
+0x0e5: 10                   | nop	
+                            | 	
+0x0e6: 608b                 | addq %r8, %r11
+0x0e8: 10                   | nop
+0x0e9: 10                   | nop
+0x0ea: 10                   | nop
+0x0eb: 609b                 | addq %r9, %r11
+                            | 
+0x0ed: 10                   | nop
+0x0ee: 10                   | nop
+0x0ef: 10                   | nop
+                            | 	
+0x0f0: 609c                 | addq %r9, %r12
+0x0f2: 10                   | nop
+0x0f3: 10                   | nop
+0x0f4: 10                   | nop
+0x0f5: 60ac                 | addq %r10, %r12
+                            | 	
+0x0f7: 10                   | nop
+0x0f8: 10                   | nop
+0x0f9: 10                   | nop
+                            | 	
+0x0fa: 60ad                 | addq %r10, %r13
+0x0fc: 10                   | nop
+0x0fd: 10                   | nop
+0x0fe: 10                   | nop
+0x0ff: 60bd                 | addq %r11, %r13
+                            | 
+0x101: 10                   | nop
+0x102: 10                   | nop
+0x103: 10                   | nop
+                            | 	
+0x104: 60be                 | addq %r11, %r14
+0x106: 10                   | nop
+0x107: 10                   | nop
+0x108: 10                   | nop
+0x109: 60ce                 | addq %r12, %r14
+                            | 
+                            | 
+                            | 
+0x10b: 00                   | halt  
+                            | 
