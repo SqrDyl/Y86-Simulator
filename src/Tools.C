@@ -387,42 +387,12 @@ bool Tools::subOverflow(uint64_t op1, uint64_t op2)
   //See hint for addOverflow
   //Note: you can not simply use addOverflow in this function.  If you negate
   //op1 in order to an add, you may get an overflow. 
-  /**if (op1 == 0xffffffffffffffff && op2 == 0xffffffffffffffff)
-  {
-    return false;
-  }**/
-  bool isOp1N = sign(op1);
-  bool isOp2N = sign(op2);
-  bool isN = sign(op2 - op1);
+  
+    bool sign1 = sign(op1);
+    bool sign2 = sign(op2);
+    bool ansSign = sign(op2 - op1);
 
-    /**if ((isOp1N && !isOp2N && !isN) || (!isOp1N && isOp2N && isN)) 
-    {
-        return false;
-    } 
-    else 
-    {
-        return true;
-    }**/
-    if (!isOp2N && !isOp1N && isN)
-    {
-        return true;
-    }
-    else if (isOp2N && !isOp1N && !isN)
-    {
-        return true;
-    }
-    else if (!isOp2N && isOp1N && isN)
-    {
-        return true;
-    }
-    else if (isOp2N && isOp1N && !isN)
-    {
-        return true;
-    }
-    else 
-    {
-        return false;
-    }
+    return ((sign2 != sign1) && (sign2 != ansSign));
 }
 
 /*
