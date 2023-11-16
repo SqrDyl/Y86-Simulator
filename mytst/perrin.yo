@@ -22,185 +22,98 @@
 0x08c: 30fe0000000000000000 | irmovq $0, %r14
                             | 
                             | #Calculate the registers in reverse order	
+                            | 
+                            | #Calculate Register rbx
 0x096: 6003                 | addq %rax, %rbx
-0x098: 10                   | nop
-0x099: 10                   | nop
-0x09a: 10                   | nop
-0x09b: 6013                 | addq %rcx, %rbx
+0x098: 6013                 | addq %rcx, %rbx
                             | 
-0x09d: 10                   | nop
-0x09e: 10                   | nop
-0x09f: 10                   | nop
+                            | #Calculate Register rsp
+0x09a: 6014                 | addq %rcx, %rsp
+0x09c: 6024                 | addq %rdx, %rsp
                             | 	
-0x0a0: 6014                 | addq %rcx, %rsp
-0x0a2: 10                   | nop
-0x0a3: 10                   | nop
-0x0a4: 10                   | nop
-0x0a5: 6024                 | addq %rdx, %rsp
+                            | #Calculate Register rbp
+0x09e: 6025                 | addq %rdx, %rbp
+0x0a0: 6035                 | addq %rbx, %rbp
                             | 	
-0x0a7: 10                   | nop
-0x0a8: 10                   | nop
-0x0a9: 10                   | nop	
+                            | #Calculate Register rsi
+0x0a2: 6036                 | addq %rbx, %rsi
+0x0a4: 6046                 | addq %rsp, %rsi
                             | 	
-0x0aa: 6025                 | addq %rdx, %rbp
-0x0ac: 10                   | nop
-0x0ad: 10                   | nop
-0x0ae: 10                   | nop
-0x0af: 6035                 | addq %rbx, %rbp
-                            | 	
-0x0b1: 10                   | nop
-0x0b2: 10                   | nop	
-0x0b3: 10                   | nop
-                            | 	
-0x0b4: 6036                 | addq %rbx, %rsi
-0x0b6: 10                   | nop
-0x0b7: 10                   | nop
-0x0b8: 10                   | nop
-0x0b9: 6046                 | addq %rsp, %rsi
-                            | 	
-0x0bb: 10                   | nop
-0x0bc: 10                   | nop
-0x0bd: 10                   | nop	
-                            | 	
-0x0be: 6047                 | addq %rsp,%rdi
-0x0c0: 10                   | nop
-0x0c1: 10                   | nop
-0x0c2: 10                   | nop
-0x0c3: 6057                 | addq %rbp,%rdi
+                            | #Calculate Register rdi
+0x0a6: 6047                 | addq %rsp,%rdi
+0x0a8: 6057                 | addq %rbp,%rdi
                             | 
-0x0c5: 10                   | nop
-0x0c6: 10                   | nop
-0x0c7: 10                   | nop
-                            | 	
-0x0c8: 6058                 | addq %rbp, %r8
-0x0ca: 10                   | nop
-0x0cb: 10                   | nop
-0x0cc: 10                   | nop
-0x0cd: 6068                 | addq %rsi, %r8
+                            | #Calculate Register 8
+0x0aa: 6058                 | addq %rbp, %r8
+0x0ac: 6068                 | addq %rsi, %r8
                             | 
-0x0cf: 10                   | nop
-0x0d0: 10                   | nop
-0x0d1: 10                   | nop
-                            | 	
-0x0d2: 6069                 | addq %rsi, %r9
-0x0d4: 10                   | nop
-0x0d5: 10                   | nop
-0x0d6: 10                   | nop
-0x0d7: 6079                 | addq %rdi, %r9
+                            | #Calculate Register 9
+0x0ae: 6069                 | addq %rsi, %r9
+0x0b0: 6079                 | addq %rdi, %r9
                             | 
-0x0d9: 10                   | nop
-0x0da: 10                   | nop
-0x0db: 10                   | nop
-                            | 	
-0x0dc: 607a                 | addq %rdi, %r10
-0x0de: 10                   | nop
-0x0df: 10                   | nop
-0x0e0: 10                   | nop
-0x0e1: 608a                 | addq %r8, %r10
-                            | 	
-0x0e3: 10                   | nop
-0x0e4: 10                   | nop
-0x0e5: 10                   | nop	
-                            | 	
-0x0e6: 608b                 | addq %r8, %r11
-0x0e8: 10                   | nop
-0x0e9: 10                   | nop
-0x0ea: 10                   | nop
-0x0eb: 609b                 | addq %r9, %r11
+                            | #Calculate Register 10
+0x0b2: 607a                 | addq %rdi, %r10
+0x0b4: 608a                 | addq %r8, %r10
                             | 
-0x0ed: 10                   | nop
-0x0ee: 10                   | nop
-0x0ef: 10                   | nop
-                            | 	
-0x0f0: 609c                 | addq %r9, %r12
-0x0f2: 10                   | nop
-0x0f3: 10                   | nop
-0x0f4: 10                   | nop
-0x0f5: 60ac                 | addq %r10, %r12
-                            | 	
-0x0f7: 10                   | nop
-0x0f8: 10                   | nop
-0x0f9: 10                   | nop
-                            | 	
-0x0fa: 60ad                 | addq %r10, %r13
-0x0fc: 10                   | nop
-0x0fd: 10                   | nop
-0x0fe: 10                   | nop
-0x0ff: 60bd                 | addq %r11, %r13
+                            | #Calculate Register 11
+0x0b6: 608b                 | addq %r8, %r11
+0x0b8: 609b                 | addq %r9, %r11
                             | 
-0x101: 10                   | nop
-0x102: 10                   | nop
-0x103: 10                   | nop
-                            | 	
-0x104: 60be                 | addq %r11, %r14
-0x106: 10                   | nop
-0x107: 10                   | nop
-0x108: 10                   | nop
-0x109: 60ce                 | addq %r12, %r14
+                            | #Calculate Register 12
+0x0ba: 609c                 | addq %r9, %r12
+0x0bc: 60ac                 | addq %r10, %r12
+                            | 
+                            | #Calculate Register 13
+0x0be: 60ad                 | addq %r10, %r13
+0x0c0: 60bd                 | addq %r11, %r13
+                            | 
+                            | #Calculate Register 14
+0x0c2: 60be                 | addq %r11, %r14
+0x0c4: 60ce                 | addq %r12, %r14
                             | 
                             | #Reverse the registers
-0x10b: 6130                 | subq %rbx, %rax
-0x10d: 10                   | nop
-0x10e: 10                   | nop
-0x10f: 10                   | nop
-0x110: 60e0                 | addq %r14, %rax
-0x112: 61ee                 | subq %r14, %r14
-0x114: 10                   | nop
-0x115: 10                   | nop
-0x116: 10                   | nop
-0x117: 603e                 | addq %rbx, %r14
-0x119: 60d1                 | addq %r13, %rcx
-0x11b: 61dd                 | subq %r13, %r13
-0x11d: 6122                 | subq %rdx, %rdx
-0x11f: 10                   | nop
-0x120: 10                   | nop
-0x121: 10                   | nop
-0x122: 60c2                 | addq %r12, %rdx
-0x124: 61cc                 | subq %r12, %r12
-0x126: 10                   | nop
-0x127: 10                   | nop
-0x128: 10                   | nop
-0x129: 604c                 | addq %rsp, %r12
-0x12b: 6133                 | subq %rbx, %rbx
-0x12d: 10                   | nop
-0x12e: 10                   | nop
-0x12f: 10                   | nop
-0x130: 60b3                 | addq %r11, %rbx
-0x132: 61bb                 | subq %r11, %r11
-0x134: 10                   | nop
-0x135: 10                   | nop
-0x136: 10                   | nop
-0x137: 60eb                 | addq %r14, %r11
-0x139: 6144                 | subq %rsp, %rsp
-0x13b: 10                   | nop
-0x13c: 10                   | nop
-0x13d: 10                   | nop
-0x13e: 60a4                 | addq %r10, %rsp
-0x140: 61aa                 | subq %r10, %r10
-0x142: 10                   | nop
-0x143: 10                   | nop
-0x144: 10                   | nop
-0x145: 60ca                 | addq  %r12, %r10
-0x147: 6155                 | subq %rbp, %rbp
-0x149: 10                   | nop
-0x14a: 10                   | nop
-0x14b: 10                   | nop
-0x14c: 6095                 | addq %r9, %rbp
-0x14e: 6199                 | subq %r9, %r9
-0x150: 10                   | nop
-0x151: 10                   | nop
-0x152: 10                   | nop
-0x153: 60c9                 | addq %r12, %r9
-0x155: 60e9                 | addq %r14, %r9
-0x157: 6166                 | subq %rsi, %rsi
-0x159: 10                   | nop
-0x15a: 10                   | nop
-0x15b: 10                   | nop
-0x15c: 6086                 | addq %r8,%rsi
-0x15e: 6188                 | subq %r8,%r8
-0x160: 10                   | nop
-0x161: 10                   | nop
-0x162: 10                   | nop
-0x163: 6098                 | addq %r9, %r8
-0x165: 00                   | halt  
+                            | 
+                            | #Flip %rax and %r14
+0x0c6: 6130                 | subq %rbx, %rax
+0x0c8: 60e0                 | addq %r14, %rax
+0x0ca: 61ee                 | subq %r14, %r14
+0x0cc: 603e                 | addq %rbx, %r14
+                            | 
+                            | #Flip %rcx and %r13
+0x0ce: 60d1                 | addq %r13, %rcx
+0x0d0: 61dd                 | subq %r13, %r13
+                            | 
+                            | #Flip %rdx and %r12
+0x0d2: 6122                 | subq %rdx, %rdx
+0x0d4: 60c2                 | addq %r12, %rdx
+0x0d6: 61cc                 | subq %r12, %r12
+0x0d8: 604c                 | addq %rsp, %r12
+                            | 
+                            | #Flip %rbx and %r11
+0x0da: 6133                 | subq %rbx, %rbx
+0x0dc: 60b3                 | addq %r11, %rbx
+0x0de: 61bb                 | subq %r11, %r11
+0x0e0: 60eb                 | addq %r14, %r11
+                            | 
+                            | #Flip %rsp and %r10
+0x0e2: 6144                 | subq %rsp, %rsp
+0x0e4: 60a4                 | addq %r10, %rsp
+0x0e6: 61aa                 | subq %r10, %r10
+0x0e8: 60ca                 | addq  %r12, %r10
+                            | 
+                            | #Flip %rbp and %r9
+0x0ea: 6155                 | subq %rbp, %rbp
+0x0ec: 6095                 | addq %r9, %rbp
+0x0ee: 6199                 | subq %r9, %r9
+0x0f0: 60c9                 | addq %r12, %r9
+0x0f2: 60e9                 | addq %r14, %r9
+                            | 
+                            | #Flip %rsi and %r8
+0x0f4: 6166                 | subq %rsi, %rsi
+0x0f6: 6086                 | addq %r8,%rsi
+0x0f8: 6188                 | subq %r8,%r8
+0x0fa: 6098                 | addq %r9, %r8
+                            | 
+                            | #End
+0x0fc: 00                   | halt  
                             | 

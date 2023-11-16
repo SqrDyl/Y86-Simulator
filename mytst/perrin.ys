@@ -22,185 +22,98 @@ irmovq $0, %r13
 irmovq $0, %r14
 
 #Calculate the registers in reverse order	
+
+#Calculate Register rbx
 addq %rax, %rbx
-nop
-nop
-nop
 addq %rcx, %rbx
 
-nop
-nop
-nop
-	
+#Calculate Register rsp
 addq %rcx, %rsp
-nop
-nop
-nop
 addq %rdx, %rsp
 	
-nop
-nop
-nop	
-	
+#Calculate Register rbp
 addq %rdx, %rbp
-nop
-nop
-nop
 addq %rbx, %rbp
 	
-nop
-nop	
-nop
-	
+#Calculate Register rsi
 addq %rbx, %rsi
-nop
-nop
-nop
 addq %rsp, %rsi
 	
-nop
-nop
-nop	
-	
+#Calculate Register rdi
 addq %rsp,%rdi
-nop
-nop
-nop
 addq %rbp,%rdi
 
-nop
-nop
-nop
-	
+#Calculate Register 8
 addq %rbp, %r8
-nop
-nop
-nop
 addq %rsi, %r8
 
-nop
-nop
-nop
-	
+#Calculate Register 9
 addq %rsi, %r9
-nop
-nop
-nop
 addq %rdi, %r9
 
-nop
-nop
-nop
-	
+#Calculate Register 10
 addq %rdi, %r10
-nop
-nop
-nop
 addq %r8, %r10
-	
-nop
-nop
-nop	
-	
+
+#Calculate Register 11
 addq %r8, %r11
-nop
-nop
-nop
 addq %r9, %r11
 
-nop
-nop
-nop
-	
+#Calculate Register 12
 addq %r9, %r12
-nop
-nop
-nop
 addq %r10, %r12
-	
-nop
-nop
-nop
-	
+
+#Calculate Register 13
 addq %r10, %r13
-nop
-nop
-nop
 addq %r11, %r13
 
-nop
-nop
-nop
-	
+#Calculate Register 14
 addq %r11, %r14
-nop
-nop
-nop
 addq %r12, %r14
 
 #Reverse the registers
+
+#Flip %rax and %r14
 subq %rbx, %rax
-nop
-nop
-nop
 addq %r14, %rax
 subq %r14, %r14
-nop
-nop
-nop
 addq %rbx, %r14
+
+#Flip %rcx and %r13
 addq %r13, %rcx
 subq %r13, %r13
+
+#Flip %rdx and %r12
 subq %rdx, %rdx
-nop
-nop
-nop
 addq %r12, %rdx
 subq %r12, %r12
-nop
-nop
-nop
 addq %rsp, %r12
+
+#Flip %rbx and %r11
 subq %rbx, %rbx
-nop
-nop
-nop
 addq %r11, %rbx
 subq %r11, %r11
-nop
-nop
-nop
 addq %r14, %r11
+
+#Flip %rsp and %r10
 subq %rsp, %rsp
-nop
-nop
-nop
 addq %r10, %rsp
 subq %r10, %r10
-nop
-nop
-nop
 addq  %r12, %r10
+
+#Flip %rbp and %r9
 subq %rbp, %rbp
-nop
-nop
-nop
 addq %r9, %rbp
 subq %r9, %r9
-nop
-nop
-nop
 addq %r12, %r9
 addq %r14, %r9
+
+#Flip %rsi and %r8
 subq %rsi, %rsi
-nop
-nop
-nop
 addq %r8,%rsi
 subq %r8,%r8
-nop
-nop
-nop
 addq %r9, %r8
+
+#End
 halt  
 
