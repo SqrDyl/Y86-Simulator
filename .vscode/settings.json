@@ -20,6 +20,7 @@
         "yess.C": "cpp",
         "ExecuteStage.C": "cpp",
         "RegisterFile.C": "cpp",
-        "ConditionCodes.C": "cpp"
+        "ConditionCodes.C": "cpp",
+        "MemoryStage.C": "cpp"
     }
 }

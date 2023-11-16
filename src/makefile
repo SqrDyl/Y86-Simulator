@@ -75,7 +75,7 @@ $(OBJD)/DecodeStage.o: $(INC)/DecodeStage.h $(INC)/PipeRegArray.h $(INC)/Instruc
 $(OBJD)/ExecuteStage.o: $(INC)/ExecuteStage.h $(INC)/PipeRegArray.h $(INC)/ConditionCodes.h \
  $(INC)/Instruction.h $(INC)/Status.h $(INC)/E.h $(INC)/M.h $(INC)/Tools.h
 
-$(OBJD)/MemoryStage.o: $(INC)/MemoryStage.h $(INC)/PipeRegArray.h
+$(OBJD)/MemoryStage.o: $(INC)/MemoryStage.h $(INC)/PipeRegArray.h $(INC)/Instruction.h
 
 $(OBJD)/WritebackStage.o: $(INC)/WritebackStage.h $(INC)/PipeRegArray.h $(INC)/W.h $(INC)/Status.h
 
