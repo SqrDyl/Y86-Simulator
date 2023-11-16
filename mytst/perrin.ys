@@ -20,7 +20,8 @@ irmovq $0, %r11
 irmovq $0, %r12
 irmovq $0, %r13
 irmovq $0, %r14
-	
+
+#Calculate the registers in reverse order	
 addq %rax, %rbx
 nop
 nop
@@ -137,6 +138,7 @@ nop
 nop
 addq %r12, %r14
 
+#Reverse the registers
 subq %rbx, %rax
 nop
 nop

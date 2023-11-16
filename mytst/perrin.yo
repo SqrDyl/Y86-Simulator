@@ -20,7 +20,8 @@
 0x078: 30fc0000000000000000 | irmovq $0, %r12
 0x082: 30fd0000000000000000 | irmovq $0, %r13
 0x08c: 30fe0000000000000000 | irmovq $0, %r14
-                            | 	
+                            | 
+                            | #Calculate the registers in reverse order	
 0x096: 6003                 | addq %rax, %rbx
 0x098: 10                   | nop
 0x099: 10                   | nop
@@ -137,6 +138,7 @@
 0x108: 10                   | nop
 0x109: 60ce                 | addq %r12, %r14
                             | 
+                            | #Reverse the registers
 0x10b: 6130                 | subq %rbx, %rax
 0x10d: 10                   | nop
 0x10e: 10                   | nop
