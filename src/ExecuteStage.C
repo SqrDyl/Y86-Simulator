@@ -26,6 +26,7 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
     uint64_t dstM = ereg->get(E_DSTM);
     uint64_t valA = ereg->get(E_VALA);
 
+    Stage::e_Cnd = cond(ereg);
     Stage::e_dstE = dstEComp(ereg);
     bool ccRes = setCC(ereg);
     uint64_t fun = aluFunComp(ereg);
@@ -33,8 +34,9 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
     uint64_t op2 = aluBComp(ereg);
     Stage::e_valE = alu(fun, op1, op2);
     ccMethod(ccRes, Stage::e_valE, op1, op2, fun);    
-    //Should the 0 be e_Cnd?
-    setMInput(mreg, stat, icode, 0, Stage::e_valE, valA, Stage::e_dstE, dstM);
+    //  v LAB 9 COMMENT v
+    //  If Stage::e_Cnd is instead set to 0, the andq runs?
+    setMInput(mreg, stat, icode, Stage::e_Cnd, Stage::e_valE, valA, Stage::e_dstE, dstM);
 
 	return false;
 }
@@ -199,4 +201,44 @@ uint64_t ExecuteStage::alu(uint64_t aluFun, uint64_t op1, uint64_t op2)
     }
 }
 
+uint64_t ExecuteStage::cond(PipeReg * ereg)
+{
+    bool error = false;
+    uint64_t icode = ereg->get(E_ICODE);
+    uint64_t ifun = ereg->get(E_IFUN);
+
+    if (icode == Instruction::IJXX || icode == Instruction::IRRMOVQ)
+    {
+        if (ifun == Instruction::UNCOND)
+        {
+            return 1;
+        }
+        else if (ifun == Instruction::LESSEQ)
+        {
+            return (cc->getConditionCode(ConditionCodes::SF, error) ^ cc->getConditionCode(ConditionCodes::OF, error)) 
+                | cc->getConditionCode(ConditionCodes::ZF, error);
+        }
+        else if (ifun == Instruction::LESS)
+        {
+            return (cc->getConditionCode(ConditionCodes::SF, error) ^ cc->getConditionCode(ConditionCodes::OF, error));
+        }   
+        else if (ifun == Instruction::EQUAL)
+        {
+            return cc->getConditionCode(ConditionCodes::ZF, error);
+        }
+        else if (ifun == Instruction::NOTEQUAL)
+        {
+            return !(cc->getConditionCode(ConditionCodes::ZF, error));
+        }
+        else if (ifun == Instruction::GREATER)
+        {
+            return (!(cc->getConditionCode(ConditionCodes::SF, error) ^ cc->getConditionCode(ConditionCodes::OF, error)) 
+                | !(cc->getConditionCode(ConditionCodes::ZF, error)));
+        }
+        else if (ifun == Instruction::GREATEREQ)
+        {
+            return !(cc->getConditionCode(ConditionCodes::SF, error) ^ cc->getConditionCode(ConditionCodes::OF, error));    
+        }
+    }
+}
 
