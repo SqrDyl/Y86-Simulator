@@ -39,8 +39,9 @@ void WritebackStage::doClockHigh(PipeRegArray * pipeRegs)
     reg->writeRegister(w_valE, w_dstE, error);
     
     //  v Lab 9 Code v
-    //uint64_t w_valM = wreg->get(W_VALM);
-    //wreg->set(W_DSTE, w_valM);
+    uint64_t w_valM = wreg->get(W_VALM);
+    uint64_t w_dstM = wreg->get(W_DSTM);
+    reg->writeRegister(w_valM, w_dstM, error);
 }
 
 

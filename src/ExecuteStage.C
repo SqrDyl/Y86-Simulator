@@ -236,12 +236,13 @@ uint64_t ExecuteStage::cond(PipeReg * ereg)
         else if (ifun == Instruction::GREATER)
         {
             return (!(cc->getConditionCode(ConditionCodes::SF, error) ^ cc->getConditionCode(ConditionCodes::OF, error)) 
-                | !(cc->getConditionCode(ConditionCodes::ZF, error)));
+                & !(cc->getConditionCode(ConditionCodes::ZF, error)));
         }
         else if (ifun == Instruction::GREATEREQ)
         {
             return !(cc->getConditionCode(ConditionCodes::SF, error) ^ cc->getConditionCode(ConditionCodes::OF, error));    
         }
     }
+    return 0;
 }
 
