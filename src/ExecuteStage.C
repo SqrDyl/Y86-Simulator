@@ -33,9 +33,12 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
     uint64_t op1 = aluAComp(ereg);
     uint64_t op2 = aluBComp(ereg);
     Stage::e_valE = alu(fun, op1, op2);
-    ccMethod(ccRes, Stage::e_valE, op1, op2, fun);    
-    //  v LAB 9 COMMENT v
-    //  If Stage::e_Cnd is instead set to 0, the andq runs?
+    ccMethod(ccRes, Stage::e_valE, op1, op2, fun);
+
+    //  v LAB 9 QUESTION FOR OFFICE HOURS v
+    //  If Stage::e_Cnd is instead set to 0, the andq runs? v LIKE THIS v
+    // setMInput(mreg, stat, icode, 0, Stage::e_valE, valA, Stage::e_dstE, dstM);
+    
     setMInput(mreg, stat, icode, Stage::e_Cnd, Stage::e_valE, valA, Stage::e_dstE, dstM);
 
 	return false;
