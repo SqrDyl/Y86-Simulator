@@ -147,7 +147,13 @@ uint64_t DecodeStage::fwdA(PipeRegArray * PipeRegs)
 	bool error; 
 	PipeReg * mreg = PipeRegs->getMemoryReg();
 	PipeReg * wreg = PipeRegs->getWritebackReg();
-	if (d_srcA == RegisterFile::RNONE)
+    PipeReg * dreg = PipeRegs->getDecodeReg();
+    uint64_t icode = dreg->get(D_ICODE);
+	if (icode == Instruction::IJXX || icode == Instruction::ICALL)
+    {
+        return dreg->get(D_VALP);
+    }
+    else if (d_srcA == RegisterFile::RNONE)
     {
         return 0;
     }
@@ -155,10 +161,18 @@ uint64_t DecodeStage::fwdA(PipeRegArray * PipeRegs)
 	{
 		return e_valE;
 	}
+    else if (d_srcA == mreg->get(M_DSTM))
+    {
+        return m_valM;
+    }
 	else if (d_srcA == mreg->get(M_DSTE))
 	{
 		return mreg->get(M_VALE);
 	}
+    else if (d_srcA == wreg->get(W_DSTM))
+    {
+        return wreg->get(W_VALM);
+    }
 	else if (d_srcA == wreg->get(W_DSTE))
 	{
 		return wreg->get(W_VALE);
@@ -175,7 +189,9 @@ uint64_t DecodeStage::fwdB(PipeRegArray * PipeRegs)
 	PipeReg * ereg = PipeRegs->getExecuteReg();
 	PipeReg * mreg = PipeRegs->getMemoryReg();
 	PipeReg * wreg = PipeRegs->getWritebackReg();
-
+    PipeReg * dreg = PipeRegs->getDecodeReg();
+    uint64_t icode = dreg->get(D_ICODE);
+    
     if (d_srcB == RegisterFile::RNONE)
     {
         return 0;
@@ -184,10 +200,18 @@ uint64_t DecodeStage::fwdB(PipeRegArray * PipeRegs)
 	{
 		return e_valE;
 	}
+    else if (d_srcB == mreg->get(M_DSTM))
+    {
+        return m_valM;
+    }
 	else if (d_srcB == mreg->get(M_DSTE))
 	{
 		return mreg->get(M_VALE);
 	}
+    else if (d_srcB == wreg->get(W_DSTM))
+    {
+        return wreg->get(W_VALM);
+    }
 	else if (d_srcB == wreg->get(W_DSTE))
 	{
 		return wreg->get(W_VALE);

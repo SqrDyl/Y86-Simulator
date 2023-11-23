@@ -26,19 +26,20 @@ bool MemoryStage::doClockLow(PipeRegArray * pipeRegs)
 
     bool error = false;
     uint64_t memAddRes = memAddr(mreg);
+    //Stage::m_valM = memAddr(mreg);
     bool memReadRes = memRead(icode);
     bool memWriteRes = memWrite(icode);
 
     if (memReadRes)
     {
-        Stage::mem->getLong(memAddRes, error);
+        m_valM = Stage::mem->getLong(memAddRes, error);
     }
     else if (memWriteRes)
     {
         Stage::mem->putLong(mreg->get(M_VALA), memAddRes, error);
     }
 
-   setWInput(wreg, stat, icode, valE, 0, dstE, dstM);
+   setWInput(wreg, stat, icode, valE, m_valM, dstE, dstM);
 
    return false;
 }
