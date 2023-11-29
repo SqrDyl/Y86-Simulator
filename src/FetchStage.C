@@ -55,11 +55,21 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     uint8_t insByte = mem->getByte(f_pc, mem_error);
     icode = Tools::getBits(insByte, 4, 7);
     ifun = Tools::getBits(insByte, 0, 3);
+    
+    bool validInstr = instr_valid(icode);
+    stat = f_stat(validInstr, icode, mem_error);
+    
+    //Lab10 code
+    icode = f_icode(icode, mreg, mem_error);
+    ifun = f_ifun(ifun, mreg, mem_error);
 
-    if (icode == Instruction::IHALT)
+    //????
+    //Old code -- do I need this?
+    /*if (icode == Instruction::IHALT)
     {
         stat = Status::SHLT;
-    }
+    }*/
+
     needRegId = FetchStage::needRegIds(icode);
     needValC = FetchStage::need_valC(icode);
     
@@ -78,7 +88,6 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
 
     //Lab7 calls
     getRegs(needRegId, f_pc, rA, rB);
-
 
    //set the inputs for the D register
     setDInput(dreg, stat, icode, ifun, rA, rB, buildValC(needValC, needRegId, f_pc), valP);
@@ -239,6 +248,57 @@ uint64_t FetchStage::buildValC(bool needValC, bool needRegs, uint64_t f_pc)
     }
 }
 
+bool FetchStage::instr_valid(uint64_t icode)
+{
+    return (icode == Instruction::INOP || icode == Instruction::IHALT || icode == Instruction::IRRMOVQ 
+    || icode == Instruction::IIRMOVQ || icode == Instruction::IRMMOVQ || icode == Instruction::IMRMOVQ 
+    || icode == Instruction::IOPQ || icode == Instruction::IJXX || icode == Instruction::ICALL 
+    || icode == Instruction::IRET || icode == Instruction::IPUSHQ || icode == Instruction::IPOPQ);
+}
+
+uint64_t FetchStage::f_stat(bool instrValid, uint64_t icode, bool memError)
+{
+    if (memError)
+    {
+        return Status::SADR;
+    }
+    else if (!instrValid)
+    {
+        return Status::SINS;
+    }
+    else if (icode == Instruction::IHALT)
+    {
+        return Status::SHLT;
+    }
+    else 
+    {
+        return Status::SAOK;
+    }
+}
+
+uint64_t FetchStage::f_icode(uint64_t icode, PipeReg * mreg, bool mem_error)
+{
+    if (mem_error)
+    {
+        return Instruction::INOP;
+    }
+    else 
+    {
+        return mreg->get(M_ICODE);
+    }
+}
+
+uint64_t FetchStage::f_ifun(uint64_t ifun, PipeReg * mreg, bool mem_error)
+{
+    if (mem_error)
+    {
+        return Instruction::FNONE;
+    }
+    else
+    {
+        return ifun;
+    }
+}
 //TODO
 //Write your selectPC, needRegIds, needValC, PC increment, and predictPC methods
 //Remember to add declarations for these to FetchStage.h
