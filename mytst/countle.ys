@@ -20,10 +20,18 @@ addq %r11, %r10
 nop
 nop
 nop
-cmovle %r9, %rax
+cmovle %r9, %r11
+nop
+nop
+nop
+addq %r11, %rax
+nop
+nop
+nop
+irmovq $0, %r11
 
 
-mrmovq 1(%r8), %r10
+mrmovq 8(%r8), %r10
 nop
 nop
 nop
@@ -31,9 +39,17 @@ addq %r11, %r10
 nop
 nop
 nop
-cmovle %r9, %rax
+cmovle %r9, %r11
+nop
+nop
+nop
+addq %r11, %rax
+nop
+nop
+nop
+irmovq $0, %r11
 
-mrmovq 2(%r8), %r10
+mrmovq 16(%r8), %r10
 nop
 nop
 nop
@@ -41,9 +57,17 @@ addq %r11, %r10
 nop
 nop
 nop
-cmovle %r9, %rax
+cmovle %r9, %r11
+nop
+nop
+nop
+addq %r11, %rax
+nop
+nop
+nop
+irmovq $0, %r11
 
-mrmovq 3(%r8), %r10
+mrmovq 24(%r8), %r10
 nop
 nop
 nop
@@ -51,9 +75,17 @@ addq %r11, %r10
 nop
 nop
 nop
-cmovle %r9, %rax
+cmovle %r9, %r11
+nop
+nop
+nop
+addq %r11, %rax
+nop
+nop
+nop
+irmovq $0, %r11
 
-mrmovq 4(%r8), %r10
+mrmovq 32(%r8), %r10
 nop
 nop
 nop
@@ -61,9 +93,17 @@ addq %r11, %r10
 nop
 nop
 nop
-cmovle %r9, %rax
+cmovle %r9, %r11
+nop
+nop
+nop
+addq %r11, %rax
+nop
+nop
+nop
+irmovq $0, %r11
 
-mrmovq 5(%r8), %r10
+mrmovq 40(%r8), %r10
 nop
 nop
 nop
@@ -71,7 +111,15 @@ addq %r11, %r10
 nop
 nop
 nop
-cmovle %r9, %rax
+cmovle %r9, %r11
+nop
+nop
+nop
+addq %r11, %rax
+nop
+nop
+nop
+irmovq $0, %r11
 
 
 

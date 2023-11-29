@@ -3,7 +3,7 @@
 0x000: 30f00000000000000000 | irmovq $0, %rax
 0x00a: 30fb0000000000000000 | irmovq $0, %r11
                             | #initialize another register to the address of the first number
-0x014: 30f8b800000000000000 | irmovq nums, %r8
+0x014: 30f82801000000000000 | irmovq nums, %r8
                             | #it can also be helpful to initialize another register to 1
 0x01e: 30f90100000000000000 | irmovq $1, %r9
 0x028: 10                   | nop
@@ -20,72 +20,120 @@
 0x039: 10                   | nop
 0x03a: 10                   | nop
 0x03b: 10                   | nop
-0x03c: 2190                 | cmovle %r9, %rax
+0x03c: 219b                 | cmovle %r9, %r11
+0x03e: 10                   | nop
+0x03f: 10                   | nop
+0x040: 10                   | nop
+0x041: 60b0                 | addq %r11, %rax
+0x043: 10                   | nop
+0x044: 10                   | nop
+0x045: 10                   | nop
+0x046: 30fb0000000000000000 | irmovq $0, %r11
                             | 
                             | 
-0x03e: 50a80100000000000000 | mrmovq 1(%r8), %r10
-0x048: 10                   | nop
-0x049: 10                   | nop
-0x04a: 10                   | nop
-0x04b: 60ba                 | addq %r11, %r10
-0x04d: 10                   | nop
-0x04e: 10                   | nop
-0x04f: 10                   | nop
-0x050: 2190                 | cmovle %r9, %rax
-                            | 
-0x052: 50a80200000000000000 | mrmovq 2(%r8), %r10
+0x050: 50a80800000000000000 | mrmovq 8(%r8), %r10
+0x05a: 10                   | nop
+0x05b: 10                   | nop
 0x05c: 10                   | nop
-0x05d: 10                   | nop
-0x05e: 10                   | nop
-0x05f: 60ba                 | addq %r11, %r10
+0x05d: 60ba                 | addq %r11, %r10
+0x05f: 10                   | nop
+0x060: 10                   | nop
 0x061: 10                   | nop
-0x062: 10                   | nop
-0x063: 10                   | nop
-0x064: 2190                 | cmovle %r9, %rax
+0x062: 219b                 | cmovle %r9, %r11
+0x064: 10                   | nop
+0x065: 10                   | nop
+0x066: 10                   | nop
+0x067: 60b0                 | addq %r11, %rax
+0x069: 10                   | nop
+0x06a: 10                   | nop
+0x06b: 10                   | nop
+0x06c: 30fb0000000000000000 | irmovq $0, %r11
                             | 
-0x066: 50a80300000000000000 | mrmovq 3(%r8), %r10
-0x070: 10                   | nop
-0x071: 10                   | nop
-0x072: 10                   | nop
-0x073: 60ba                 | addq %r11, %r10
-0x075: 10                   | nop
-0x076: 10                   | nop
-0x077: 10                   | nop
-0x078: 2190                 | cmovle %r9, %rax
-                            | 
-0x07a: 50a80400000000000000 | mrmovq 4(%r8), %r10
-0x084: 10                   | nop
+0x076: 50a81000000000000000 | mrmovq 16(%r8), %r10
+0x080: 10                   | nop
+0x081: 10                   | nop
+0x082: 10                   | nop
+0x083: 60ba                 | addq %r11, %r10
 0x085: 10                   | nop
 0x086: 10                   | nop
-0x087: 60ba                 | addq %r11, %r10
-0x089: 10                   | nop
+0x087: 10                   | nop
+0x088: 219b                 | cmovle %r9, %r11
 0x08a: 10                   | nop
 0x08b: 10                   | nop
-0x08c: 2190                 | cmovle %r9, %rax
+0x08c: 10                   | nop
+0x08d: 60b0                 | addq %r11, %rax
+0x08f: 10                   | nop
+0x090: 10                   | nop
+0x091: 10                   | nop
+0x092: 30fb0000000000000000 | irmovq $0, %r11
                             | 
-0x08e: 50a80500000000000000 | mrmovq 5(%r8), %r10
-0x098: 10                   | nop
-0x099: 10                   | nop
-0x09a: 10                   | nop
-0x09b: 60ba                 | addq %r11, %r10
-0x09d: 10                   | nop
-0x09e: 10                   | nop
-0x09f: 10                   | nop
-0x0a0: 2190                 | cmovle %r9, %rax
+0x09c: 50a81800000000000000 | mrmovq 24(%r8), %r10
+0x0a6: 10                   | nop
+0x0a7: 10                   | nop
+0x0a8: 10                   | nop
+0x0a9: 60ba                 | addq %r11, %r10
+0x0ab: 10                   | nop
+0x0ac: 10                   | nop
+0x0ad: 10                   | nop
+0x0ae: 219b                 | cmovle %r9, %r11
+0x0b0: 10                   | nop
+0x0b1: 10                   | nop
+0x0b2: 10                   | nop
+0x0b3: 60b0                 | addq %r11, %rax
+0x0b5: 10                   | nop
+0x0b6: 10                   | nop
+0x0b7: 10                   | nop
+0x0b8: 30fb0000000000000000 | irmovq $0, %r11
+                            | 
+0x0c2: 50a82000000000000000 | mrmovq 32(%r8), %r10
+0x0cc: 10                   | nop
+0x0cd: 10                   | nop
+0x0ce: 10                   | nop
+0x0cf: 60ba                 | addq %r11, %r10
+0x0d1: 10                   | nop
+0x0d2: 10                   | nop
+0x0d3: 10                   | nop
+0x0d4: 219b                 | cmovle %r9, %r11
+0x0d6: 10                   | nop
+0x0d7: 10                   | nop
+0x0d8: 10                   | nop
+0x0d9: 60b0                 | addq %r11, %rax
+0x0db: 10                   | nop
+0x0dc: 10                   | nop
+0x0dd: 10                   | nop
+0x0de: 30fb0000000000000000 | irmovq $0, %r11
+                            | 
+0x0e8: 50a82800000000000000 | mrmovq 40(%r8), %r10
+0x0f2: 10                   | nop
+0x0f3: 10                   | nop
+0x0f4: 10                   | nop
+0x0f5: 60ba                 | addq %r11, %r10
+0x0f7: 10                   | nop
+0x0f8: 10                   | nop
+0x0f9: 10                   | nop
+0x0fa: 219b                 | cmovle %r9, %r11
+0x0fc: 10                   | nop
+0x0fd: 10                   | nop
+0x0fe: 10                   | nop
+0x0ff: 60b0                 | addq %r11, %rax
+0x101: 10                   | nop
+0x102: 10                   | nop
+0x103: 10                   | nop
+0x104: 30fb0000000000000000 | irmovq $0, %r11
                             | 
                             | 
                             | 
                             | #finally store %rax in memory location result
-0x0a2: 400fb000000000000000 | rmmovq %rax, result
+0x10e: 400f2001000000000000 | rmmovq %rax, result
                             | 
                             | 
-0x0ac: 00                   |         halt
-0x0b0:                      |         .align 8
-0x0b0: 0000000000000000     | result: .quad 0     #should be 3 at end
-0x0b8: 0b00000000000000     | nums:   .quad 11
-0x0c0: e9ffffffffffffff     |         .quad -23
-0x0c8: 0000000000000000     |         .quad 0
-0x0d0: 0f00000000000000     |         .quad 15
-0x0d8: fdffffffffffffff     |         .quad -3
-0x0e0: 0400000000000000     |         .quad 4
+0x118: 00                   |         halt
+0x120:                      |         .align 8
+0x120: 0000000000000000     | result: .quad 0     #should be 3 at end
+0x128: 0b00000000000000     | nums:   .quad 11
+0x130: e9ffffffffffffff     |         .quad -23
+0x138: 0000000000000000     |         .quad 0
+0x140: 0f00000000000000     |         .quad 15
+0x148: fdffffffffffffff     |         .quad -3
+0x150: 0400000000000000     |         .quad 4
                             | 
