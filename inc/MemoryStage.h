@@ -1,5 +1,6 @@
 #include "PipeRegArray.h"
 #include "Stage.h"
+#include "Status.h"
 
 #ifndef MEMORYSTAGE_H
 #define MEMORYSTAGE_H

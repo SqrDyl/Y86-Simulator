@@ -3,6 +3,7 @@
 #include "M.h"
 #include "W.h"
 #include "Instruction.h"
+#include "Status.h"
 
 /*
  * doClockLow
@@ -39,7 +40,14 @@ bool MemoryStage::doClockLow(PipeRegArray * pipeRegs)
         Stage::mem->putLong(mreg->get(M_VALA), memAddRes, error);
         //m_valM = 0;
     }
-    
+    if (error)
+	{
+		return Status::SADR;
+	}
+	else
+	{
+		return Stage::m_stat;
+	}
 
    setWInput(wreg, stat, icode, valE, Stage::m_valM, dstE, dstM);
 

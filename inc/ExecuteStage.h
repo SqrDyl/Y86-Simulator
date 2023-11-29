@@ -19,6 +19,7 @@ class ExecuteStage: public Stage
       uint64_t alu(uint64_t aluFun, uint64_t op1, uint64_t op2);
       uint64_t cond(PipeReg * ereg);
 	  uint64_t calculateControlSignals(PipeReg * wreg);
+	  bool M_bubble;
    public:
       //These are the only methods called outside of the class
       bool doClockLow(PipeRegArray * pipeRegs);

@@ -281,7 +281,7 @@ uint64_t FetchStage::f_icode(uint64_t icode, PipeReg * mreg, bool mem_error)
     }
     else 
     {
-        return mreg->get(M_ICODE);
+        return icode;
     }
 }
 

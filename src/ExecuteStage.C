@@ -18,6 +18,7 @@
  * @param: pipeRegs - array of the pipeline register 
                       (F, D, E, M, W instances)
  */
+
 bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
 {
 	PipeReg * ereg = pipeRegs->getExecuteReg();
@@ -38,7 +39,7 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
     Stage::e_valE = alu(fun, op1, op2);
     ccMethod(ccRes, Stage::e_valE, op1, op2, fun);
     
-	bool M_bubble = calculateControlSignals(wreg);
+	M_bubble = calculateControlSignals(wreg);
     //  v LAB 9 QUESTION FOR OFFICE HOURS v
     //  If Stage::e_Cnd is instead set to 0, the andq runs? v LIKE THIS v
     // setMInput(mreg, stat, icode, 0, Stage::e_valE, valA, Stage::e_dstE, dstM);
@@ -72,7 +73,7 @@ void ExecuteStage::doClockHigh(PipeRegArray * pipeRegs)
 {
 	PipeReg * mreg = pipeRegs->getMemoryReg();
 	PipeReg * wreg = pipeRegs->getWritebackReg();
-	if (calculateControlSignals(wreg))
+	if (M_bubble)
 	{
 		((M *)mreg)->bubble();
 	}
