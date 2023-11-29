@@ -6,6 +6,8 @@
 #include "M.h"
 #include "ConditionCodes.h"
 #include "Tools.h"
+#include "W.h"
+#include "Stage.h"
 
 /*
  * doClockLow
@@ -20,6 +22,7 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
 {
 	PipeReg * ereg = pipeRegs->getExecuteReg();
 	PipeReg * mreg = pipeRegs->getMemoryReg();
+	PipeReg * wreg = pipeRegs->getWritebackReg();
    
 	uint64_t stat = ereg->get(E_STAT);
 	uint64_t icode = ereg->get(E_ICODE);
@@ -28,13 +31,14 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
 
     Stage::e_Cnd = cond(ereg);
     Stage::e_dstE = dstEComp(ereg);
-    bool ccRes = setCC(ereg);
+    bool ccRes = setCC(ereg, wreg);
     uint64_t fun = aluFunComp(ereg);
     uint64_t op1 = aluAComp(ereg);
     uint64_t op2 = aluBComp(ereg);
     Stage::e_valE = alu(fun, op1, op2);
     ccMethod(ccRes, Stage::e_valE, op1, op2, fun);
     
+	bool M_bubble = calculateControlSignals(wreg);
     //  v LAB 9 QUESTION FOR OFFICE HOURS v
     //  If Stage::e_Cnd is instead set to 0, the andq runs? v LIKE THIS v
     // setMInput(mreg, stat, icode, 0, Stage::e_valE, valA, Stage::e_dstE, dstM);
@@ -67,7 +71,15 @@ void ExecuteStage::setMInput(PipeReg * mreg, uint64_t stat, uint64_t icode,
 void ExecuteStage::doClockHigh(PipeRegArray * pipeRegs)
 {
 	PipeReg * mreg = pipeRegs->getMemoryReg();
-	mreg->normal();
+	PipeReg * wreg = pipeRegs->getWritebackReg();
+	if (calculateControlSignals(wreg))
+	{
+		((M *)mreg)->bubble();
+	}
+	else
+	{
+		mreg->normal();
+	}
 }
 
 
@@ -137,10 +149,20 @@ uint64_t ExecuteStage::aluFunComp(PipeReg * ereg)
     }
 }
 
-bool ExecuteStage::setCC(PipeReg * ereg)
+bool ExecuteStage::setCC(PipeReg * ereg, PipeReg * wreg)
 {
-    uint64_t e_icode = ereg->get(E_ICODE);
-    return (e_icode == Instruction::IOPQ);
+	uint64_t w_stat = wreg->get(W_STAT);
+	if (ereg->get(E_ICODE) == Instruction::IOPQ && 
+		!Stage::m_stat == Status::SADR || !Stage::m_stat == Status::SINS
+		|| !Stage::m_stat == Status::SHLT && !w_stat == Status::SADR
+		|| !w_stat == Status::SINS || !w_stat == Status::SHLT)
+	{
+		return true;
+	}
+    else 
+	{
+		return false;
+	}
 }
 
 uint64_t ExecuteStage::dstEComp(PipeReg * ereg)
@@ -246,3 +268,19 @@ uint64_t ExecuteStage::cond(PipeReg * ereg)
     return 0;
 }
 
+uint64_t ExecuteStage::calculateControlSignals(PipeReg * wreg)
+{
+	uint64_t w_stat = wreg->get(W_STAT);
+
+	if (Stage::m_stat == Status::SADR || Stage::m_stat == Status::SINS 
+		|| Stage::m_stat == Status::SHLT || w_stat == Status::SADR
+		|| w_stat == Status::SINS || w_stat == Status::SHLT)
+	{
+		return true;
+	}
+	else 
+	{
+		return false;
+	}
+
+}

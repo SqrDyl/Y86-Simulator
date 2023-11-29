@@ -13,11 +13,12 @@ class ExecuteStage: public Stage
       uint64_t aluAComp(PipeReg * ereg);
       uint64_t aluBComp(PipeReg * ereg);
       uint64_t aluFunComp(PipeReg * ereg);
-      bool setCC(PipeReg * ereg);
+      bool setCC(PipeReg * ereg, PipeReg * wreg);
       uint64_t dstEComp(PipeReg * ereg);
       void ccMethod(bool setCC, uint64_t aluRes, uint64_t aluA, uint64_t aluB, uint64_t aluFun);
       uint64_t alu(uint64_t aluFun, uint64_t op1, uint64_t op2);
       uint64_t cond(PipeReg * ereg);
+	  uint64_t calculateControlSignals(PipeReg * wreg);
    public:
       //These are the only methods called outside of the class
       bool doClockLow(PipeRegArray * pipeRegs);
