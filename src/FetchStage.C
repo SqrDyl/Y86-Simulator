@@ -62,7 +62,6 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     //Lab10 code
     icode = f_icode(icode, mreg, mem_error);
     ifun = f_ifun(ifun, mreg, mem_error);
-
     //????
     //Old code -- do I need this?
     /*if (icode == Instruction::IHALT)
@@ -82,7 +81,6 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
    //calculate the predicted PC value
    //predPC = .... call your function that predicts the next PoC   
     predPC = predictPC(icode, valC, valP);
-
    //set the input for the PREDPC pipe register field in the F register
     freg->set(F_PREDPC, predPC);
 
