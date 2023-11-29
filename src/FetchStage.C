@@ -83,7 +83,6 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     predPC = predictPC(icode, valC, valP);
    //set the input for the PREDPC pipe register field in the F register
     freg->set(F_PREDPC, predPC);
-
     //Lab7 calls
     getRegs(needRegId, f_pc, rA, rB);
 
