@@ -15,30 +15,33 @@ nop
 nop
 #cause the condition codes to be modified based upon value of the number
 #add 1 to %rax if number <= 0; otherwise, add 0 to %rax
-cmovle %r10, %r11
-addq %r9, %rax
+cmovle %r9, %rax
 
-mrmovq 1(%r8), %r10
+mrmovq 8(%r8), %r10
 nop
 nop
 nop
 cmovle %r9, %rax
 
-
-mrmovq 2(%r8), %r10
+mrmovq 16(%r8), %r10
 nop
 nop
 nop
 cmovle %r9, %rax
 
-
-mrmovq 3(%r8), %r10
+mrmovq 24(%r8), %r10
 nop
 nop
 nop
 cmovle %r9, %rax
 
-mrmovq 4(%r8), %r10
+mrmovq 32(%r8), %r10
+nop
+nop
+nop
+cmovle %r9, %rax
+
+mrmovq 40(%r8), %r10
 nop
 nop
 nop

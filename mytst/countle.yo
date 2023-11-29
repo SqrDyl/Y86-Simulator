@@ -1,0 +1,65 @@
+0x000:                      |         .pos 0
+                            | #initialize %rax to 0
+0x000: 30f00000000000000000 | irmovq $0, %rax
+                            | #initialize another register to the address of the first number
+0x00a: 30f89000000000000000 | irmovq nums, %r8
+                            | #it can also be helpful to initialize another register to 1
+0x014: 30f90100000000000000 | irmovq $1, %r9
+0x01e: 10                   | nop
+0x01f: 10                   | nop
+                            | #for each number:  
+                            | #get the number out of memory
+0x020: 50a80000000000000000 | mrmovq (%r8), %r10
+0x02a: 10                   | nop
+0x02b: 10                   | nop
+0x02c: 10                   | nop
+                            | #cause the condition codes to be modified based upon value of the number
+                            | #add 1 to %rax if number <= 0; otherwise, add 0 to %rax
+0x02d: 2190                 | cmovle %r9, %rax
+                            | 
+0x02f: 50a80800000000000000 | mrmovq 8(%r8), %r10
+0x039: 10                   | nop
+0x03a: 10                   | nop
+0x03b: 10                   | nop
+0x03c: 2190                 | cmovle %r9, %rax
+                            | 
+0x03e: 50a81000000000000000 | mrmovq 16(%r8), %r10
+0x048: 10                   | nop
+0x049: 10                   | nop
+0x04a: 10                   | nop
+0x04b: 2190                 | cmovle %r9, %rax
+                            | 
+0x04d: 50a81800000000000000 | mrmovq 24(%r8), %r10
+0x057: 10                   | nop
+0x058: 10                   | nop
+0x059: 10                   | nop
+0x05a: 2190                 | cmovle %r9, %rax
+                            | 
+0x05c: 50a82000000000000000 | mrmovq 32(%r8), %r10
+0x066: 10                   | nop
+0x067: 10                   | nop
+0x068: 10                   | nop
+0x069: 2190                 | cmovle %r9, %rax
+                            | 
+0x06b: 50a82800000000000000 | mrmovq 40(%r8), %r10
+0x075: 10                   | nop
+0x076: 10                   | nop
+0x077: 10                   | nop
+0x078: 2190                 | cmovle %r9, %rax
+                            | 
+                            | 
+                            | 
+                            | #finally store %rax in memory location result
+0x07a: 400f8800000000000000 | rmmovq %rax, result
+                            | 
+                            | 
+0x084: 00                   |         halt
+0x088:                      |         .align 8
+0x088: 0000000000000000     | result: .quad 0     #should be 3 at end
+0x090: 0b00000000000000     | nums:   .quad 11
+0x098: e9ffffffffffffff     |         .quad -23
+0x0a0: 0000000000000000     |         .quad 0
+0x0a8: 0f00000000000000     |         .quad 15
+0x0b0: fdffffffffffffff     |         .quad -3
+0x0b8: 0400000000000000     |         .quad 4
+                            | 
