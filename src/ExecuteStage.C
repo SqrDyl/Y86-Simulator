@@ -194,8 +194,9 @@ uint64_t ExecuteStage::aluFunComp(PipeReg * ereg)
  * grabs the stat and icode in order to see if the condition
  * codes will need to be updated
  * 
- * @param ereg - execute reg
- * @param wreg - writeBack reg 
+ * @param ereg - execute reg to get the icode
+ * @param wreg - writeBack reg to get the stat value
+ * @return bool returns if the condition codes need to be updated or not
 */
 bool ExecuteStage::setCC(PipeReg * ereg, PipeReg * wreg)
 {
@@ -212,7 +213,14 @@ bool ExecuteStage::setCC(PipeReg * ereg, PipeReg * wreg)
 		return false;
 	}
 }
-
+/**
+ * dstEComp
+ * 
+ * method to get the dstEComp
+ * 
+ * @param ereg - execute reg to get the icode, and the dstE
+ * @return uint64_t
+*/
 uint64_t ExecuteStage::dstEComp(PipeReg * ereg)
 {
     uint64_t e_icode = ereg->get(E_ICODE);
@@ -226,7 +234,17 @@ uint64_t ExecuteStage::dstEComp(PipeReg * ereg)
         return ereg->get(E_DSTE);
     }
 }
-
+/**
+ * ccMethod
+ * 
+ * updates condition codes 
+ * 
+ * @param setCC - bool value to determine if we need to update condtion codes
+ * @param aluRes - alu result
+ * @param aluA - op1 from aluAComp
+ * @param aluB - op2 from aluBComp
+ * @param aluFun - uses the function to determine which overflow to use
+*/
 void ExecuteStage::ccMethod(bool setCC, uint64_t aluRes, uint64_t aluA, uint64_t aluB, uint64_t aluFun)
 {
     bool error = false;
@@ -250,6 +268,16 @@ void ExecuteStage::ccMethod(bool setCC, uint64_t aluRes, uint64_t aluA, uint64_t
     }
 }
 
+/**
+ * alu
+ * 
+ * conducts the operation if it is IOPQ
+ * 
+ * @param aluFun - what operation is being performed
+ * @param op1 - value from aluAComp
+ * @param op2 - value from aluBComp
+ * @return uint64_t - result
+*/
 uint64_t ExecuteStage::alu(uint64_t aluFun, uint64_t op1, uint64_t op2)
 {
     if (aluFun == Instruction::ADDQ)
@@ -274,6 +302,14 @@ uint64_t ExecuteStage::alu(uint64_t aluFun, uint64_t op1, uint64_t op2)
     }
 }
 
+/**
+ * cond
+ * 
+ * updates the execute stage condition variable
+ * 
+ * @param ereg - execute reg to get the icode and the ifun variables
+ * @return uint64_t
+*/
 uint64_t ExecuteStage::cond(PipeReg * ereg)
 {
     bool error = false;
@@ -316,6 +352,14 @@ uint64_t ExecuteStage::cond(PipeReg * ereg)
     return 0;
 }
 
+/**
+ * calculateControlSignals
+ * 
+ * calculate the status based on the stat in the writeback stage
+ * 
+ * @param wreg - writeBack reg in order to attain the stat value
+ * @return uin64_t
+*/
 uint64_t ExecuteStage::calculateControlSignals(PipeReg * wreg)
 {
 	uint64_t w_stat = wreg->get(W_STAT);
