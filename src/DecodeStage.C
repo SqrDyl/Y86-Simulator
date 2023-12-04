@@ -39,7 +39,21 @@ bool DecodeStage::doClockLow(PipeRegArray * pipeRegs)
 
     return false;
 }
-
+/**
+ * setEInput
+ * 
+ * @param ereg - execute reg
+ * @param stat - stat value in execute reg
+ * @param icode - stat value in execute reg
+ * @param ifun - ifun value in execute reg
+ * @param valC - updated valC value
+ * @param valA - updated valA value
+ * @param valB - updated valB value
+ * @param destE - updated destE value
+ * @param destM - updated destM value
+ * @param srcA - updated srcA value
+ * @param srcB - updated srcB value
+*/
 void DecodeStage::setEInput(PipeReg * ereg, uint64_t stat, uint64_t icode,
                            uint64_t ifun, uint64_t valC, uint64_t valA, uint64_t valB,
                            uint64_t destE, uint64_t destM, uint64_t srcA, uint64_t srcB)
@@ -71,7 +85,14 @@ void DecodeStage::doClockHigh(PipeRegArray * pipeRegs)
 	ereg->normal();
 }
 
-
+/**
+ * srcA
+ * 
+ * grabs the correct srcA value based on the icode in the decode stage.
+ * 
+ * @param dreg - decode register that has the d_icode, and the RA value.
+ * @return uint64_t 
+*/
 uint64_t DecodeStage::srcA(PipeReg * dreg)
 {
 	uint64_t d_Icode = dreg->get(D_ICODE);
@@ -91,6 +112,14 @@ uint64_t DecodeStage::srcA(PipeReg * dreg)
 	}
 }
 
+/**
+ * srcB
+ * 
+ * grabs the correct srcB value based on the icode in the decode stage.
+ * 
+ * @param dreg - decode register that has the d_icode, and the RB value.
+ * @return uint64_t 
+*/
 uint64_t DecodeStage::srcB(PipeReg * dreg)
 {
 	uint64_t d_Icode = dreg->get(D_ICODE);
@@ -110,6 +139,15 @@ uint64_t DecodeStage::srcB(PipeReg * dreg)
 	}
 }
 
+/**
+ * dstE
+ * 
+ * grabs the appropriate destination for to send to the execute stage
+ * (if it will be conducted there) based on the icode in the decode stage.
+ * 
+ * @param dreg - decode register that has the d_icode, and the RB value.
+ * @return uint64_t 
+*/
 uint64_t DecodeStage::dstE(PipeReg * dreg)
 {
 	uint64_t d_Icode = dreg->get(D_ICODE);
@@ -129,6 +167,15 @@ uint64_t DecodeStage::dstE(PipeReg * dreg)
 	}
 }
 
+/**
+ * dstM
+ * 
+ * grabs the appropriate destination in memory for to send to the execute stage
+ * (if it will be conducted in memory) based on the icode in the decode stage.
+ * 
+ * @param dreg - decode register that has the d_icode, and the RB value.
+ * @return uint64_t 
+**/
 uint64_t DecodeStage::dstM(PipeReg * dreg)
 {
 	uint64_t d_Icode = dreg->get(D_ICODE);
@@ -142,6 +189,14 @@ uint64_t DecodeStage::dstM(PipeReg * dreg)
 	}
 }
 
+/**
+ * fwdA 
+ * 
+ * grabs the correct value for valA in the execute stage
+ * 
+ * @param PipeRegs - passes the memory, writeBack, and decode reg.
+ * @return uint64_t 
+*/
 uint64_t DecodeStage::fwdA(PipeRegArray * PipeRegs)
 {
 	bool error; 
@@ -183,6 +238,14 @@ uint64_t DecodeStage::fwdA(PipeRegArray * PipeRegs)
 	}
 }
 
+/**
+ * fwdB
+ * 
+ * grabs the correct value for valB in the execute stage
+ * 
+ * @param PipeRegs - passes the memory, writeBack, and decode reg.
+ * @return uint64_t 
+*/
 uint64_t DecodeStage::fwdB(PipeRegArray * PipeRegs)
 {
 	bool error = false;

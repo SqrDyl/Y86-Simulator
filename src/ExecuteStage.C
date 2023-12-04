@@ -48,7 +48,20 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
 
 	return false;
 }
-
+/**
+ * setMInput
+ * 
+ * sends the updated values to the memory stage
+ * 
+ * @param mreg - memory register
+ * @param stat - stat value from execute stage
+ * @param icode - icode from execute stage
+ * @param Cnd - condition value from stage
+ * @param valE - valE computed from the ALU
+ * @param valA - valA from execute stage
+ * @param dstE - destination if operation was conducted in execute stage
+ * @param dstM - destination if operation was conducted in memory
+**/
 void ExecuteStage::setMInput(PipeReg * mreg, uint64_t stat, uint64_t icode,
                            uint64_t Cnd, uint64_t valE, uint64_t valA, 
                            uint64_t dstE, uint64_t dstM)
@@ -86,6 +99,15 @@ void ExecuteStage::doClockHigh(PipeRegArray * pipeRegs)
 
 //LAB 8 
 //==============================
+
+/**
+ * aluAComp
+ * 
+ * figures out value of op1
+ * 
+ * @param ereg - execute reg in order to get the icode, valA, valC
+ * @return uint64_t
+*/
 uint64_t ExecuteStage::aluAComp(PipeReg * ereg)
 {
     uint64_t e_icode = ereg->get(E_ICODE);
@@ -114,6 +136,14 @@ uint64_t ExecuteStage::aluAComp(PipeReg * ereg)
     }
 }
 
+/**
+ * aluBComp
+ * 
+ * gets the value for op2
+ * 
+ * @param ereg - execute reg in order to get the values or icode, and valB
+ * @return uint64_t
+*/
 uint64_t ExecuteStage::aluBComp(PipeReg * ereg)
 {
     uint64_t e_icode = ereg->get(E_ICODE);
@@ -135,6 +165,14 @@ uint64_t ExecuteStage::aluBComp(PipeReg * ereg)
     }
 }
 
+/**
+ * aluFunComp 
+ * 
+ * gets the function based on the icode and the ifun
+ * 
+ * @param ereg - execute reg in order to get the icode and the ifun values
+ * @return uint64_t 
+*/
 uint64_t ExecuteStage::aluFunComp(PipeReg * ereg)
 {
     uint64_t e_icode = ereg->get(E_ICODE);
@@ -150,6 +188,15 @@ uint64_t ExecuteStage::aluFunComp(PipeReg * ereg)
     }
 }
 
+/**
+ * setCC
+ * 
+ * grabs the stat and icode in order to see if the condition
+ * codes will need to be updated
+ * 
+ * @param ereg - execute reg
+ * @param wreg - writeBack reg 
+*/
 bool ExecuteStage::setCC(PipeReg * ereg, PipeReg * wreg)
 {
 	uint64_t w_stat = wreg->get(W_STAT);
