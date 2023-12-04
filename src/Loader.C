@@ -169,15 +169,14 @@ bool Loader::load()
 
 }
 
-//Add helper methods definitions here and the declarations to Loader.h
-//In your code, be sure to use the static const variables defined in 
-//Loader.h to grab specific fields from the input line.
-/*bool Loader::colon(String inputLine)
-{
-    bool error = false;
-    return (inputLine.isSubString(":", 5, error))
-}*/
-
+/**
+ * isDataRec
+ * 
+ * determines whether the current line is a data record
+ * 
+ * @param input - current line
+ * @return bool
+*/
 bool Loader::isDataRec(String input)
 {
    bool error = false;
@@ -191,6 +190,17 @@ bool Loader::isDataRec(String input)
    }
 }
 
+/**
+ * isBadDataRec 
+ * 
+ * checks if the data record isn't formatted properly
+ * 
+ * @param input - current line
+ * @param lineNumber - current lineNumber of .yo file
+ * @param pointer
+ * @param addressLen - addressLength
+ * @return bool
+*/
 bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, int32_t addressLen)
 {
 	bool error = false;
@@ -242,7 +252,7 @@ bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, in
                 }
             }
         }
-        
+        uint64_t maxMem = 4096;
         if ((numOfDataDig) % 2 != 0) //Checking if bytes is odd
         {
             return true;
@@ -251,7 +261,7 @@ bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, in
 		{
 			return true;
 		}
-        if (address + (numOfDataDig / 2) >= 4096)
+        if (address + (numOfDataDig / 2) >= maxMem)
         {
             return true;
         }
@@ -259,6 +269,16 @@ bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, in
 	}
 }
 
+/**
+ * isBadComRec 
+ * 
+ * determines whether a comment record is formatted improperly
+ * 
+ * @param input - current line
+ * @param lineNumber - current line number in .yo file
+ * @param pointer
+ * @return bool
+*/
 bool Loader::isBadComRec(String input, int32_t lineNumber, String * pointer)
 {
 	bool error = false; 
@@ -275,7 +295,14 @@ bool Loader::isBadComRec(String input, int32_t lineNumber, String * pointer)
     }
 	return false;
 }
-
+/**
+ * loadline
+ * 
+ * loads current line
+ * 
+ * @param input - current line in .yo file
+ * @param address - current address of instruction
+*/
 void Loader::loadLine(String input, int32_t address)
 {
 	bool error = false;
