@@ -60,8 +60,8 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     stat = f_stat(validInstr, icode, mem_error);
     
     //Lab10 code
-    icode = f_icode(icode, mreg, mem_error);
-    ifun = f_ifun(ifun, mreg, mem_error);
+    icode = f_icode(icode, mem_error);
+    ifun = f_ifun(ifun, mem_error);
     //????
     //Old code -- do I need this?
     /*if (icode == Instruction::IHALT)
@@ -132,6 +132,17 @@ void FetchStage::setDInput(PipeReg * dreg, uint64_t stat, uint64_t icode,
    dreg->set(D_VALP, valP);
 }
 
+/**
+ * selectPC
+ * 
+ * gets the value for the pc based on the icodes in the writeBack 
+ * and the memory regs
+ * 
+ * @param freg - fetchStage reg for predpc
+ * @param mreg - memory reg for icode, valA, and condition value
+ * @param wreg - writeBack reg for icode and valM
+ * @return uint64_t
+*/
 uint64_t FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
 {
     uint64_t M_icode = mreg->get(M_ICODE);
@@ -154,7 +165,14 @@ uint64_t FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg)
 		return pred_pc;
     }
 }
-
+/**
+ * needRegIds
+ * 
+ * determines if you need regIds based off the icode in fetch stage
+ * 
+ * @param icode - fetch stage icode
+ * @return bool
+*/
 bool FetchStage::needRegIds(uint64_t icode)
 {
     //needRegIds  method: input is f_icode
@@ -166,6 +184,14 @@ bool FetchStage::needRegIds(uint64_t icode)
         || (icode == Instruction::IMRMOVQ));
 }
 
+/**
+ * needValC
+ * 
+ * returns 1 if you need valC based off the icode
+ * 
+ * @param icode - fetch stage icode
+ * @return bool 
+*/
 bool FetchStage::need_valC(uint64_t icode)
 {
     //needValC method: input is f_icode
@@ -176,7 +202,18 @@ bool FetchStage::need_valC(uint64_t icode)
         || icode == Instruction::IMRMOVQ || icode == Instruction::IJXX || icode == Instruction::ICALL);
 }
 
-
+/**
+ * predictPC
+ * 
+ * predicts the value of the next PC based on icode, 
+ * accounts for jumps and calls
+ * 
+ * @param icode - operation being fetched right now
+ * @param f_valC - fetchStage value that will have the value of the jump/call address
+ * @param f_valP - fetchStage value that will have the value of the next operation in the 
+ *      .yo file
+ * @return uint64_t
+*/
 uint64_t FetchStage::predictPC(uint64_t icode, uint64_t f_valC, uint64_t f_valP)
 {
 	//uint64_t num = Tools::getBits(f_icode, 0, 4);
@@ -190,7 +227,16 @@ uint64_t FetchStage::predictPC(uint64_t icode, uint64_t f_valC, uint64_t f_valP)
 		return f_valP;
 	}
 }
-
+/**
+ * PCIncrement
+ * 
+ * determines the amount to increment the PC based on if we need regIds or valC
+ * 
+ * @param f_pc - current PC
+ * @param needRegRes - bool result of needRegIds function
+ * @param needValCRes - bool restul of needValC function
+ * @return uint64_t
+*/
 uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegRes, bool needValCRes)
 {
 	// F_PC + length of current intruction (Get length from if needRegRes or needValCRes)
@@ -209,6 +255,16 @@ uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegRes, bool needValCRe
 
 //Lab7
 //=============================================================================
+/**
+ * getRegs
+ * 
+ * gets the values of regs based on the operation and needRegResult
+ * 
+ * @param needReg - bool result of needRegIds
+ * @param f_pc - current PC
+ * @param rA - the address of rA
+ * @param rB - the address of rB
+*/
 void FetchStage::getRegs(bool needReg, uint64_t f_pc, uint64_t &rA, uint64_t &rB)
 {
     bool error = false;
@@ -220,6 +276,16 @@ void FetchStage::getRegs(bool needReg, uint64_t f_pc, uint64_t &rA, uint64_t &rB
     }
 }
 
+/**
+ * buildValC 
+ * 
+ * aligns valC
+ * 
+ * @param needValC - determines if we need to buildValC
+ * @param needRegs - result of needRegIds function
+ * @param f_pc - current PC
+ * @return uint64_t
+*/
 uint64_t FetchStage::buildValC(bool needValC, bool needRegs, uint64_t f_pc)
 {
     bool error = false;
@@ -245,6 +311,13 @@ uint64_t FetchStage::buildValC(bool needValC, bool needRegs, uint64_t f_pc)
     }
 }
 
+/**
+ * instr_valid
+ * 
+ * returns true if the instruction is valid
+ * 
+ * @param icode - current icode
+*/
 bool FetchStage::instr_valid(uint64_t icode)
 {
     return (icode == Instruction::INOP || icode == Instruction::IHALT || icode == Instruction::IRRMOVQ 
@@ -253,6 +326,17 @@ bool FetchStage::instr_valid(uint64_t icode)
     || icode == Instruction::IRET || icode == Instruction::IPUSHQ || icode == Instruction::IPOPQ);
 }
 
+/**
+ * f_stat 
+ * 
+ * updates the status variable if there is a memError
+ * or if instructions isn't valid, or halt is hit
+ * 
+ * @param instrValid - bool result if the current instruction is valid
+ * @param icode - current icode
+ * @param memError - will occur if error in memory
+ * @return uint64_t
+*/
 uint64_t FetchStage::f_stat(bool instrValid, uint64_t icode, bool memError)
 {
     if (memError)
@@ -273,7 +357,16 @@ uint64_t FetchStage::f_stat(bool instrValid, uint64_t icode, bool memError)
     }
 }
 
-uint64_t FetchStage::f_icode(uint64_t icode, PipeReg * mreg, bool mem_error)
+/**
+ * f_icode
+ * 
+ * changes icode if there is a memory error
+ * 
+ * @param icode - current icode
+ * @param mem_error - bool if there was a memory error
+ * @return uint64_t
+*/
+uint64_t FetchStage::f_icode(uint64_t icode, bool mem_error)
 {
     if (mem_error)
     {
@@ -284,8 +377,16 @@ uint64_t FetchStage::f_icode(uint64_t icode, PipeReg * mreg, bool mem_error)
         return icode;
     }
 }
-
-uint64_t FetchStage::f_ifun(uint64_t ifun, PipeReg * mreg, bool mem_error)
+/**
+ * f_ifun
+ * 
+ * changes ifun if there was a memory error
+ * 
+ * @param ifun - current ifun
+ * @param mem_error - bool if there was a memory error
+ * @return uint64_t
+*/
+uint64_t FetchStage::f_ifun(uint64_t ifun, bool mem_error)
 {
     if (mem_error)
     {
@@ -296,34 +397,6 @@ uint64_t FetchStage::f_ifun(uint64_t ifun, PipeReg * mreg, bool mem_error)
         return ifun;
     }
 }
-//TODO
-//Write your selectPC, needRegIds, needValC, PC increment, and predictPC methods
-//Remember to add declarations for these to FetchStage.h
 
-// Here is the HCL describing the behavior for some of these methods. 
-/*
-
-//selectPC method: input is F, M, and W registers
-word f_pc = [
-    M_icode == IJXX && !M_Cnd : M_valA;
-    W_icode == IRET : W_valM;
-    1: F_predPC;
-];
-
-//needRegIds  method: input is f_icode
-bool need_regids = f_icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, IIRMOVQ, IRMMOVQ, IMRMOVQ };
-
-
-
-//needValC method: input is f_icode
-bool need_valC = f_icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL };
-
-//predictPC method: inputs are f_icode, f_valC, f_valP
-word f_predPC = [
-    f_icode in { IJXX, ICALL } : f_valC;
-    1: f_valP;
-];
-
-*/
 
 
