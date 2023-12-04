@@ -54,6 +54,19 @@ bool MemoryStage::doClockLow(PipeRegArray * pipeRegs)
    return false;
 }
 
+/**
+ * setWInput
+ * 
+ * sends the updated values to the writeBack reg
+ * 
+ * @param wreg - writeBack reg
+ * @param stat - current stat
+ * @param icode - current icode
+ * @param valE - updated valE
+ * @param valM - updated valM
+ * @param dstE - updated dstE
+ * @param dstM - updated dstM
+*/
 void MemoryStage::setWInput(PipeReg * wreg, uint64_t stat, uint64_t icode, uint64_t valE,
 		uint64_t valM, uint64_t dstE, uint64_t dstM)
 {
@@ -78,6 +91,14 @@ void MemoryStage::doClockHigh(PipeRegArray * pipeRegs)
 	wreg->normal();
 }
 
+/**
+ * memAddr
+ * 
+ * determine the memAddress needed
+ * 
+ * @param mreg - memory register to get the value of icode, valE, and valA
+ * @return uint64_t
+*/
 uint64_t MemoryStage::memAddr(PipeReg * mreg)
 {
     uint64_t icode = mreg->get(M_ICODE);
@@ -95,11 +116,27 @@ uint64_t MemoryStage::memAddr(PipeReg * mreg)
     }
 }
 
+/**
+ * memRead 
+ * 
+ * determines whether the instruction will need to read from memory
+ * 
+ * @param icode - current instruction code
+ * @return bool 
+*/
 bool MemoryStage::memRead(uint64_t icode)
 {
     return (icode == Instruction::IMRMOVQ || icode == Instruction::IPOPQ || icode == Instruction::IRET);
 }
 
+/**
+ * memWrite 
+ * 
+ * determines whether the instruction will need to write to memory
+ * 
+ * @param icode - current instruction code
+ * @return bool 
+*/
 bool MemoryStage::memWrite(uint64_t icode)
 {
     return (icode == Instruction::IRMMOVQ || icode == Instruction::IPUSHQ || icode == Instruction::ICALL);
