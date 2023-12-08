@@ -22,8 +22,8 @@ class FetchStage: public Stage
       uint64_t buildValC(bool needValC, bool needRegs, uint64_t f_pc);
       bool instr_valid(uint64_t icode);
       uint64_t f_stat(bool instrValid, uint64_t icode, bool memError);
-      uint64_t f_icode(uint64_t icode, bool mem_error);
-      uint64_t f_ifun(uint64_t ifun, bool mem_error);
+      uint64_t f_icode(uint8_t insByte, bool mem_error);
+      uint64_t f_ifun(uint8_t insByte, bool mem_error);
       bool f_stall(PipeReg * ereg);
       bool d_stall(PipeReg * ereg);
 

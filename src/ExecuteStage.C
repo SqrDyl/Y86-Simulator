@@ -86,14 +86,16 @@ void ExecuteStage::doClockHigh(PipeRegArray * pipeRegs)
 {
 	PipeReg * mreg = pipeRegs->getMemoryReg();
 	PipeReg * wreg = pipeRegs->getWritebackReg();
-	if (M_bubble)
+	mreg->normal();
+    /* UNCOMMENT AFTER TESTING
+    if (M_bubble)
 	{
 		((M *)mreg)->bubble();
 	}
 	else
 	{
 		mreg->normal();
-	}
+	}*/
 }
 
 

@@ -23,24 +23,43 @@ bool MemoryStage::doClockLow(PipeRegArray * pipeRegs)
     uint64_t valE = mreg->get(M_VALE);
     uint64_t dstE = mreg->get(M_DSTE);
     uint64_t dstM = mreg->get(M_DSTM);
-    // Undefined Reference Error for below???? 
-
+    uint64_t newStat = 0;
     bool mem_error = false;
+    //Get the memory address
     uint64_t memAddRes = memAddr(mreg);
-    //Stage::m_valM = memAddr(mreg);
+    //Check if we need to read or write
     bool memReadRes = memRead(icode);
     bool memWriteRes = memWrite(icode);
+
+    //Get value out of memory or write to memory
 	Stage::m_valM = 0;
     if (memReadRes)
     {
         Stage::m_valM = Stage::mem->getLong(memAddRes, mem_error);
+        if (mem_error)
+        {
+            stat = Status::SADR;
+        }
+        else
+        {
+            stat = Stage::m_stat;
+        }
     }
     else if (memWriteRes)
     {
         Stage::mem->putLong(mreg->get(M_VALA), memAddRes, mem_error);
-        //m_valM = 0;
+        if (mem_error)
+        {
+            stat = Status::SADR;
+        }
+        else
+        {
+            stat = Stage::m_stat;
+        }
+        //newStat = m_stat(mem_error);
+        //Stage::m_stat = newStat;
     }
-    Stage::m_stat = m_stat(mem_error);
+    //Stage::m_stat = m_stat(mem_error);
    setWInput(wreg, Stage::m_stat, icode, valE, Stage::m_valM, dstE, dstM);
 
    return false;

@@ -56,46 +56,27 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     uint64_t rA = RegisterFile::RNONE, rB = RegisterFile::RNONE;
     //Instruction Memory
     uint8_t insByte = mem->getByte(f_pc, mem_error);
-    //Split
-    icode = Tools::getBits(insByte, 4, 7);
-    ifun = Tools::getBits(insByte, 0, 3);
-    
+    //Split    
+    icode = f_icode(insByte, mem_error);
+    ifun = f_ifun(insByte, mem_error);
+    //Checks if Valid Instruction
     bool validInstr = instr_valid(icode);
     stat = f_stat(validInstr, icode, mem_error);
-    
-    //Lab10 code
-    
-    //????
-    //Old code -- do I need this?
-    /*if (icode == Instruction::IHALT)
-    {
-        stat = Status::SHLT;
-    }*/
-
+    //Checks if we will need regIds and valC.
     needRegId = FetchStage::needRegIds(icode);
     needValC = FetchStage::need_valC(icode);
     
-   //TODO
-   //determine the address of the next sequential function
-   //valP = ..... call your PC increment function 
     valP = PCincrement(f_pc, needRegId, needValC);
-   
-   //TODO
-   //calculate the predicted PC value
-   //predPC = .... call your function that predicts the next PoC   
-    predPC = predictPC(icode, valC, valP);
-   //set the input for the PREDPC pipe register field in the F register
-    freg->set(F_PREDPC, predPC);
-    
-    icode = f_icode(icode, mem_error);
-    ifun = f_ifun(ifun, mem_error);
-    //Lab7 calls
+
     getRegs(needRegId, f_pc, rA, rB);
 
+    predPC = predictPC(icode, valC, valP);
+    freg->set(F_PREDPC, predPC);
+    
     fetchStall = f_stall(ereg);
     decodeStall = d_stall(ereg);
 
-   //set the inputs for the D register
+    //set the inputs for the D register
     setDInput(dreg, stat, icode, ifun, rA, rB, buildValC(needValC, needRegId, f_pc), valP);
     return false;
 }
@@ -111,6 +92,9 @@ void FetchStage::doClockHigh(PipeRegArray * pipeRegs)
 {
     PipeReg * freg = pipeRegs->getFetchReg();  
     PipeReg * dreg = pipeRegs->getDecodeReg();
+    freg->normal();
+    dreg->normal();
+    /*  UNCOMMENT AFTER TESTS PASS
     if (!fetchStall)
     {
         freg->normal();
@@ -118,7 +102,7 @@ void FetchStage::doClockHigh(PipeRegArray * pipeRegs)
     if (!decodeStall)
     {
         dreg->normal();
-    }
+    }*/
 }
 
 /* setDInput
@@ -381,7 +365,7 @@ uint64_t FetchStage::f_stat(bool instrValid, uint64_t icode, bool memError)
  * @param mem_error - bool if there was a memory error
  * @return uint64_t
 */
-uint64_t FetchStage::f_icode(uint64_t icode, bool mem_error)
+uint64_t FetchStage::f_icode(uint8_t insByte, bool mem_error)
 {
     if (mem_error)
     {
@@ -389,7 +373,7 @@ uint64_t FetchStage::f_icode(uint64_t icode, bool mem_error)
     }
     else 
     {
-        return icode;
+        return Tools::getBits(insByte, 4, 7);
     }
 }
 /**
@@ -401,7 +385,7 @@ uint64_t FetchStage::f_icode(uint64_t icode, bool mem_error)
  * @param mem_error - bool if there was a memory error
  * @return uint64_t
 */
-uint64_t FetchStage::f_ifun(uint64_t ifun, bool mem_error)
+uint64_t FetchStage::f_ifun(uint8_t insByte, bool mem_error)
 {
     if (mem_error)
     {
@@ -409,7 +393,7 @@ uint64_t FetchStage::f_ifun(uint64_t ifun, bool mem_error)
     }
     else
     {
-        return ifun;
+        return Tools::getBits(insByte, 0, 3);;
     }
 }
 

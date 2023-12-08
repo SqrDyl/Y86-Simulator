@@ -82,6 +82,8 @@ void DecodeStage::setEInput(PipeReg * ereg, uint64_t stat, uint64_t icode,
 void DecodeStage::doClockHigh(PipeRegArray * pipeRegs)
 {
     PipeReg * ereg = pipeRegs->getExecuteReg(); 
+    ereg->normal();
+    /* UNCOMMENT AFTER TESTING
     if (executeBubble)
     {
         ((E *)ereg)->bubble();
@@ -89,7 +91,7 @@ void DecodeStage::doClockHigh(PipeRegArray * pipeRegs)
     else
     {
 	    ereg->normal();
-    }
+    }*/
 }
 
 /**
