@@ -134,7 +134,7 @@ bool Loader::load()
 		int32_t address = inputLine.convert2Hex(addrbegin, addrend - addrbegin + 1, error);
 		int32_t addressLength = 3;
 
-        if (isDataRec(inputLine) && isBadDataRec(inputLine, lineNumber, pointer, addressLength))
+        if (isDataRec(inputLine) && isBadDataRec(inputLine, lineNumber, addressLength))
 		{  
             return printErrMsg(baddata, lineNumber, pointer);
 		}
@@ -201,7 +201,7 @@ bool Loader::isDataRec(String input)
  * @param addressLen - addressLength
  * @return bool
 */
-bool Loader::isBadDataRec(String input, int32_t lineNumber, String * pointer, int32_t addressLen)
+bool Loader::isBadDataRec(String input, int32_t lineNumber, int32_t addressLen)
 {
 	bool error = false;
     int32_t colon = 5;

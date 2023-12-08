@@ -67,7 +67,7 @@ $(OBJD)/W.o: $(INC)/W.h $(INC)/Instruction.h $(INC)/RegisterFile.h $(INC)/PipeRe
 
 $(OBJD)/FetchStage.o: $(INC)/PipeRegArray.h $(INC)/PipeReg.h $(INC)/Memory.h \
  $(INC)/FetchStage.h $(INC)/Instruction.h $(INC)/RegisterFile.h $(INC)/Status.h \
- $(INC)/F.h $(INC)/D.h $(INC)/M.h $(INC)/W.h $(INC)/Tools.h
+ $(INC)/F.h $(INC)/D.h $(INC)/M.h $(INC)/W.h $(INC)/Tools.h $(INC)/E.h
 
 $(OBJD)/DecodeStage.o: $(INC)/DecodeStage.h $(INC)/PipeRegArray.h $(INC)/Instruction.h \
  $(INC)/Status.h $(INC)/D.h $(INC)/E.h $(INC)/W.h $(INC)/M.h

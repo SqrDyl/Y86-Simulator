@@ -12,6 +12,7 @@
 #include "M.h"
 #include "W.h"
 #include "Tools.h"
+#include "E.h"
 
 /*
  * doClockLow
@@ -28,6 +29,7 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
    PipeReg * dreg = pipeRegs->getDecodeReg();
    PipeReg * mreg = pipeRegs->getMemoryReg();
    PipeReg * wreg = pipeRegs->getWritebackReg();
+   PipeReg * ereg = pipeRegs->getExecuteReg();
    bool mem_error = false;
    uint64_t icode = Instruction::INOP, ifun = Instruction::FNONE;
    uint64_t valC = 0, valP = 0, stat = Status::SAOK, predPC = 0;
@@ -86,6 +88,9 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     //Lab7 calls
     getRegs(needRegId, f_pc, rA, rB);
 
+    fetchStall = f_stall(ereg);
+    decodeStall = d_stall(ereg);
+
    //set the inputs for the D register
     setDInput(dreg, stat, icode, ifun, rA, rB, buildValC(needValC, needRegId, f_pc), valP);
     return false;
@@ -100,10 +105,16 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
 */
 void FetchStage::doClockHigh(PipeRegArray * pipeRegs)
 {
-   PipeReg * freg = pipeRegs->getFetchReg();  
-   PipeReg * dreg = pipeRegs->getDecodeReg();
-   freg->normal();
-   dreg->normal();
+    PipeReg * freg = pipeRegs->getFetchReg();  
+    PipeReg * dreg = pipeRegs->getDecodeReg();
+    if (!fetchStall)
+    {
+        freg->normal();
+    }    
+    if (!decodeStall)
+    {
+        dreg->normal();
+    }
 }
 
 /* setDInput
@@ -398,5 +409,34 @@ uint64_t FetchStage::f_ifun(uint64_t ifun, bool mem_error)
     }
 }
 
+/**
+ * f_stall
+ * 
+ * determines whether fetch needs to stall
+ * 
+ * @param ereg - allows the use of the execute stage icode and the dstM
+ * @return bool
+*/
+bool FetchStage::f_stall(PipeReg * ereg)
+{
+    uint64_t e_icode = ereg->get(E_ICODE);
+    uint64_t e_dstM = ereg->get(E_DSTM);
+    return ((e_icode == Instruction::IMRMOVQ || e_icode == Instruction::IPOPQ) 
+        && (e_dstM == Stage::d_srcA) || e_dstM == Stage::d_srcB);
+}
 
-
+/**
+ * d_stall
+ * 
+ * determines whether fetch needs to stall
+ * 
+ * @param ereg - allows the use of the execute stage icode and the dstM
+ * @return bool
+*/
+bool FetchStage::d_stall(PipeReg * ereg)
+{
+    uint64_t e_icode = ereg->get(E_ICODE);
+    uint64_t e_dstM = ereg->get(E_DSTM);
+    return ((e_icode == Instruction::IMRMOVQ || e_icode == Instruction::IPOPQ) 
+        && (e_dstM == Stage::d_srcA) || e_dstM == Stage::d_srcB);
+}
