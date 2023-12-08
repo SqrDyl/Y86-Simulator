@@ -204,8 +204,8 @@ bool ExecuteStage::setCC(PipeReg * ereg, PipeReg * wreg)
 	uint64_t w_stat = wreg->get(W_STAT);
 	uint64_t e_icode = ereg->get(E_ICODE);
 	return ((e_icode == Instruction::IOPQ) && 
-		(Stage::m_stat != Status::SADR || Stage::m_stat != Status::SINS|| Stage::m_stat != Status::SHLT)
-         && (w_stat != Status::SADR|| w_stat != Status::SINS || w_stat != Status::SHLT));
+		(Stage::m_stat != Status::SADR && Stage::m_stat != Status::SINS && Stage::m_stat != Status::SHLT)
+         && (w_stat != Status::SADR && w_stat != Status::SINS && w_stat != Status::SHLT));
 }
 /**
  * dstEComp
