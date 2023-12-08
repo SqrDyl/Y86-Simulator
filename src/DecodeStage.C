@@ -31,7 +31,7 @@ bool DecodeStage::doClockLow(PipeRegArray * pipeRegs)
     uint64_t destE = dstE(dreg);
 	d_srcA = srcA(dreg);
 	d_srcB = srcB(dreg);
-	
+	executeBubble = e_bubble(ereg);
 
     setEInput(ereg, stat, icode, ifun, valC, fwdA(pipeRegs), fwdB(pipeRegs), destE, dstM(dreg),
 	   d_srcA, d_srcB);
@@ -81,8 +81,15 @@ void DecodeStage::setEInput(PipeReg * ereg, uint64_t stat, uint64_t icode,
 */
 void DecodeStage::doClockHigh(PipeRegArray * pipeRegs)
 {
-    PipeReg * ereg = pipeRegs->getExecuteReg();  
-	ereg->normal();
+    PipeReg * ereg = pipeRegs->getExecuteReg(); 
+    if (executeBubble)
+    {
+        //Calls bubble on the E register??
+    } 
+    else
+    {
+	    ereg->normal();
+    }
 }
 
 /**
@@ -285,3 +292,21 @@ uint64_t DecodeStage::fwdB(PipeRegArray * PipeRegs)
 	}
 }
 
+/**
+ * 
+*/
+/**
+ * f_stall
+ * 
+ * determines whether fetch needs to stall
+ * 
+ * @param ereg - allows the use of the execute stage icode and the dstM
+ * @return bool
+*/
+bool DecodeStage::e_bubble(PipeReg * ereg)
+{
+    uint64_t e_icode = ereg->get(E_ICODE);
+    uint64_t e_dstM = ereg->get(E_DSTM);
+    return ((e_icode == Instruction::IMRMOVQ || e_icode == Instruction::IPOPQ) 
+        && (e_dstM == Stage::d_srcA) || e_dstM == Stage::d_srcB);
+}
