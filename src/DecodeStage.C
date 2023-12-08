@@ -84,7 +84,7 @@ void DecodeStage::doClockHigh(PipeRegArray * pipeRegs)
     PipeReg * ereg = pipeRegs->getExecuteReg(); 
     if (executeBubble)
     {
-        //Calls bubble on the E register??
+        ((E *)ereg)->bubble();
     } 
     else
     {

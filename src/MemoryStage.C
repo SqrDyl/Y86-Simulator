@@ -25,7 +25,7 @@ bool MemoryStage::doClockLow(PipeRegArray * pipeRegs)
     uint64_t dstM = mreg->get(M_DSTM);
     // Undefined Reference Error for below???? 
 
-    bool error = false;
+    bool mem_error = false;
     uint64_t memAddRes = memAddr(mreg);
     //Stage::m_valM = memAddr(mreg);
     bool memReadRes = memRead(icode);
@@ -33,23 +33,15 @@ bool MemoryStage::doClockLow(PipeRegArray * pipeRegs)
 	Stage::m_valM = 0;
     if (memReadRes)
     {
-        Stage::m_valM = Stage::mem->getLong(memAddRes, error);
+        Stage::m_valM = Stage::mem->getLong(memAddRes, mem_error);
     }
     else if (memWriteRes)
     {
-        Stage::mem->putLong(mreg->get(M_VALA), memAddRes, error);
+        Stage::mem->putLong(mreg->get(M_VALA), memAddRes, mem_error);
         //m_valM = 0;
     }
-    if (error)
-	{
-		return Status::SADR;
-	}
-	else
-	{
-		return Stage::m_stat;
-	}
-
-   setWInput(wreg, stat, icode, valE, Stage::m_valM, dstE, dstM);
+    Stage::m_stat = m_stat(mem_error);
+   setWInput(wreg, Stage::m_stat, icode, valE, Stage::m_valM, dstE, dstM);
 
    return false;
 }
@@ -142,4 +134,24 @@ bool MemoryStage::memWrite(uint64_t icode)
     return (icode == Instruction::IRMMOVQ || icode == Instruction::IPUSHQ || icode == Instruction::ICALL);
 }
 
+/**
+ * m_stat
+ * 
+ * Updates m_stat if there is a memory error
+ * 
+ * @param stat - original stat variable
+ * @param mem_error - bool state true if error occured
+ * @return uint64_t
+*/
+uint64_t MemoryStage::m_stat(bool mem_error)
+{
+    if (mem_error)
+    {
+        return Status::SADR;
+    }
+    else
+    {
+        return Stage::m_stat;
+    }
+}
 

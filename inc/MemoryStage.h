@@ -13,6 +13,7 @@ class MemoryStage: public Stage
       uint64_t memAddr(PipeReg * mreg);
       bool memRead(uint64_t icode);
       bool memWrite(uint64_t icode);
+      uint64_t m_stat(bool mem_error);
 
    public:
       //These are the only methods called outside of the class

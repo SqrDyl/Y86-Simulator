@@ -54,7 +54,9 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
    //needregId = .... call your need regId function
     uint64_t f_pc = selectPC(freg, mreg, wreg);
     uint64_t rA = RegisterFile::RNONE, rB = RegisterFile::RNONE;
+    //Instruction Memory
     uint8_t insByte = mem->getByte(f_pc, mem_error);
+    //Split
     icode = Tools::getBits(insByte, 4, 7);
     ifun = Tools::getBits(insByte, 0, 3);
     
@@ -62,8 +64,7 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     stat = f_stat(validInstr, icode, mem_error);
     
     //Lab10 code
-    icode = f_icode(icode, mem_error);
-    ifun = f_ifun(ifun, mem_error);
+    
     //????
     //Old code -- do I need this?
     /*if (icode == Instruction::IHALT)
@@ -85,6 +86,9 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     predPC = predictPC(icode, valC, valP);
    //set the input for the PREDPC pipe register field in the F register
     freg->set(F_PREDPC, predPC);
+    
+    icode = f_icode(icode, mem_error);
+    ifun = f_ifun(ifun, mem_error);
     //Lab7 calls
     getRegs(needRegId, f_pc, rA, rB);
 
