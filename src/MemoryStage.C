@@ -42,7 +42,7 @@ bool MemoryStage::doClockLow(PipeRegArray * pipeRegs)
         Stage::mem->putLong(mreg->get(M_VALA), memAddRes, mem_error);
     }
     //Check if memory error after the read or write
-    Stage::m_stat = m_stat(mem_error);
+   Stage::m_stat = m_stat(mreg, mem_error);
    setWInput(wreg, Stage::m_stat, icode, valE, Stage::m_valM, dstE, dstM);
 
    return false;
@@ -145,7 +145,7 @@ bool MemoryStage::memWrite(uint64_t icode)
  * @param mem_error - bool state true if error occured
  * @return uint64_t
 */
-uint64_t MemoryStage::m_stat(bool mem_error)
+uint64_t MemoryStage::m_stat(PipeReg * mreg, bool mem_error)
 {
     if (mem_error)
     {
@@ -153,7 +153,7 @@ uint64_t MemoryStage::m_stat(bool mem_error)
     }
     else
     {
-        return Stage::m_stat;
+        return mreg->get(M_STAT);
     }
 }
 

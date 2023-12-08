@@ -21,7 +21,7 @@
 # stop when the length of the sorted list is equal to the length of list
 # 
 # TODO: Provide missing code (see description below of insert function)
-#
+# 
 done:   halt
 #
 # insert function

@@ -87,7 +87,6 @@ void ExecuteStage::doClockHigh(PipeRegArray * pipeRegs)
 	PipeReg * mreg = pipeRegs->getMemoryReg();
 	PipeReg * wreg = pipeRegs->getWritebackReg();
 	mreg->normal();
-    /* UNCOMMENT AFTER TESTING
     if (M_bubble)
 	{
 		((M *)mreg)->bubble();
@@ -95,7 +94,7 @@ void ExecuteStage::doClockHigh(PipeRegArray * pipeRegs)
 	else
 	{
 		mreg->normal();
-	}*/
+	}
 }
 
 
@@ -205,8 +204,8 @@ bool ExecuteStage::setCC(PipeReg * ereg, PipeReg * wreg)
 	uint64_t w_stat = wreg->get(W_STAT);
 	uint64_t e_icode = ereg->get(E_ICODE);
 	return ((e_icode == Instruction::IOPQ) && 
-		(!Stage::m_stat == Status::SADR || !Stage::m_stat == Status::SINS|| !Stage::m_stat == Status::SHLT)
-         && (!w_stat == Status::SADR|| !w_stat == Status::SINS || !w_stat == Status::SHLT));
+		(Stage::m_stat != Status::SADR || Stage::m_stat != Status::SINS|| Stage::m_stat != Status::SHLT)
+         && (w_stat != Status::SADR|| w_stat != Status::SINS || w_stat != Status::SHLT));
 }
 /**
  * dstEComp
@@ -247,8 +246,8 @@ void ExecuteStage::ccMethod(bool setCC, uint64_t aluRes, uint64_t aluA, uint64_t
     {
         return;
     }
-    cc->setConditionCode(aluRes == 0, ConditionCodes::ZF, error);
-    cc->setConditionCode(Tools::sign(aluRes), ConditionCodes::SF, error);
+    	cc->setConditionCode(aluRes == 0, ConditionCodes::ZF, error);
+    	cc->setConditionCode(Tools::sign(aluRes), ConditionCodes::SF, error);
     if (aluFun == Instruction::ADDQ)
     {
         cc->setConditionCode(Tools::addOverflow(aluA, aluB), ConditionCodes::OF, error);
