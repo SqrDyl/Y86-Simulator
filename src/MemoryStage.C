@@ -36,30 +36,13 @@ bool MemoryStage::doClockLow(PipeRegArray * pipeRegs)
     if (memReadRes)
     {
         Stage::m_valM = Stage::mem->getLong(memAddRes, mem_error);
-        if (mem_error)
-        {
-            stat = Status::SADR;
-        }
-        else
-        {
-            stat = Stage::m_stat;
-        }
     }
     else if (memWriteRes)
     {
         Stage::mem->putLong(mreg->get(M_VALA), memAddRes, mem_error);
-        if (mem_error)
-        {
-            stat = Status::SADR;
-        }
-        else
-        {
-            stat = Stage::m_stat;
-        }
-        //newStat = m_stat(mem_error);
-        //Stage::m_stat = newStat;
     }
-    //Stage::m_stat = m_stat(mem_error);
+    //Check if memory error after the read or write
+    Stage::m_stat = m_stat(mem_error);
    setWInput(wreg, Stage::m_stat, icode, valE, Stage::m_valM, dstE, dstM);
 
    return false;
