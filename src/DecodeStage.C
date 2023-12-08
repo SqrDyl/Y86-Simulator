@@ -82,8 +82,7 @@ void DecodeStage::setEInput(PipeReg * ereg, uint64_t stat, uint64_t icode,
 void DecodeStage::doClockHigh(PipeRegArray * pipeRegs)
 {
     PipeReg * ereg = pipeRegs->getExecuteReg(); 
-    ereg->normal();
-    /* UNCOMMENT AFTER TESTING
+    //ereg->normal();
     if (executeBubble)
     {
         ((E *)ereg)->bubble();
@@ -91,7 +90,7 @@ void DecodeStage::doClockHigh(PipeRegArray * pipeRegs)
     else
     {
 	    ereg->normal();
-    }*/
+    }
 }
 
 /**
@@ -310,5 +309,6 @@ bool DecodeStage::e_bubble(PipeReg * ereg)
     uint64_t e_icode = ereg->get(E_ICODE);
     uint64_t e_dstM = ereg->get(E_DSTM);
     return ((e_icode == Instruction::IMRMOVQ || e_icode == Instruction::IPOPQ) 
-        && (e_dstM == Stage::d_srcA) || e_dstM == Stage::d_srcB);
+        && (e_dstM == Stage::d_srcA || e_dstM == Stage::d_srcB)) 
+        || (e_icode == Instruction::IJXX && !Stage::e_Cnd);
 }

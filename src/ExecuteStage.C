@@ -39,7 +39,7 @@ bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
     Stage::e_valE = alu(fun, op1, op2);
     ccMethod(ccRes, Stage::e_valE, op1, op2, fun);
     
-	M_bubble = calculateControlSignals(wreg);
+	M_bubble = calculateControlSignals(wreg, mreg);
     //  v LAB 9 QUESTION FOR OFFICE HOURS v
     //  If Stage::e_Cnd is instead set to 0, the andq runs? v LIKE THIS v
     // setMInput(mreg, stat, icode, 0, Stage::e_valE, valA, Stage::e_dstE, dstM);
@@ -86,7 +86,7 @@ void ExecuteStage::doClockHigh(PipeRegArray * pipeRegs)
 {
 	PipeReg * mreg = pipeRegs->getMemoryReg();
 	PipeReg * wreg = pipeRegs->getWritebackReg();
-	mreg->normal();
+	//mreg->normal();
     if (M_bubble)
 	{
 		((M *)mreg)->bubble();
@@ -354,19 +354,12 @@ uint64_t ExecuteStage::cond(PipeReg * ereg)
  * @param wreg - writeBack reg in order to attain the stat value
  * @return uin64_t
 */
-uint64_t ExecuteStage::calculateControlSignals(PipeReg * wreg)
+uint64_t ExecuteStage::calculateControlSignals(PipeReg * wreg, PipeReg * mreg)
 {
 	uint64_t w_stat = wreg->get(W_STAT);
+    uint64_t m_Stat = mreg->get(M_STAT);
 
-	if ((Stage::m_stat == Status::SADR || Stage::m_stat == Status::SINS 
+	return ((Stage::m_stat == Status::SADR || Stage::m_stat == Status::SINS 
 		|| Stage::m_stat == Status::SHLT) || (w_stat == Status::SADR
-		|| w_stat == Status::SINS || w_stat == Status::SHLT))
-	{
-		return true;
-	}
-	else 
-	{
-		return false;
-	}
-
+		|| w_stat == Status::SINS || w_stat == Status::SHLT));
 }

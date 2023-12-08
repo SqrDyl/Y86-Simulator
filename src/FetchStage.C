@@ -75,6 +75,7 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     
     fetchStall = f_stall(ereg);
     decodeStall = d_stall(ereg);
+    decodeBubble = d_bubble(ereg);
 
     //set the inputs for the D register
     setDInput(dreg, stat, icode, ifun, rA, rB, buildValC(needValC, needRegId, f_pc), valP);
@@ -92,17 +93,20 @@ void FetchStage::doClockHigh(PipeRegArray * pipeRegs)
 {
     PipeReg * freg = pipeRegs->getFetchReg();  
     PipeReg * dreg = pipeRegs->getDecodeReg();
-    freg->normal();
-    dreg->normal();
-    /*  UNCOMMENT AFTER TESTS PASS
+    //freg->normal();
+    //dreg->normal();
     if (!fetchStall)
     {
         freg->normal();
-    }    
-    if (!decodeStall)
+    }
+    if (decodeBubble)
+    {
+        ((D *)dreg)->bubble();
+    }
+    else if (!decodeStall)
     {
         dreg->normal();
-    }*/
+    }
 }
 
 /* setDInput
@@ -410,7 +414,7 @@ bool FetchStage::f_stall(PipeReg * ereg)
     uint64_t e_icode = ereg->get(E_ICODE);
     uint64_t e_dstM = ereg->get(E_DSTM);
     return ((e_icode == Instruction::IMRMOVQ || e_icode == Instruction::IPOPQ) 
-        && (e_dstM == Stage::d_srcA) || e_dstM == Stage::d_srcB);
+        && (e_dstM == Stage::d_srcA || e_dstM == Stage::d_srcB));
 }
 
 /**
@@ -426,5 +430,11 @@ bool FetchStage::d_stall(PipeReg * ereg)
     uint64_t e_icode = ereg->get(E_ICODE);
     uint64_t e_dstM = ereg->get(E_DSTM);
     return ((e_icode == Instruction::IMRMOVQ || e_icode == Instruction::IPOPQ) 
-        && (e_dstM == Stage::d_srcA) || e_dstM == Stage::d_srcB);
+        && (e_dstM == Stage::d_srcA || e_dstM == Stage::d_srcB));
+}
+
+bool FetchStage::d_bubble(PipeReg * ereg)
+{
+    uint64_t e_icode = ereg->get(E_ICODE);
+    return (e_icode == Instruction::IJXX && !Stage::e_Cnd);
 }

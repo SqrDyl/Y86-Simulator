@@ -10,6 +10,7 @@ class FetchStage: public Stage
       //TODO: provide declarations for new methods
       bool fetchStall;
       bool decodeStall;
+      bool decodeBubble;
       void setDInput(PipeReg * dreg, uint64_t stat, uint64_t icode, uint64_t ifun, 
                      uint64_t rA, uint64_t rB,
                      uint64_t valC, uint64_t valP);
@@ -26,6 +27,7 @@ class FetchStage: public Stage
       uint64_t f_ifun(uint8_t insByte, bool mem_error);
       bool f_stall(PipeReg * ereg);
       bool d_stall(PipeReg * ereg);
+      bool d_bubble(PipeReg * ereg);
 
    public:
       //These are the only methods called outside of the class
