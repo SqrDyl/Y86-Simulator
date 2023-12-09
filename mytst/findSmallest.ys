@@ -16,48 +16,49 @@
 # %rdi contains the address of the first element
 # %rsi contains the length of the list
 # TODO: write the min function
-min:     
-		cmovl 1(%rdi), %rdi
-		bubble
-		stall
-		stall
-		cmovl 2(%rdi), %rdi
-		stall
-		stall
-		stall
-		cmovl 3(%rdi), %rdi
-		stall
-		stall
-		stall
-		cmovl 4(%rdi), %rdi
-		stall
-		stall
-		stall
-		cmovl 5(%rdi), %rdi
-		stall
-		stall
-		stall
-		cmovl 6(%rdi), %rdi
-		stall
-		stall
-		stall
-		cmovl 7(%rdi), %rdi
-		stall
-		stall
-		stall
-		cmovl 8(%rdi), %rdi
-		stall
-		stall
-		stall
-		cmovl 9(%rdi), %rdi
-		stall
-		stall
-		stall
-		cmovl 10(%rdi), %rdi
-		stall
-		stall
-		stall
-		rrmovl %rdi, %rax
+min:    
+		cmpq %rdi, %rax
+		cmovl %rdi, %rax
+		mrmovq 1(%rdi), %rdi
+
+		cmpq %rdi, %rax
+		cmovl %rdi, %rax
+		mrmovq 2(%rdi), %rdi
+
+		cmpq %rdi, %rax
+		cmovl %rdi, %rax
+		mrmovq 3(%rdi), %rdi
+
+		cmpq %rdi, %rax
+		cmovl %rdi, %rax
+		mrmovq 4(%rdi), %rdi
+
+		cmpq %rdi, %rax
+		cmovl %rdi, %rax
+		mrmovq 5(%rdi), %rdi
+
+		cmpq %rdi, %rax
+		cmovl %rdi, %rax
+		mrmovq 6(%rdi), %rdi
+
+		cmpq %rdi, %rax
+		cmovl %rdi, %rax
+		mrmovq 7(%rdi), %rdi
+
+		cmpq %rdi, %rax
+		cmovl %rdi, %rax
+		mrmovq 8(%rdi), %rdi
+
+		cmpq %rdi, %rax
+		cmovl %rdi, %rax
+		mrmovq 9(%rdi), %rdi
+
+		cmpq %rdi, %rax
+		cmovl %rdi, %rax
+		mrmovq 10(%rdi), %rdi
+
+		cmpq %rdi, %rax
+		cmovl %rdi, %rax
         ret    
 #
 #        list data
