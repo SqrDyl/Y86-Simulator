@@ -252,7 +252,7 @@ bool Loader::isBadDataRec(String input, int32_t lineNumber, int32_t addressLen)
                 }
             }
         }
-        uint64_t maxMem = 4096;
+        int64_t maxMem = 4096;
         if ((numOfDataDig) % 2 != 0) //Checking if bytes is odd
         {
             return true;

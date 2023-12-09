@@ -85,7 +85,6 @@ void ExecuteStage::setMInput(PipeReg * mreg, uint64_t stat, uint64_t icode,
 void ExecuteStage::doClockHigh(PipeRegArray * pipeRegs)
 {
 	PipeReg * mreg = pipeRegs->getMemoryReg();
-	PipeReg * wreg = pipeRegs->getWritebackReg();
 	//mreg->normal();
     if (M_bubble)
 	{
@@ -357,7 +356,6 @@ uint64_t ExecuteStage::cond(PipeReg * ereg)
 uint64_t ExecuteStage::calculateControlSignals(PipeReg * wreg, PipeReg * mreg)
 {
 	uint64_t w_stat = wreg->get(W_STAT);
-    uint64_t m_Stat = mreg->get(M_STAT);
 
 	return ((Stage::m_stat == Status::SADR || Stage::m_stat == Status::SINS 
 		|| Stage::m_stat == Status::SHLT) || (w_stat == Status::SADR

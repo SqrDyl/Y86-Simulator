@@ -257,11 +257,8 @@ uint64_t DecodeStage::fwdA(PipeRegArray * PipeRegs)
 uint64_t DecodeStage::fwdB(PipeRegArray * PipeRegs)
 {
 	bool error = false;
-	PipeReg * ereg = PipeRegs->getExecuteReg();
 	PipeReg * mreg = PipeRegs->getMemoryReg();
 	PipeReg * wreg = PipeRegs->getWritebackReg();
-    PipeReg * dreg = PipeRegs->getDecodeReg();
-    uint64_t icode = dreg->get(D_ICODE);
     
     if (d_srcB == RegisterFile::RNONE)
     {

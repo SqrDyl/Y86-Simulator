@@ -436,7 +436,7 @@ bool FetchStage::d_bubble(PipeReg * ereg, PipeReg * dreg, PipeReg * mreg)
     uint64_t d_icode = dreg->get(D_ICODE);
     uint64_t m_icode = mreg->get(M_ICODE);
     return (e_icode == Instruction::IJXX && !Stage::e_Cnd)
-        || !((e_icode == Instruction::IMRMOVQ || e_icode == Instruction::IPOPQ) 
+        || (!((e_icode == Instruction::IMRMOVQ || e_icode == Instruction::IPOPQ) 
         && (e_dstM == Stage::d_srcA || e_dstM == Stage::d_srcB)) 
-        && (e_icode == Instruction::IRET || d_icode == Instruction::IRET || m_icode == Instruction::IRET);
+		&& (e_icode == Instruction::IRET || d_icode == Instruction::IRET || m_icode == Instruction::IRET));
 }

@@ -18,12 +18,10 @@ bool MemoryStage::doClockLow(PipeRegArray * pipeRegs)
 {
     PipeReg * mreg = pipeRegs->getMemoryReg();
     PipeReg * wreg = pipeRegs->getWritebackReg();
-    uint64_t stat = mreg->get(M_STAT);
     uint64_t icode = mreg->get(M_ICODE);
     uint64_t valE = mreg->get(M_VALE);
     uint64_t dstE = mreg->get(M_DSTE);
     uint64_t dstM = mreg->get(M_DSTM);
-    uint64_t newStat = 0;
     bool mem_error = false;
     //Get the memory address
     uint64_t memAddRes = memAddr(mreg);
