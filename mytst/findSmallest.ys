@@ -18,45 +18,45 @@
 # TODO: write the min function
 min:     
 		cmovl 1(%rdi), %rdi
-		nop
-		nop
-		nop
+		bubble
+		stall
+		stall
 		cmovl 2(%rdi), %rdi
-		nop
-		nop
-		nop
+		stall
+		stall
+		stall
 		cmovl 3(%rdi), %rdi
-		nop
-		nop
-		nop
+		stall
+		stall
+		stall
 		cmovl 4(%rdi), %rdi
-		nop
-		nop
-		nop
+		stall
+		stall
+		stall
 		cmovl 5(%rdi), %rdi
-		nop
-		nop
-		nop
+		stall
+		stall
+		stall
 		cmovl 6(%rdi), %rdi
-		nop
-		nop
-		nop
+		stall
+		stall
+		stall
 		cmovl 7(%rdi), %rdi
-		nop
-		nop
-		nop
+		stall
+		stall
+		stall
 		cmovl 8(%rdi), %rdi
-		nop
-		nop
-		nop
+		stall
+		stall
+		stall
 		cmovl 9(%rdi), %rdi
-		nop
-		nop
-		nop
+		stall
+		stall
+		stall
 		cmovl 10(%rdi), %rdi
-		nop 
-		nop
-		nop
+		stall
+		stall
+		stall
 		rrmovl %rdi, %rax
         ret    
 #
