@@ -6,119 +6,45 @@ irmovq $0, %r11
 irmovq nums, %r8
 #it can also be helpful to initialize another register to 1
 irmovq $1, %r9
-nop
-nop
 #for each number:  
 #get the number out of memory
 mrmovq (%r8), %r10
-nop
-nop
-nop
 #cause the condition codes to be modified based upon value of the number
 #add 1 to %rax if number <= 0; otherwise, add 0 to %rax
 addq %r11, %r10
-nop
-nop
-nop
 cmovle %r9, %r11
-nop
-nop
-nop
 addq %r11, %rax
-nop
-nop
-nop
 irmovq $0, %r11
 
 
 mrmovq 8(%r8), %r10
-nop
-nop
-nop
 addq %r11, %r10
-nop
-nop
-nop
 cmovle %r9, %r11
-nop
-nop
-nop
 addq %r11, %rax
-nop
-nop
-nop
 irmovq $0, %r11
 
 mrmovq 16(%r8), %r10
-nop
-nop
-nop
 addq %r11, %r10
-nop
-nop
-nop
 cmovle %r9, %r11
-nop
-nop
-nop
 addq %r11, %rax
-nop
-nop
-nop
 irmovq $0, %r11
 
 mrmovq 24(%r8), %r10
-nop
-nop
-nop
 addq %r11, %r10
-nop
-nop
-nop
 cmovle %r9, %r11
-nop
-nop
-nop
 addq %r11, %rax
-nop
-nop
-nop
 irmovq $0, %r11
 
 mrmovq 32(%r8), %r10
-nop
-nop
-nop
 addq %r11, %r10
-nop
-nop
-nop
 cmovle %r9, %r11
-nop
-nop
-nop
 addq %r11, %rax
-nop
-nop
-nop
 irmovq $0, %r11
 
 mrmovq 40(%r8), %r10
-nop
-nop
-nop
 addq %r11, %r10
-nop
-nop
-nop
 cmovle %r9, %r11
-nop
-nop
-nop
 addq %r11, %rax
-nop
-nop
-nop
 irmovq $0, %r11
 
 
