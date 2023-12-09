@@ -16,49 +16,40 @@
 # %rdi contains the address of the first element
 # %rsi contains the length of the list
 # TODO: write the min function
+
+# %rax = smallest integer in list
+# %rcx = temp variable for next value in list
+# %rdx = temp variable for next value in list
+# %rbx = increment by 8 variable
+# %rsp = current item # in list
+# %rbp = increment by 1 variable
+# %r8  = -10 variable 
+
 min:    
-		cmpq %rdi, %rax
-		cmovl %rdi, %rax
-		mrmovq 1(%rdi), %rdi
+        irmovq $8, %rbx
+        irmovq $2, %rsp
+        irmovq $1, %rbp
+        irmovq $-10, %r8
 
-		cmpq %rdi, %rax
-		cmovl %rdi, %rax
-		mrmovq 2(%rdi), %rdi
-
-		cmpq %rdi, %rax
-		cmovl %rdi, %rax
-		mrmovq 3(%rdi), %rdi
-
-		cmpq %rdi, %rax
-		cmovl %rdi, %rax
-		mrmovq 4(%rdi), %rdi
-
-		cmpq %rdi, %rax
-		cmovl %rdi, %rax
-		mrmovq 5(%rdi), %rdi
-
-		cmpq %rdi, %rax
-		cmovl %rdi, %rax
-		mrmovq 6(%rdi), %rdi
-
-		cmpq %rdi, %rax
-		cmovl %rdi, %rax
-		mrmovq 7(%rdi), %rdi
-
-		cmpq %rdi, %rax
-		cmovl %rdi, %rax
-		mrmovq 8(%rdi), %rdi
-
-		cmpq %rdi, %rax
-		cmovl %rdi, %rax
-		mrmovq 9(%rdi), %rdi
-
-		cmpq %rdi, %rax
-		cmovl %rdi, %rax
-		mrmovq 10(%rdi), %rdi
-
-		cmpq %rdi, %rax
-		cmovl %rdi, %rax
+        mrmovq (%rdi), %rax
+        addq %rbx, %rdi
+        mrmovq (%rdi), %rcx
+        mrmovq (%rdi), %rdx
+        subq %rcx, %rdx
+        jle nextVal
+changeRax:
+        rrmovq %rcx, %rax
+nextVal:
+        addq %rbp, %
+        addq %r8, %rsp
+        je done
+        addq %rbx, %rdi
+        mrmovq (%rdi), %rcx
+        mrmovq (%rdi), %rdx
+        subq %rcx, %rdx
+        jg changeRax
+        jle nextVal
+done:
         ret    
 #
 #        list data
