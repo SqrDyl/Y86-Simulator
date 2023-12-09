@@ -69,7 +69,7 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     valP = PCincrement(f_pc, needRegId, needValC);
 
     getRegs(needRegId, f_pc, rA, rB);
-
+    valC = buildValC(needValC, needRegId, f_pc);
     predPC = predictPC(icode, valC, valP);
     freg->set(F_PREDPC, predPC);
     
@@ -78,7 +78,7 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     decodeBubble = d_bubble(ereg);
 
     //set the inputs for the D register
-    setDInput(dreg, stat, icode, ifun, rA, rB, buildValC(needValC, needRegId, f_pc), valP);
+    setDInput(dreg, stat, icode, ifun, rA, rB, valC, valP);
     return false;
 }
 
@@ -197,10 +197,6 @@ bool FetchStage::needRegIds(uint64_t icode)
 */
 bool FetchStage::need_valC(uint64_t icode)
 {
-    //needValC method: input is f_icode
-    //bool need_valC = f_icode in { IIRMOVQ, IRMMOVQ, IMRMOVQ, IJXX, ICALL };   
-    //uint64_t num = Tools::getBits(f_icode, 0, 4); //will return 0x61
-
     return (icode == Instruction::IIRMOVQ || icode == Instruction::IRMMOVQ 
         || icode == Instruction::IMRMOVQ || icode == Instruction::IJXX || icode == Instruction::ICALL);
 }
@@ -218,9 +214,7 @@ bool FetchStage::need_valC(uint64_t icode)
  * @return uint64_t
 */
 uint64_t FetchStage::predictPC(uint64_t icode, uint64_t f_valC, uint64_t f_valP)
-{
-	//uint64_t num = Tools::getBits(f_icode, 0, 4);
-    
+{    
 	if (icode == Instruction::ICALL || icode == Instruction::IJXX)
 	{
 		return f_valC;
@@ -252,7 +246,6 @@ uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegRes, bool needValCRe
         f_pc += 8;	
 	}
 	return f_pc + 1; 
-	
 }
 
 
