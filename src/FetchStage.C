@@ -429,6 +429,16 @@ bool FetchStage::d_stall(PipeReg * ereg)
         && (e_dstM == Stage::d_srcA || e_dstM == Stage::d_srcB));
 }
 
+/**
+* d_bubble 
+* 
+* determines whether fetch needs to bubble
+*
+* @param ereg - allows the use of the execute stage and its variables.
+* @param dreg - allows the use of the decode stage and its variables.
+* @param mreg - allows the use of the memory stage and its variables.
+* @return bool
+*/
 bool FetchStage::d_bubble(PipeReg * ereg, PipeReg * dreg, PipeReg * mreg)
 {
     uint64_t e_icode = ereg->get(E_ICODE);

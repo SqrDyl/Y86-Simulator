@@ -18,7 +18,6 @@
  * @param: pipeRegs - array of the pipeline register 
                       (F, D, E, M, W instances)
  */
-
 bool ExecuteStage::doClockLow(PipeRegArray * pipeRegs)
 {
 	PipeReg * ereg = pipeRegs->getExecuteReg();
