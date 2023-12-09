@@ -66,16 +66,16 @@ bool FetchStage::doClockLow(PipeRegArray * pipeRegs)
     needRegId = FetchStage::needRegIds(icode);
     needValC = FetchStage::need_valC(icode);
     
-    valP = PCincrement(f_pc, needRegId, needValC);
 
     getRegs(needRegId, f_pc, rA, rB);
     valC = buildValC(needValC, needRegId, f_pc);
+    valP = PCincrement(f_pc, needRegId, needValC);
     predPC = predictPC(icode, valC, valP);
     freg->set(F_PREDPC, predPC);
     
-    fetchStall = f_stall(ereg);
+    fetchStall = f_stall(ereg, dreg, mreg);
     decodeStall = d_stall(ereg);
-    decodeBubble = d_bubble(ereg);
+    decodeBubble = d_bubble(ereg, dreg, mreg);
 
     //set the inputs for the D register
     setDInput(dreg, stat, icode, ifun, rA, rB, valC, valP);
@@ -402,12 +402,15 @@ uint64_t FetchStage::f_ifun(uint8_t insByte, bool mem_error)
  * @param ereg - allows the use of the execute stage icode and the dstM
  * @return bool
 */
-bool FetchStage::f_stall(PipeReg * ereg)
+bool FetchStage::f_stall(PipeReg * ereg, PipeReg * dreg, PipeReg * mreg)
 {
     uint64_t e_icode = ereg->get(E_ICODE);
     uint64_t e_dstM = ereg->get(E_DSTM);
-    return ((e_icode == Instruction::IMRMOVQ || e_icode == Instruction::IPOPQ) 
-        && (e_dstM == Stage::d_srcA || e_dstM == Stage::d_srcB));
+    uint64_t d_icode = dreg->get(D_ICODE);
+    uint64_t m_icode = mreg->get(M_ICODE);
+    return (((e_icode == Instruction::IMRMOVQ || e_icode == Instruction::IPOPQ) 
+        && (e_dstM == Stage::d_srcA || e_dstM == Stage::d_srcB))) 
+        || (d_icode == Instruction::IRET || e_icode == Instruction::IRET || m_icode == Instruction::IRET);
 }
 
 /**
@@ -426,8 +429,14 @@ bool FetchStage::d_stall(PipeReg * ereg)
         && (e_dstM == Stage::d_srcA || e_dstM == Stage::d_srcB));
 }
 
-bool FetchStage::d_bubble(PipeReg * ereg)
+bool FetchStage::d_bubble(PipeReg * ereg, PipeReg * dreg, PipeReg * mreg)
 {
     uint64_t e_icode = ereg->get(E_ICODE);
-    return (e_icode == Instruction::IJXX && !Stage::e_Cnd);
+    uint64_t e_dstM = ereg->get(E_DSTM);
+    uint64_t d_icode = dreg->get(D_ICODE);
+    uint64_t m_icode = mreg->get(M_ICODE);
+    return (e_icode == Instruction::IJXX && !Stage::e_Cnd)
+        || !((e_icode == Instruction::IMRMOVQ || e_icode == Instruction::IPOPQ) 
+        && (e_dstM == Stage::d_srcA || e_dstM == Stage::d_srcB)) 
+        && (e_icode == Instruction::IRET || d_icode == Instruction::IRET || m_icode == Instruction::IRET);
 }

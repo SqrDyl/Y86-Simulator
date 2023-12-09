@@ -25,9 +25,9 @@ class FetchStage: public Stage
       uint64_t f_stat(bool instrValid, uint64_t icode, bool memError);
       uint64_t f_icode(uint8_t insByte, bool mem_error);
       uint64_t f_ifun(uint8_t insByte, bool mem_error);
-      bool f_stall(PipeReg * ereg);
+      bool f_stall(PipeReg * ereg, PipeReg * dreg, PipeReg * mreg);
       bool d_stall(PipeReg * ereg);
-      bool d_bubble(PipeReg * ereg);
+      bool d_bubble(PipeReg * ereg, PipeReg * dreg, PipeReg * mreg);
 
    public:
       //These are the only methods called outside of the class
