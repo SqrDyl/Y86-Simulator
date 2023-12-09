@@ -30,6 +30,7 @@ min:
         irmovq $2, %rsp
         irmovq $1, %rbp
         irmovq $-10, %r8
+		irmovq $0, %r9
 
         mrmovq (%rdi), %rax
         addq %rbx, %rdi
@@ -40,9 +41,11 @@ min:
 changeRax:
         rrmovq %rcx, %rax
 nextVal:
-        addq %rbp, %
-        addq %r8, %rsp
+        addq %rbp, %rsp
+		addq %rsp, %r9
+        addq %r8, %r9
         je done
+		subq %r9, %r9
         addq %rbx, %rdi
         mrmovq (%rdi), %rcx
         mrmovq (%rdi), %rdx

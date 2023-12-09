@@ -1,0 +1,74 @@
+                            | # This program calls a min function which takes as input the
+                            | # address of a list and the number of elements in the list
+                            | # and returns the smallest value in the list
+                            | #
+0x000:                      |         .pos 0
+0x000: 30f40002000000000000 |         irmovq stack, %rsp   #initialize stack pointer
+0x00a: 30f70801000000000000 |         irmovq list, %rdi    #address of first element
+0x014: 30f60001000000000000 |         irmovq len, %rsi     #address of length of list
+0x01e: 50660000000000000000 |         mrmovq (%rsi), %rsi  #load length of list
+0x028: 803200000000000000   |         call min
+                            | #  When halt statement is reached, %rax should be equal to -7 (0xfffffffffffffff9)
+0x031: 00                   |         halt
+                            | #
+                            | # min function
+                            | # sets %rax to the value of the smallest element in a list
+                            | # %rdi contains the address of the first element
+                            | # %rsi contains the length of the list
+                            | # TODO: write the min function
+                            | 
+                            | # %rax = smallest integer in list
+                            | # %rcx = temp variable for next value in list
+                            | # %rdx = temp variable for next value in list
+                            | # %rbx = increment by 8 variable
+                            | # %rsp = current item # in list
+                            | # %rbp = increment by 1 variable
+                            | # %r8  = -10 variable 
+                            | 
+0x032:                      | min:    
+0x032: 30f30800000000000000 |         irmovq $8, %rbx
+0x03c: 30f40200000000000000 |         irmovq $2, %rsp
+0x046: 30f50100000000000000 |         irmovq $1, %rbp
+0x050: 30f8f6ffffffffffffff |         irmovq $-10, %r8
+0x05a: 30f90000000000000000 | 		irmovq $0, %r9
+                            | 
+0x064: 50070000000000000000 |         mrmovq (%rdi), %rax
+0x06e: 6037                 |         addq %rbx, %rdi
+0x070: 50170000000000000000 |         mrmovq (%rdi), %rcx
+0x07a: 50270000000000000000 |         mrmovq (%rdi), %rdx
+0x084: 6112                 |         subq %rcx, %rdx
+0x086: 719100000000000000   |         jle nextVal
+0x08f:                      | changeRax:
+0x08f: 2010                 |         rrmovq %rcx, %rax
+0x091:                      | nextVal:
+0x091: 6054                 |         addq %rbp, %rsp
+0x093: 6049                 | 		addq %rsp, %r9
+0x095: 6089                 |         addq %r8, %r9
+0x097: 73cc00000000000000   |         je done
+0x0a0: 6199                 | 		subq %r9, %r9
+0x0a2: 6037                 |         addq %rbx, %rdi
+0x0a4: 50170000000000000000 |         mrmovq (%rdi), %rcx
+0x0ae: 50270000000000000000 |         mrmovq (%rdi), %rdx
+0x0b8: 6112                 |         subq %rcx, %rdx
+0x0ba: 768f00000000000000   |         jg changeRax
+0x0c3: 719100000000000000   |         jle nextVal
+0x0cc:                      | done:
+0x0cc: 90                   |         ret    
+                            | #
+                            | #        list data
+0x100:                      |         .pos 0x100
+0x100: 0a00000000000000     | len:    .quad 10 
+0x108: 0e00000000000000     | list:   .quad 14
+0x110: 0300000000000000     |         .quad 3
+0x118: 0200000000000000     |         .quad 2
+0x120: 1b00000000000000     |         .quad 27
+0x128: feffffffffffffff     |         .quad -2
+0x130: 0c00000000000000     |         .quad 12
+0x138: 1700000000000000     |         .quad 23
+0x140: 0500000000000000     |         .quad 5
+0x148: f9ffffffffffffff     |         .quad -7
+0x150: 0900000000000000     |         .quad 9
+                            | 
+                            | #       stack    
+0x200:                      |         .pos 0x200
+0x200: 0000000000000000     | stack:  .quad 0    
