@@ -1,3 +1,4 @@
+#include <cstdint>
 #define LONGSIZE 8
 
 class Tools
